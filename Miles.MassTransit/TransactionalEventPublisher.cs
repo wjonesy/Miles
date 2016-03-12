@@ -36,7 +36,7 @@ namespace Miles.MassTransit
         private void Transaction_PreCommit(object sender, EventArgs e)
         {
             // TODO: Id generation etc
-            pendingDispatchEvents = pendingSaveEvents.Select(evt => new OutgoingEventAndObject(new OutgoingEvent(JsonConvert.SerializeObject(evt)), evt)).ToList();
+            pendingDispatchEvents = pendingSaveEvents.Select(evt => new OutgoingEventAndObject(new OutgoingEvent(time, JsonConvert.SerializeObject(evt)), evt)).ToList();
             outgoingEventRepository.Save(pendingDispatchEvents.Select(x => x.OutgoingEvent));
             pendingSaveEvents.Clear();
         }
