@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles", "Miles\Miles.csproj", "{63B7FA97-8619-4EA0-B594-71FBB10481E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit", "Miles.MassTransit\Miles.MassTransit.csproj", "{BC322498-9FAA-4258-B728-ED4DE372BFE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.Unity", "Miles.MassTransit.Unity\Miles.MassTransit.Unity.csproj", "{1C316F1C-58EF-4846-9713-D903BACB5FB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{63B7FA97-8619-4EA0-B594-71FBB10481E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63B7FA97-8619-4EA0-B594-71FBB10481E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63B7FA97-8619-4EA0-B594-71FBB10481E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC322498-9FAA-4258-B728-ED4DE372BFE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC322498-9FAA-4258-B728-ED4DE372BFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC322498-9FAA-4258-B728-ED4DE372BFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC322498-9FAA-4258-B728-ED4DE372BFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C316F1C-58EF-4846-9713-D903BACB5FB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C316F1C-58EF-4846-9713-D903BACB5FB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C316F1C-58EF-4846-9713-D903BACB5FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C316F1C-58EF-4846-9713-D903BACB5FB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
