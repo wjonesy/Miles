@@ -3,26 +3,47 @@
 namespace Miles.MassTransit
 {
     /// <summary>
-    /// Represents the incoming message serialized for data storage.
+    /// Represents the outgoing message serialized for data storage.
     /// </summary>
-    public class OutgoingEvent
+    public class OutgoingMessage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OutgoingEvent"/> class.
+        /// Initializes a new instance of the <see cref="OutgoingMessage"/> class.
         /// Empty constructor is required by some ORMs and serializers.
         /// </summary>
-        protected OutgoingEvent()
+        protected OutgoingMessage()
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OutgoingEvent"/> class.
+        /// Initializes a new instance of the <see cref="OutgoingMessage" /> class.
         /// </summary>
+        /// <param name="transactionMessageId">The transaction message identifier.</param>
+        /// <param name="messageType">Type of the message.</param>
         /// <param name="serializedMessage">The serialized message.</param>
-        public OutgoingEvent(ITime time, string serializedMessage)
+        /// <param name="time">Time service.</param>
+        public OutgoingMessage(Guid transactionMessageId, OutgoingMessageType messageType, string serializedMessage, ITime time)
         {
             this.EventCreated = time.Now;
+            this.TransactionMessageId = transactionMessageId;
+            this.MessageType = messageType;
             this.SerializedMessage = serializedMessage;
         }
+
+        /// <summary>
+        /// Gets a unique identifier used for message de-deuplication between Miles endpoints.
+        /// </summary>
+        /// <value>
+        /// The transaction message identifier.
+        /// </value>
+        public Guid TransactionMessageId { get; private set; }
+
+        /// <summary>
+        /// Gets the message type.
+        /// </summary>
+        /// <value>
+        /// The message type.
+        /// </value>
+        public OutgoingMessageType MessageType { get; private set; }
 
         /// <summary>
         /// Gets the serialized message.

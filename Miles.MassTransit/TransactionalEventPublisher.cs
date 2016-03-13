@@ -11,17 +11,17 @@ namespace Miles.MassTransit
     // TODO: Consider async
     public class TransactionalEventPublisher : IEventPublisher
     {
-        private readonly IOutgoingEventRepository outgoingEventRepository;
+        private readonly IOutgoingMessageRepository outgoingEventRepository;
         private readonly ITime time;
         private readonly ConsumeContext consumeContext;
 
         // State
-        private readonly List<object> pendingSaveEvents = new List<object>();
-        private List<OutgoingEventAndObject> pendingDispatchEvents;
+        private readonly List<IMilesMassTransitEnvelope<Object>> pendingSaveEvents = new List<IMilesMassTransitEnvelope<Object>>();
+        private List<OutgoingMessageAndMessage> pendingDispatchEvents;
 
         public TransactionalEventPublisher(
             ITransaction transaction,
-            IOutgoingEventRepository outgoingEventRepository,
+            IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
             ConsumeContext consumeContext)
         {
@@ -35,9 +35,16 @@ namespace Miles.MassTransit
 
         private void Transaction_PreCommit(object sender, EventArgs e)
         {
-            // TODO: Id generation etc
-            pendingDispatchEvents = pendingSaveEvents.Select(evt => new OutgoingEventAndObject(new OutgoingEvent(time, JsonConvert.SerializeObject(evt)), evt)).ToList();
-            outgoingEventRepository.Save(pendingDispatchEvents.Select(x => x.OutgoingEvent));
+            pendingDispatchEvents = pendingSaveEvents
+                .Select(evt =>
+                    new OutgoingMessageAndMessage(
+                        new OutgoingMessage(
+                            NewId.NextGuid(),
+                            OutgoingMessageType.Event,
+                            JsonConvert.SerializeObject(evt),
+                            time),
+                        evt)).ToList();
+            outgoingEventRepository.Save(pendingDispatchEvents.Select(x => x.OutgoingMessage));
             pendingSaveEvents.Clear();
         }
 
@@ -46,31 +53,32 @@ namespace Miles.MassTransit
             foreach (var evt in pendingDispatchEvents)
             {
                 // TODO: Consider async
-                // TODO: Id generation etc
-                consumeContext.Publish(evt.EventObject,
+                consumeContext.Publish(
+                    evt.EventObject,
                     callback: x =>
                     {
-                        evt.OutgoingEvent.Dispatched(time);
-                        outgoingEventRepository.Save(evt.OutgoingEvent, ignoreTransaction: true);
+                        evt.OutgoingMessage.Dispatched(time);
+                        outgoingEventRepository.Save(evt.OutgoingMessage, ignoreTransaction: true);
                     });
             }
         }
 
         public void Publish<TEvent>(TEvent evt) where TEvent : class
         {
-            pendingSaveEvents.Add(evt);
+            var eventMessage = new MilesMassTransitEnvelope<TEvent>(NewId.NextGuid(), evt);
+            pendingSaveEvents.Add(eventMessage);
         }
 
-        private struct OutgoingEventAndObject
+        private struct OutgoingMessageAndMessage
         {
-            public OutgoingEventAndObject(OutgoingEvent outgoingEvent, Object eventObject)
+            public OutgoingMessageAndMessage(OutgoingMessage outgoingEvent, IMilesMassTransitEnvelope<Object> eventObject)
             {
-                this.OutgoingEvent = outgoingEvent;
+                this.OutgoingMessage = outgoingEvent;
                 this.EventObject = eventObject;
             }
 
-            public OutgoingEvent OutgoingEvent { get; private set; }
-            public Object EventObject { get; private set; }
+            public OutgoingMessage OutgoingMessage { get; private set; }
+            public IMilesMassTransitEnvelope<Object> EventObject { get; private set; }
         }
     }
 }
