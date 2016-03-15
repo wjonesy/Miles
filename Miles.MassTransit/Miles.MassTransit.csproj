@@ -38,7 +38,7 @@
     <Compile Include="IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransactionalEventPublisher.cs" />
+    <Compile Include="TransactionalMessagePublisher.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MassTransit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Miles.Persistence
 {
@@ -6,12 +7,12 @@ namespace Miles.Persistence
     {
         void Begin();
 
-        event EventHandler PreCommit;
-        void Commit();
-        event EventHandler PostCommit;
+        IHook<object, EventArgs> PreCommit { get; }
+        Task CommitAsync();
+        IHook<object, EventArgs> PostCommit { get; }
 
-        event EventHandler PreRollback;
-        void Rollback();
-        event EventHandler PostRollback;
+        IHook<object, EventArgs> PreRollback { get; }
+        Task RollbackAsync();
+        IHook<object, EventArgs> PostRollback { get; }
     }
 }

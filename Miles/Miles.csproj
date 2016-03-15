@@ -31,7 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Events\IEventPublisher.cs" />
+    <Compile Include="Hook.cs" />
     <Compile Include="IEventProcessor.cs" />
+    <Compile Include="ICommandPublisher.cs" />
+    <Compile Include="IHook.cs" />
     <Compile Include="ITime.cs" />
     <Compile Include="Persistence\ITransaction.cs" />
     <Compile Include="Persistence\Transaction.cs" />

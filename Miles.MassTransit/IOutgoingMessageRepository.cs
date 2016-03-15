@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
@@ -14,13 +15,13 @@ namespace Miles.MassTransit
         /// Saves the specified events to the storage mechanism.
         /// </summary>
         /// <param name="evts">The events.</param>
-        void Save(IEnumerable<OutgoingMessage> evts);
+        Task SaveAsync(IEnumerable<OutgoingMessage> evts);
 
         /// <summary>
         /// Saves the specified event to the storage mechanism.
         /// </summary>
         /// <param name="evt">The event.</param>
         /// <param name="ignoreTransaction">if set to <c>true</c> then the save shouldn't be part of a transaction; this change should save in isolation.</param>
-        void Save(OutgoingMessage evt, bool ignoreTransaction = false);
+        Task SaveAsync(OutgoingMessage evt, bool ignoreTransaction = false);
     }
 }

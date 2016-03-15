@@ -31,8 +31,7 @@ namespace Miles.MassTransit
         {
             serviceLocator.RegisterInstance<ConsumeContext>(context);
             var processor = serviceLocator.GetInstance<IEventProcessor<TMessage>>();
-            processor.Process(context.Message);
-            return Task.FromResult(0);
+            return processor.ProcessAsync(context.Message);
         }
     }
 }
