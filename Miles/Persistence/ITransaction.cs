@@ -5,7 +5,7 @@ namespace Miles.Persistence
 {
     public interface ITransaction : IDisposable
     {
-        void Begin();
+        Task BeginAsync();
 
         IHook<object, EventArgs> PreCommit { get; }
         Task CommitAsync();

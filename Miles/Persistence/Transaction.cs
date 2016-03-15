@@ -29,7 +29,7 @@ namespace Miles.Persistence
             await postRollbackHook.ExecuteAsync(this, new EventArgs());
         }
 
-        public abstract void Begin();
+        public abstract Task BeginAsync();
 
         protected abstract Task DoCommitAsync();
 
