@@ -11,15 +11,15 @@ namespace Miles.MassTransit
     /// <seealso cref="MassTransit.IConsumer{TMessage}" />
     public class MassTransitConsumer<TMessage> : IConsumer<TMessage> where TMessage : class
     {
-        private readonly IExtendedServiceLocator serviceLocator;
+        private readonly IProcessorFactory processorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MassTransitConsumer{TMessage}"/> class.
         /// </summary>
-        /// <param name="serviceLocator">The service locator.</param>
-        public MassTransitConsumer(IExtendedServiceLocator serviceLocator)
+        /// <param name="processorFactory">The processor factory.</param>
+        public MassTransitConsumer(IProcessorFactory processorFactory)
         {
-            this.serviceLocator = serviceLocator;
+            this.processorFactory = processorFactory;
         }
 
         /// <summary>
@@ -29,8 +29,7 @@ namespace Miles.MassTransit
         /// <returns></returns>
         public Task Consume(ConsumeContext<TMessage> context)
         {
-            serviceLocator.RegisterInstance<ConsumeContext>(context);
-            var processor = serviceLocator.GetInstance<IEventProcessor<TMessage>>();
+            var processor = processorFactory.CreateEventProcessor<TMessage>(context);
             return processor.ProcessAsync(context.Message);
         }
     }
