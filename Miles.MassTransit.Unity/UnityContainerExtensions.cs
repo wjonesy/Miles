@@ -3,13 +3,19 @@ using Microsoft.Practices.Unity;
 using Miles.Events;
 using Miles.Persistence;
 using System;
-using System.Collections.Generic;
 
 namespace Miles.MassTransit.Unity
 {
+    /// <exclude />
     public static class UnityContainerExtensions
     {
-        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, IEnumerable<Type> contracts)
+        /// <summary>
+        /// Configures a unity container to resolve Miles MassTransit types.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="contracts">The contracts you want to handle.</param>
+        /// <returns></returns>
+        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, params Type[] contracts)
         {
             var genericIConsumerType = typeof(IConsumer<>);
             var genericConsumerType = typeof(MassTransitConsumer<>);
@@ -33,6 +39,12 @@ namespace Miles.MassTransit.Unity
                         new OptionalParameter<ConsumeContext>()));
         }
 
+        /// <summary>
+        /// Configures a bus into Unity once you've created it.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="busControl">The bus control.</param>
+        /// <returns></returns>
         public static IUnityContainer LoadMassTransitBusConfiguration(this IUnityContainer container, IBusControl busControl)
         {
             return container
