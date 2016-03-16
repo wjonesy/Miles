@@ -17,25 +17,25 @@ namespace Miles.MassTransit
         /// <summary>
         /// Initializes a new instance of the <see cref="OutgoingMessage" /> class.
         /// </summary>
-        /// <param name="transactionMessageId">The transaction message identifier.</param>
+        /// <param name="messageId">The message identifier.</param>
         /// <param name="messageType">Type of the message.</param>
         /// <param name="serializedMessage">The serialized message.</param>
         /// <param name="time">Time service.</param>
-        public OutgoingMessage(Guid transactionMessageId, OutgoingMessageType messageType, string serializedMessage, ITime time)
+        public OutgoingMessage(Guid messageId, OutgoingMessageType messageType, string serializedMessage, ITime time)
         {
             this.EventCreated = time.Now;
-            this.TransactionMessageId = transactionMessageId;
+            this.MessageId = messageId;
             this.MessageType = messageType;
             this.SerializedMessage = serializedMessage;
         }
 
         /// <summary>
-        /// Gets a unique identifier used for message de-deuplication between Miles endpoints.
+        /// Gets a unique identifier used for message de-duplication between endpoints.
         /// </summary>
         /// <value>
-        /// The transaction message identifier.
+        /// The message identifier.
         /// </value>
-        public Guid TransactionMessageId { get; private set; }
+        public Guid MessageId { get; private set; }
 
         /// <summary>
         /// Gets the message type.

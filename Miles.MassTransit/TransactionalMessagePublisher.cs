@@ -9,24 +9,26 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
-    // TODO: Consider async
     public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher
     {
         private readonly IOutgoingMessageRepository outgoingEventRepository;
         private readonly ITime time;
+        private readonly IBus bus;
         private readonly ConsumeContext consumeContext;
 
         // State
-        private readonly List<IMilesMassTransitEnvelope<Object>> pendingSaveMessages = new List<IMilesMassTransitEnvelope<Object>>();
+        private readonly List<Object> pendingSaveMessages = new List<Object>();
         private List<OutgoingMessageAndMessage> pendingDispatchMessages;
 
         public TransactionalMessagePublisher(
             ITransaction transaction,
             IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
-            ConsumeContext consumeContext)
+            IBus bus,
+            ConsumeContext consumeContext = null)
         {
             this.outgoingEventRepository = outgoingEventRepository;
+            this.bus = bus;
             this.consumeContext = consumeContext;
             this.time = time;
 
@@ -45,38 +47,41 @@ namespace Miles.MassTransit
                 pendingSaveMessages.Clear();
             });
 
-            transaction.PostCommit.Register((s, e) =>
-                Task.WhenAll(pendingDispatchMessages.Select(evt => consumeContext.Publish(
-                    evt.MessageObject,
-                    callback: x =>
-                    {
-                        evt.OutgoingMessage.Dispatched(time);
-                        return outgoingEventRepository.SaveAsync(evt.OutgoingMessage, ignoreTransaction: true);
-                    }))));
+            // TODO: Remove from pendingDispatchMessages
+            if (consumeContext == null)
+            {
+                // first event
+                transaction.PostCommit.Register((s, e) =>
+                    Task.WhenAll(pendingDispatchMessages.Select(evt => bus.Publish(evt.MessageObject, callback: x => x.MessageId = evt.OutgoingMessage.MessageId))));
+            }
+            else
+            {
+                // responding to an event or command
+                transaction.PostCommit.Register((s, e) =>
+                    Task.WhenAll(pendingDispatchMessages.Select(evt => consumeContext.Publish(evt.MessageObject, callback: x => x.MessageId = evt.OutgoingMessage.MessageId))));
+            }
         }
 
         void IEventPublisher.Publish<TEvent>(TEvent evt)
         {
-            var eventMessage = new MilesMassTransitEnvelope<TEvent>(NewId.NextGuid(), evt);
-            pendingSaveMessages.Add(eventMessage);
+            pendingSaveMessages.Add(evt);
         }
 
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
-            var eventMessage = new MilesMassTransitEnvelope<TCommand>(NewId.NextGuid(), cmd);
-            pendingSaveMessages.Add(eventMessage);
+            pendingSaveMessages.Add(cmd);
         }
 
         private struct OutgoingMessageAndMessage
         {
-            public OutgoingMessageAndMessage(OutgoingMessage outgoingMessage, IMilesMassTransitEnvelope<Object> messageObject)
+            public OutgoingMessageAndMessage(OutgoingMessage outgoingMessage, Object messageObject)
             {
                 this.OutgoingMessage = outgoingMessage;
                 this.MessageObject = messageObject;
             }
 
             public OutgoingMessage OutgoingMessage { get; private set; }
-            public IMilesMassTransitEnvelope<Object> MessageObject { get; private set; }
+            public Object MessageObject { get; private set; }
         }
     }
 }

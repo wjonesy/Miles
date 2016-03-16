@@ -31,9 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IExtendedServiceLocator.cs" />
-    <Compile Include="IMilesMassTransitEnvelope.cs" />
     <Compile Include="MassTransitConsumer.cs" />
-    <Compile Include="MilesMassTransitEnvelope.cs" />
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageType.cs" />
