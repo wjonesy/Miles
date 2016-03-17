@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
@@ -47,19 +46,22 @@ namespace Miles.MassTransit
                 pendingSaveMessages.Clear();
             });
 
-            // TODO: Remove from pendingDispatchMessages
-            if (consumeContext == null)
+            // TODO: Handle commands
+
+            // If we are working off the back of something else we have a consumeContext.
+            // If we are initiating action we fallback to the bus
+            var publishEndPoint = (IPublishEndpoint)consumeContext ?? bus;
+
+            transaction.PostCommit.Register(async (s, e) =>
             {
-                // first event
-                transaction.PostCommit.Register((s, e) =>
-                    Task.WhenAll(pendingDispatchMessages.Select(evt => bus.Publish(evt.MessageObject, callback: x => x.MessageId = evt.OutgoingMessage.MessageId))));
-            }
-            else
-            {
-                // responding to an event or command
-                transaction.PostCommit.Register((s, e) =>
-                    Task.WhenAll(pendingDispatchMessages.Select(evt => consumeContext.Publish(evt.MessageObject, callback: x => x.MessageId = evt.OutgoingMessage.MessageId))));
-            }
+                foreach (var message in pendingDispatchMessages.ToList())
+                {
+                    await publishEndPoint.Publish(message.MessageObject, callback: x => x.MessageId = message.OutgoingMessage.MessageId);
+                    message.OutgoingMessage.Dispatched(time);
+                    await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true);
+                    pendingDispatchMessages.Remove(message);
+                }
+            });
         }
 
         void IEventPublisher.Publish<TEvent>(TEvent evt)
