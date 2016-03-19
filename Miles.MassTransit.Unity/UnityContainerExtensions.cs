@@ -15,7 +15,7 @@ namespace Miles.MassTransit.Unity
         /// <param name="container">The container.</param>
         /// <param name="contracts">The contracts you want to handle.</param>
         /// <returns></returns>
-        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, params Type[] contracts)
+        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, params Type[] contracts)
         {
             var genericIConsumerType = typeof(IConsumer<>);
             var genericConsumerType = typeof(MassTransitConsumer<>);
@@ -24,13 +24,13 @@ namespace Miles.MassTransit.Unity
             {
                 var iconsumerContract = genericIConsumerType.MakeGenericType(contract);
                 var consumerContract = genericConsumerType.MakeGenericType(contract);
-                container.RegisterType(iconsumerContract, consumerContract, new HierarchicalLifetimeManager());
+                container.RegisterType(iconsumerContract, consumerContract, lifetimeManagerFactory());
             }
 
             return container
-                .RegisterType<IProcessorFactory, ProcessorFactory>(new HierarchicalLifetimeManager())
+                .RegisterType<IProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>(
-                    new HierarchicalLifetimeManager(),
+                    lifetimeManagerFactory(),
                     new InjectionConstructor(
                         new ResolvedParameter<ITransaction>(),
                         new ResolvedParameter<IOutgoingMessageRepository>(),
