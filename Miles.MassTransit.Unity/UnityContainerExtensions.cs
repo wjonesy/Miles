@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Practices.Unity;
 using Miles.Events;
-using Miles.Persistence;
 using System;
 
 namespace Miles.MassTransit.Unity
@@ -15,7 +14,7 @@ namespace Miles.MassTransit.Unity
         /// <param name="container">The container.</param>
         /// <param name="contracts">The contracts you want to handle.</param>
         /// <returns></returns>
-        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, params Type[] contracts)
+        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, bool useConventionBasedCommandDispatch = true, params Type[] contracts)
         {
             var genericIConsumerType = typeof(IConsumer<>);
             var genericConsumerType = typeof(MassTransitConsumer<>);
@@ -27,16 +26,24 @@ namespace Miles.MassTransit.Unity
                 container.RegisterType(iconsumerContract, consumerContract, lifetimeManagerFactory());
             }
 
-            return container
-                .RegisterType<IProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
-                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(
+            if (useConventionBasedCommandDispatch)
+                container.RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(
                     lifetimeManagerFactory(),
                     new InjectionConstructor(
-                        new ResolvedParameter<ITransaction>(),
-                        new ResolvedParameter<IOutgoingMessageRepository>(),
-                        new ResolvedParameter<ITime>(),
                         new ResolvedParameter<IBus>(),
                         new OptionalParameter<ConsumeContext>()));
+            else
+                container.RegisterType<IMessageDispatcher, LookupBasedMessageDispatch>(
+                    lifetimeManagerFactory(),
+                    new InjectionConstructor(
+                        new ResolvedParameter<ILookupEndpointUri>(),
+                        new ResolvedParameter<IBus>(),
+                        new OptionalParameter<ConsumeContext>()));
+
+            return container
+                .RegisterType<IProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
+                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
+                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory());
         }
 
         /// <summary>
