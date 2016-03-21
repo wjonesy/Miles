@@ -1,4 +1,4 @@
-﻿namespace Miles.Events
+﻿namespace Miles.Messaging
 {
     /// <summary>
     /// Represents a service that will publish commands.

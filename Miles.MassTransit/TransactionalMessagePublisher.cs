@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using Miles.Events;
+using Miles.Messaging;
 using Miles.Persistence;
 using Newtonsoft.Json;
 using System;

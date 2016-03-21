@@ -1,13 +1,14 @@
 ﻿using MassTransit;
 using Microsoft.Practices.Unity;
+using Miles.Messaging;
 
 namespace Miles.MassTransit.Unity
 {
     /// <summary>
     /// Implemenation of the ProcessorFactory for MassTransit using the Unity container.
     /// </summary>
-    /// <seealso cref="Miles.MassTransit.IProcessorFactory" />
-    class ProcessorFactory : IProcessorFactory
+    /// <seealso cref="Miles.MassTransit.IMessageProcessorFactory" />
+    class ProcessorFactory : IMessageProcessorFactory
     {
         private readonly IUnityContainer container;
 
@@ -21,14 +22,14 @@ namespace Miles.MassTransit.Unity
         }
 
         /// <summary>
-        /// Creates an event processor.
+        /// Creates the processor.
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="consumerContext">The consumer context.</param>
         /// <returns></returns>
-        public IEventProcessor<TEvent> CreateEventProcessor<TEvent>(ConsumeContext consumerContext)
+        public IMessageProcessor<TEvent> CreateProcessor<TEvent>(ConsumeContext consumerContext)
         {
-            return container.Resolve<IEventProcessor<TEvent>>(new ParameterOverride("consumerContext", consumerContext));
+            return container.Resolve<IMessageProcessor<TEvent>>(new ParameterOverride("consumerContext", consumerContext));
         }
     }
 }

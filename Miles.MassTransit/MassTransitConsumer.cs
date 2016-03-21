@@ -11,13 +11,13 @@ namespace Miles.MassTransit
     /// <seealso cref="MassTransit.IConsumer{TMessage}" />
     public class MassTransitConsumer<TMessage> : IConsumer<TMessage> where TMessage : class
     {
-        private readonly IProcessorFactory processorFactory;
+        private readonly IMessageProcessorFactory processorFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MassTransitConsumer{TMessage}"/> class.
         /// </summary>
         /// <param name="processorFactory">The processor factory.</param>
-        public MassTransitConsumer(IProcessorFactory processorFactory)
+        public MassTransitConsumer(IMessageProcessorFactory processorFactory)
         {
             this.processorFactory = processorFactory;
         }
@@ -29,7 +29,7 @@ namespace Miles.MassTransit
         /// <returns></returns>
         public Task Consume(ConsumeContext<TMessage> context)
         {
-            var processor = processorFactory.CreateEventProcessor<TMessage>(context);
+            var processor = processorFactory.CreateProcessor<TMessage>(context);
             return processor.ProcessAsync(context.Message);
         }
     }

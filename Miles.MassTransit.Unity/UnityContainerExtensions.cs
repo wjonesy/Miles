@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.Practices.Unity;
-using Miles.Events;
+using Miles.Messaging;
 using System;
 
 namespace Miles.MassTransit.Unity
@@ -41,7 +41,7 @@ namespace Miles.MassTransit.Unity
                         new OptionalParameter<ConsumeContext>()));
 
             return container
-                .RegisterType<IProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
+                .RegisterType<IMessageProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
                 .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory());
         }
