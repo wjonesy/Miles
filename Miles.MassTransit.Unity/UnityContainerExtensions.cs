@@ -9,12 +9,27 @@ namespace Miles.MassTransit.Unity
     public static class UnityContainerExtensions
     {
         /// <summary>
-        /// Configures a unity container to resolve Miles MassTransit types.
+        /// Registers common components with unity.
         /// </summary>
         /// <param name="container">The container.</param>
-        /// <param name="contracts">The contracts you want to handle.</param>
+        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
         /// <returns></returns>
-        public static IUnityContainer LoadMilesMassTransitConfiguration(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, bool useConventionBasedCommandDispatch = true, params Type[] contracts)
+        public static IUnityContainer RegisterMilesMassTransitCommon(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory)
+        {
+            return container
+                .RegisterType<IMessageProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
+                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
+                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory());
+        }
+
+        /// <summary>
+        /// Registers the message contracts you intend for an endpoint to resolve.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
+        /// <param name="contracts">The contracts.</param>
+        /// <returns></returns>
+        public static IUnityContainer RegisterContracts(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, params Type[] contracts)
         {
             var genericIConsumerType = typeof(IConsumer<>);
             var genericConsumerType = typeof(MassTransitConsumer<>);
@@ -26,6 +41,18 @@ namespace Miles.MassTransit.Unity
                 container.RegisterType(iconsumerContract, consumerContract, lifetimeManagerFactory());
             }
 
+            return container;
+        }
+
+        /// <summary>
+        /// Registers the command publisher.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
+        /// <param name="useConventionBasedCommandDispatch">if set to <c>true</c> use the convention based command dispatchr.</param>
+        /// <returns></returns>
+        public static IUnityContainer RegisterCommandDispatcher(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, bool useConventionBasedCommandDispatch = true)
+        {
             if (useConventionBasedCommandDispatch)
                 container.RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(
                     lifetimeManagerFactory(),
@@ -40,19 +67,16 @@ namespace Miles.MassTransit.Unity
                         new ResolvedParameter<IBus>(),
                         new OptionalParameter<ConsumeContext>()));
 
-            return container
-                .RegisterType<IMessageProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
-                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
-                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory());
+            return container;
         }
 
         /// <summary>
-        /// Configures a bus into Unity once you've created it.
+        /// Registers an instance of the bus with Unity.
         /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="busControl">The bus control.</param>
         /// <returns></returns>
-        public static IUnityContainer LoadMassTransitBusConfiguration(this IUnityContainer container, IBusControl busControl)
+        public static IUnityContainer RegisterMassTransitBus(this IUnityContainer container, IBusControl busControl)
         {
             return container
                 .RegisterInstance<IBusControl>(busControl)
