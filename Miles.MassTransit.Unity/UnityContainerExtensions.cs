@@ -17,7 +17,7 @@ namespace Miles.MassTransit.Unity
         public static IUnityContainer RegisterMilesMassTransitCommon(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory)
         {
             return container
-                .RegisterType<IMessageProcessorFactory, ProcessorFactory>(lifetimeManagerFactory())
+                .RegisterType<IContainer, UnityMilesMassTransitContainer>(lifetimeManagerFactory())
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
                 .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory());
         }

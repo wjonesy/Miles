@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Miles.Messaging;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit
@@ -11,15 +12,15 @@ namespace Miles.MassTransit
     /// <seealso cref="MassTransit.IConsumer{TMessage}" />
     public class MassTransitConsumer<TMessage> : IConsumer<TMessage> where TMessage : class
     {
-        private readonly IMessageProcessorFactory processorFactory;
+        private readonly IContainer container;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MassTransitConsumer{TMessage}"/> class.
+        /// Initializes a new instance of the <see cref="MassTransitConsumer{TMessage}" /> class.
         /// </summary>
-        /// <param name="processorFactory">The processor factory.</param>
-        public MassTransitConsumer(IMessageProcessorFactory processorFactory)
+        /// <param name="container">The container.</param>
+        public MassTransitConsumer(IContainer container)
         {
-            this.processorFactory = processorFactory;
+            this.container = container;
         }
 
         /// <summary>
@@ -29,7 +30,8 @@ namespace Miles.MassTransit
         /// <returns></returns>
         public Task Consume(ConsumeContext<TMessage> context)
         {
-            var processor = processorFactory.CreateProcessor<TMessage>(context);
+            container.RegisterInstance<ConsumeContext>(context);
+            var processor = container.Resolve<IMessageProcessor<TMessage>>();
             return processor.ProcessAsync(context.Message);
         }
     }
