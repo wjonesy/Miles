@@ -32,8 +32,10 @@
   <ItemGroup>
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
     <Compile Include="IContainer.cs" />
+    <Compile Include="IIncomingMessageRepository.cs" />
     <Compile Include="ILookupEndpointUri.cs" />
     <Compile Include="IMessageDispatcher.cs" />
+    <Compile Include="IncomingMessage.cs" />
     <Compile Include="LookupBasedMessageDispatch.cs" />
     <Compile Include="MassTransitConsumer.cs" />
     <Compile Include="OutgoingMessage.cs" />

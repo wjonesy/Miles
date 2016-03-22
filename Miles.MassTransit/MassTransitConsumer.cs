@@ -12,15 +12,18 @@ namespace Miles.MassTransit
     /// <seealso cref="MassTransit.IConsumer{TMessage}" />
     public class MassTransitConsumer<TMessage> : IConsumer<TMessage> where TMessage : class
     {
+        private readonly static Task CompletedTask = Task.FromResult(0);    // Replace with Task.CompletedTask in .NET 4.6
         private readonly IContainer container;
+        private readonly IIncomingMessageRepository incomingMessageRepo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MassTransitConsumer{TMessage}" /> class.
         /// </summary>
         /// <param name="container">The container.</param>
-        public MassTransitConsumer(IContainer container)
+        public MassTransitConsumer(IContainer container, IIncomingMessageRepository incomingMessageRepo)
         {
             this.container = container;
+            this.incomingMessageRepo = incomingMessageRepo;
         }
 
         /// <summary>
@@ -28,11 +31,17 @@ namespace Miles.MassTransit
         /// </summary>
         /// <param name="context">The consumer context.</param>
         /// <returns></returns>
-        public Task Consume(ConsumeContext<TMessage> context)
+        public async Task Consume(ConsumeContext<TMessage> context)
         {
+            // De-duplication
+            var incomingMessage = new IncomingMessage(typeof(TMessage).FullName, context.MessageId.Value);
+            var notProcessed = await incomingMessageRepo.SaveAsync(incomingMessage);
+            if (!notProcessed)
+                await CompletedTask;
+
             container.RegisterInstance<ConsumeContext>(context);
             var processor = container.Resolve<IMessageProcessor<TMessage>>();
-            return processor.ProcessAsync(context.Message);
+            await processor.ProcessAsync(context.Message);
         }
     }
 }
