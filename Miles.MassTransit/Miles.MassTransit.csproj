@@ -31,13 +31,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
+    <Compile Include="Consumer.cs" />
     <Compile Include="IContainer.cs" />
     <Compile Include="IIncomingMessageRepository.cs" />
     <Compile Include="ILookupEndpointUri.cs" />
     <Compile Include="IMessageDispatcher.cs" />
     <Compile Include="IncomingMessage.cs" />
     <Compile Include="LookupBasedMessageDispatch.cs" />
-    <Compile Include="MassTransitConsumer.cs" />
+    <Compile Include="DeduplicatedConsumer.cs" />
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageType.cs" />

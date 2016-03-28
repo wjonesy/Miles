@@ -23,6 +23,28 @@ namespace Miles.MassTransit.Unity
         }
 
         /// <summary>
+        /// Registers the message contracts you intend for an endpoint to resolve with message deduplication.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
+        /// <param name="contracts">The contracts.</param>
+        /// <returns></returns>
+        public static IUnityContainer RegisterDeduplicatedContracts(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, params Type[] contracts)
+        {
+            var genericIConsumerType = typeof(IConsumer<>);
+            var genericConsumerType = typeof(DeduplicatedConsumer<>);
+
+            foreach (var contract in contracts)
+            {
+                var iconsumerContract = genericIConsumerType.MakeGenericType(contract);
+                var consumerContract = genericConsumerType.MakeGenericType(contract);
+                container.RegisterType(iconsumerContract, consumerContract, lifetimeManagerFactory());
+            }
+
+            return container;
+        }
+
+        /// <summary>
         /// Registers the message contracts you intend for an endpoint to resolve.
         /// </summary>
         /// <param name="container">The container.</param>
@@ -32,7 +54,7 @@ namespace Miles.MassTransit.Unity
         public static IUnityContainer RegisterContracts(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, params Type[] contracts)
         {
             var genericIConsumerType = typeof(IConsumer<>);
-            var genericConsumerType = typeof(MassTransitConsumer<>);
+            var genericConsumerType = typeof(Consumer<>);
 
             foreach (var contract in contracts)
             {
