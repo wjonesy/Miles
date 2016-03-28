@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Miles.Messaging;
+using Miles.Persistence;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit
@@ -13,17 +14,25 @@ namespace Miles.MassTransit
     public class MassTransitConsumer<TMessage> : IConsumer<TMessage> where TMessage : class
     {
         private readonly static Task CompletedTask = Task.FromResult(0);    // Replace with Task.CompletedTask in .NET 4.6
+
         private readonly IContainer container;
         private readonly IIncomingMessageRepository incomingMessageRepo;
+        private readonly ITransaction transaction;
+        private readonly ITime time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MassTransitConsumer{TMessage}" /> class.
         /// </summary>
         /// <param name="container">The container.</param>
-        public MassTransitConsumer(IContainer container, IIncomingMessageRepository incomingMessageRepo)
+        /// <param name="incomingMessageRepo">The incoming message repo.</param>
+        /// <param name="transaction">The transaction.</param>
+        /// <param name="time">The time.</param>
+        public MassTransitConsumer(IContainer container, IIncomingMessageRepository incomingMessageRepo, ITransaction transaction, ITime time)
         {
             this.container = container;
             this.incomingMessageRepo = incomingMessageRepo;
+            this.transaction = transaction;
+            this.time = time;
         }
 
         /// <summary>
@@ -33,15 +42,28 @@ namespace Miles.MassTransit
         /// <returns></returns>
         public async Task Consume(ConsumeContext<TMessage> context)
         {
-            // De-duplication
-            var incomingMessage = new IncomingMessage(typeof(TMessage).FullName, context.MessageId.Value);
-            var notProcessed = await incomingMessageRepo.SaveAsync(incomingMessage);
-            if (!notProcessed)
-                await CompletedTask;
+            await transaction.BeginAsync();
+            try
+            {
+                // De-duplication
+                var incomingMessage = new IncomingMessage(context.MessageId.Value, time.Now);
+                var notProcessed = await incomingMessageRepo.SaveAsync(incomingMessage);
+                if (!notProcessed)
+                {
+                    await transaction.RollbackAsync();
+                    return;
+                }
 
-            container.RegisterInstance<ConsumeContext>(context);
-            var processor = container.Resolve<IMessageProcessor<TMessage>>();
-            await processor.ProcessAsync(context.Message);
+                container.RegisterInstance<ConsumeContext>(context);
+                var processor = container.Resolve<IMessageProcessor<TMessage>>();
+                await processor.ProcessAsync(context.Message);
+
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+            }
         }
     }
 }

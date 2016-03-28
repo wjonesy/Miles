@@ -14,23 +14,15 @@ namespace Miles.MassTransit
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IncomingMessage"/> class.
+        /// Initializes a new instance of the <see cref="IncomingMessage" /> class.
         /// </summary>
-        /// <param name="messageType">Type of the message.</param>
         /// <param name="messageId">The message identifier.</param>
-        public IncomingMessage(string messageType, Guid messageId)
+        /// <param name="when">When the message was processed.</param>
+        public IncomingMessage(Guid messageId, DateTime when)
         {
-            this.MessageType = messageType;
             this.MessageId = messageId;
+            this.When = when;
         }
-
-        /// <summary>
-        /// Gets the type of the message.
-        /// </summary>
-        /// <value>
-        /// The type of the message.
-        /// </value>
-        public string MessageType { get; private set; }
 
         /// <summary>
         /// Gets the message identifier.
@@ -39,5 +31,13 @@ namespace Miles.MassTransit
         /// The message identifier.
         /// </value>
         public Guid MessageId { get; private set; }
+
+        /// <summary>
+        /// Gets when the message was processed.
+        /// </summary>
+        /// <value>
+        /// The when.
+        /// </value>
+        public DateTime When { get; private set; }
     }
 }
