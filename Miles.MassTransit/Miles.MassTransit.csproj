@@ -30,8 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CleanupOutgoingMessagesConsumer.cs" />
+    <Compile Include="CleanupIncomingMessagesConsumer.cs" />
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Consumer.cs" />
+    <Compile Include="ICleanupIncomingMessages.cs" />
+    <Compile Include="ICleanupOutgoingMessages.cs" />
     <Compile Include="IContainer.cs" />
     <Compile Include="IIncomingMessageRepository.cs" />
     <Compile Include="ILookupEndpointUri.cs" />

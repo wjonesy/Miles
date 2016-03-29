@@ -19,7 +19,9 @@ namespace Miles.MassTransit.Unity
             return container
                 .RegisterType<IContainer, UnityMilesMassTransitContainer>(lifetimeManagerFactory())
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
-                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory());
+                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
+                .RegisterType<IConsumer<ICleanupIncomingMessages>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
+                .RegisterType<IConsumer<ICleanupOutgoingMessages>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());
         }
 
         /// <summary>

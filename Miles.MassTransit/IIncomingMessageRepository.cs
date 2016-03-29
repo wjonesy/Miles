@@ -14,5 +14,11 @@ namespace Miles.MassTransit
         /// </remarks>
         /// <returns><c>true</c> when the instance is unique, <c>false</c> on primary key clash.</returns>
         Task<bool> SaveAsync(IncomingMessage incomingMessage);
+
+        /// <summary>
+        /// Deletes the old incoming messages.
+        /// </summary>
+        /// <returns></returns>
+        Task DeleteOldAsync();
     }
 }

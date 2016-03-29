@@ -23,5 +23,11 @@ namespace Miles.MassTransit
         /// <param name="evt">The event.</param>
         /// <param name="ignoreTransaction">if set to <c>true</c> then the save shouldn't be part of a transaction; this change should save in isolation.</param>
         Task SaveAsync(OutgoingMessage evt, bool ignoreTransaction = false);
+
+        /// <summary>
+        /// Deletes the old dispatched outgoing messages.
+        /// </summary>
+        /// <returns></returns>
+        Task DeleteOldDispatchedAsync();
     }
 }
