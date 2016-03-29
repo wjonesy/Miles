@@ -1,4 +1,7 @@
-﻿namespace Miles.MassTransit
+﻿using MassTransit;
+using Miles.Messaging;
+
+namespace Miles.MassTransit
 {
     /// <summary>
     /// Container requirements.
@@ -6,17 +9,20 @@
     public interface IContainer
     {
         /// <summary>
-        /// Registers an instance of an object with the container.
+        /// Registers the consume context.
         /// </summary>
-        /// <typeparam name="TType">The type of the instance.</typeparam>
+        /// <remarks>
+        /// It is expected this is a singleton per child container instance. It doesn't need to be cleaned up by the container.
+        /// </remarks>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="instance">The instance.</param>
-        void RegisterInstance<TType>(TType instance);
+        void RegisterConsumeContext<TMessage>(ConsumeContext<TMessage> instance) where TMessage : class;
 
         /// <summary>
-        /// Resolves a type.
+        /// Resolves the processor.
         /// </summary>
-        /// <typeparam name="TType">The type to resolve.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <returns></returns>
-        TType Resolve<TType>();
+        IMessageProcessor<TMessage> ResolveProcessor<TMessage>();
     }
 }

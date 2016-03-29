@@ -1,9 +1,11 @@
-﻿using Microsoft.Practices.Unity;
+﻿using MassTransit;
+using Microsoft.Practices.Unity;
+using Miles.Messaging;
 
 namespace Miles.MassTransit.Unity
 {
     /// <summary>
-    /// Adapters Unity to the requirements of the Miles.MassTransit implementation.
+    /// Adapts Unity to the requirements of the Miles.MassTransit implementation.
     /// </summary>
     /// <seealso cref="Miles.MassTransit.IContainer" />
     class UnityMilesMassTransitContainer : IContainer
@@ -20,23 +22,27 @@ namespace Miles.MassTransit.Unity
         }
 
         /// <summary>
-        /// Registers an instance of an object with the container.
+        /// Registers the consume context.
         /// </summary>
-        /// <typeparam name="TType">The type of the instance.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="instance">The instance.</param>
-        public void RegisterInstance<TType>(TType instance)
+        /// <remarks>
+        /// It is expected this is a singleton per child container instance. It doesn't need to be cleaned up by the container.
+        /// </remarks>
+        public void RegisterConsumeContext<TMessage>(ConsumeContext<TMessage> instance) where TMessage : class
         {
-            container.RegisterInstance(instance);
+            this.container.RegisterInstance(instance, new ExternallyControlledLifetimeManager());
+            this.container.RegisterInstance<ConsumeContext>(instance, new ExternallyControlledLifetimeManager());
         }
 
         /// <summary>
-        /// Resolves a type.
+        /// Resolves the processor.
         /// </summary>
-        /// <typeparam name="TType">The type to resolve.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <returns></returns>
-        public TType Resolve<TType>()
+        public IMessageProcessor<TMessage> ResolveProcessor<TMessage>()
         {
-            return container.Resolve<TType>();
+            return container.Resolve<IMessageProcessor<TMessage>>();
         }
     }
 }

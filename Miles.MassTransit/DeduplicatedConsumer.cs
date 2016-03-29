@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Miles.Messaging;
 using Miles.Persistence;
 using System.Threading.Tasks;
 
@@ -54,8 +53,8 @@ namespace Miles.MassTransit
                     return;
                 }
 
-                container.RegisterInstance<ConsumeContext>(context);
-                var processor = container.Resolve<IMessageProcessor<TMessage>>();
+                container.RegisterConsumeContext(context);
+                var processor = container.ResolveProcessor<TMessage>();
                 await processor.ProcessAsync(context.Message);
 
                 await transaction.CommitAsync();
