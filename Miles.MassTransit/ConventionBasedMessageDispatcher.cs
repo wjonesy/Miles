@@ -14,15 +14,13 @@ namespace Miles.MassTransit
         private readonly IPublishEndpoint publishEndpoint;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConventionBasedMessageDispatcher"/> class.
+        /// Initializes a new instance of the <see cref="ConventionBasedMessageDispatcher" /> class.
         /// </summary>
         /// <param name="bus">The bus.</param>
-        /// <param name="consumeContext">The consume context.</param>
-        public ConventionBasedMessageDispatcher(IBus bus, ConsumeContext consumeContext)
+        /// <param name="publishEndpoint">The publish endpoint.</param>
+        public ConventionBasedMessageDispatcher(IPublishEndpoint publishEndpoint)
         {
-            // If we are working off the back of something else we have a consumeContext.
-            // If we are initiating action we fallback to the bus
-            publishEndpoint = (IPublishEndpoint)consumeContext ?? bus;
+            this.publishEndpoint = publishEndpoint;
         }
 
         /// <summary>
@@ -31,9 +29,9 @@ namespace Miles.MassTransit
         /// <param name="message">The message.</param>
         /// <param name="messageId">The message identifier.</param>
         /// <returns></returns>
-        public async Task DispatchAsync(object message, Guid messageId)
+        public Task DispatchAsync(object message, Guid messageId)
         {
-            await publishEndpoint.Publish(message, c => c.MessageId = messageId);
+            return publishEndpoint.Publish(message, c => c.MessageId = messageId);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Miles.MassTransit
                                 JsonConvert.SerializeObject(evt),
                                 time),
                             evt))).ToList();
-                await outgoingEventRepository.SaveAsync(pendingDispatchMessages.Select(x => x.OutgoingMessage));
+                await outgoingEventRepository.SaveAsync(pendingDispatchMessages.Select(x => x.OutgoingMessage)).ConfigureAwait(false);
                 pendingSaveEvents.Clear();
                 pendingSaveCommands.Clear();
             });
@@ -74,9 +74,9 @@ namespace Miles.MassTransit
                 foreach (var message in pendingDispatchMessages.ToList())
                 {
                     var dispatcher = message.OutgoingMessage.MessageType == OutgoingMessageType.Command ? commandDispatcher : eventDispatcher;
-                    await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage.MessageId);
+                    await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage.MessageId).ConfigureAwait(false);
                     message.OutgoingMessage.Dispatched(time);
-                    await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true);
+                    await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true).ConfigureAwait(false);
                     pendingDispatchMessages.Remove(message);
                 }
             });

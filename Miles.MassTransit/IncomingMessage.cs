@@ -36,7 +36,7 @@ namespace Miles.MassTransit
         /// Gets when the message was processed.
         /// </summary>
         /// <value>
-        /// The when.
+        /// The date.
         /// </value>
         public DateTime When { get; private set; }
     }

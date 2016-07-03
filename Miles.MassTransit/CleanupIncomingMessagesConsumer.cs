@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
+    /// <summary>
+    /// MassTransit consumer that cleans up old incoming messages.
+    /// </summary>
+    /// <seealso cref="MassTransit.IConsumer{Miles.MassTransit.ICleanupIncomingMessages}" />
     public class CleanupIncomingMessagesConsumer : IConsumer<ICleanupIncomingMessages>
     {
         private readonly IIncomingMessageRepository incomingMessageRepository;
@@ -22,9 +26,9 @@ namespace Miles.MassTransit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public async Task Consume(ConsumeContext<ICleanupIncomingMessages> context)
+        public Task Consume(ConsumeContext<ICleanupIncomingMessages> context)
         {
-            await incomingMessageRepository.DeleteOldAsync();
+            return incomingMessageRepository.DeleteOldAsync();
         }
     }
 }
