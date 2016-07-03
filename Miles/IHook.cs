@@ -12,7 +12,16 @@ namespace Miles
     /// <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
     public interface IHook<TSender, TEventArgs> where TEventArgs : EventArgs
     {
+        /// <summary>
+        /// Registers the specified hook.
+        /// </summary>
+        /// <param name="hook">The hook.</param>
         void Register(Func<TSender, TEventArgs, Task> hook);
+
+        /// <summary>
+        /// Unregisters the specified hook.
+        /// </summary>
+        /// <param name="hook">The hook.</param>
         void UnRegister(Func<TSender, TEventArgs, Task> hook);
     }
 }

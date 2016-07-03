@@ -27,11 +27,19 @@ namespace Miles
         /// </value>
         public bool InitiateSynchronously { get; set; } = true;
 
+        /// <summary>
+        /// Registers the specified hook.
+        /// </summary>
+        /// <param name="hook">The hook.</param>
         public void Register(Func<TSender, TEventArgs, Task> hook)
         {
             hooks.Add(hook);
         }
 
+        /// <summary>
+        /// Unregisters the specified hook.
+        /// </summary>
+        /// <param name="hook">The hook.</param>
         public void UnRegister(Func<TSender, TEventArgs, Task> hook)
         {
             hooks.Remove(hook);
