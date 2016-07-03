@@ -58,9 +58,7 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  -->
   <Target Name="AfterBuild">
-    <Exec Command="nuget pack $(ProjectPath) -IncludeReferencedProjects -Prop Configuration=$(Configuration) -OutputDirectory $(ProjectDir)$(OutDir)">
-    </Exec>
   </Target>
+  -->
 </Project>
