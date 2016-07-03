@@ -21,10 +21,11 @@ namespace Miles.MassTransit
         /// <param name="messageType">Type of the message.</param>
         /// <param name="serializedMessage">The serialized message.</param>
         /// <param name="time">Time service.</param>
-        public OutgoingMessage(Guid messageId, OutgoingMessageType messageType, string serializedMessage, ITime time)
+        public OutgoingMessage(Guid messageId, Guid correlationId, OutgoingMessageType messageType, string serializedMessage, ITime time)
         {
             this.EventCreated = time.Now;
             this.MessageId = messageId;
+            this.CorrelationId = correlationId;
             this.MessageType = messageType;
             this.SerializedMessage = serializedMessage;
         }
@@ -36,6 +37,14 @@ namespace Miles.MassTransit
         /// The message identifier.
         /// </value>
         public Guid MessageId { get; private set; }
+
+        /// <summary>
+        /// Gets the correlation identifier.
+        /// </summary>
+        /// <value>
+        /// The correlation identifier.
+        /// </value>
+        public Guid CorrelationId { get; private set; }
 
         /// <summary>
         /// Gets the message type.

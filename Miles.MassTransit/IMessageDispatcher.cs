@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
@@ -12,8 +11,8 @@ namespace Miles.MassTransit
         /// Dispatches the specified message.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="messageId">The message identifier.</param>
+        /// <param name="messageDetails">The message details.</param>
         /// <returns></returns>
-        Task DispatchAsync(object message, Guid messageId);
+        Task DispatchAsync(object message, OutgoingMessage messageDetails);
     }
 }

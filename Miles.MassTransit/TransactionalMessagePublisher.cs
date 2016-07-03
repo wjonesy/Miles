@@ -26,15 +26,17 @@ namespace Miles.MassTransit
         private List<OutgoingMessageAndMessage> pendingDispatchMessages;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionalMessagePublisher"/> class.
+        /// Initializes a new instance of the <see cref="TransactionalMessagePublisher" /> class.
         /// </summary>
         /// <param name="transaction">The transaction.</param>
+        /// <param name="consumeContext">The consume context.</param>
         /// <param name="outgoingEventRepository">The outgoing event repository.</param>
         /// <param name="time">The time.</param>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
         public TransactionalMessagePublisher(
             ITransaction transaction,
+            ConsumeContext consumeContext,
             IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
             IMessageDispatcher commandDispatcher,
@@ -42,6 +44,8 @@ namespace Miles.MassTransit
         {
             this.outgoingEventRepository = outgoingEventRepository;
             this.time = time;
+
+            var correlationId = consumeContext.CorrelationId ?? NewId.NextGuid();
 
             // Just before commit save all the outgoing messages and generate their ids.
             transaction.PreCommit.Register(async (s, e) =>
@@ -51,6 +55,7 @@ namespace Miles.MassTransit
                         new OutgoingMessageAndMessage(
                             new OutgoingMessage(
                                 NewId.NextGuid(),
+                                correlationId,
                                 OutgoingMessageType.Event,
                                 JsonConvert.SerializeObject(evt),
                                 time),
@@ -59,6 +64,7 @@ namespace Miles.MassTransit
                         new OutgoingMessageAndMessage(
                             new OutgoingMessage(
                                 NewId.NextGuid(),
+                                correlationId,
                                 OutgoingMessageType.Command,
                                 JsonConvert.SerializeObject(evt),
                                 time),
@@ -74,7 +80,7 @@ namespace Miles.MassTransit
                 foreach (var message in pendingDispatchMessages.ToList())
                 {
                     var dispatcher = message.OutgoingMessage.MessageType == OutgoingMessageType.Command ? commandDispatcher : eventDispatcher;
-                    await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage.MessageId).ConfigureAwait(false);
+                    await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage).ConfigureAwait(false);
                     message.OutgoingMessage.Dispatched(time);
                     await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true).ConfigureAwait(false);
                     pendingDispatchMessages.Remove(message);

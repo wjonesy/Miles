@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using System;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit
@@ -27,11 +26,11 @@ namespace Miles.MassTransit
         /// Dispatches the specified message.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="messageId">The message identifier.</param>
+        /// <param name="messageDetails">The message details.</param>
         /// <returns></returns>
-        public Task DispatchAsync(object message, Guid messageId)
+        public Task DispatchAsync(object message, OutgoingMessage messageDetails)
         {
-            return publishEndpoint.Publish(message, c => c.MessageId = messageId);
+            return publishEndpoint.Publish(message, c => { c.MessageId = messageDetails.MessageId; c.CorrelationId = messageDetails.CorrelationId; });
         }
     }
 }
