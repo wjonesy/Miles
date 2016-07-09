@@ -23,6 +23,8 @@ namespace Miles.MassTransit
         // State
         private HashSet<OutgoingMessageAndObject> pendingSaveMessages = new HashSet<OutgoingMessageAndObject>();
         private HashSet<OutgoingMessageAndObject> pendingDispatchMessages = new HashSet<OutgoingMessageAndObject>();
+        // handlers
+        private readonly Dictionary<Type, List<object>> immediateMessageHandlers = new Dictionary<Type, List<object>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionalMessagePublisher" /> class.
@@ -68,6 +70,13 @@ namespace Miles.MassTransit
             });
         }
 
+        #region IEventPublisher
+
+        void IEventPublisher.Register<TEvent>(IMessageProcessor<TEvent> evt)
+        {
+            AddMessageHandler(evt);
+        }
+
         /// <summary>
         /// Publishes the specified event.
         /// </summary>
@@ -78,6 +87,15 @@ namespace Miles.MassTransit
             pendingSaveMessages.Add(new OutgoingMessageAndObject(OutgoingMessageType.Event, typeof(TEvent), evt));
         }
 
+        #endregion
+
+        #region ICommandPublisher
+
+        void ICommandPublisher.Register<TCommand>(IMessageProcessor<TCommand> cmd)
+        {
+            AddMessageHandler(cmd);
+        }
+
         /// <summary>
         /// Publishes the specified command.
         /// </summary>
@@ -86,6 +104,20 @@ namespace Miles.MassTransit
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
             pendingSaveMessages.Add(new OutgoingMessageAndObject(OutgoingMessageType.Command, typeof(TCommand), cmd));
+        }
+
+        #endregion
+
+        private void AddMessageHandler<TMessage>(IMessageProcessor<TMessage> messageHandler) where TMessage : class
+        {
+            var messageType = typeof(TMessage);
+            List<object> handlers;
+            if (!immediateMessageHandlers.TryGetValue(messageType, out handlers))
+            {
+                handlers = new List<object>();
+                immediateMessageHandlers.Add(messageType, handlers);
+            }
+            handlers.Add(messageHandler);
         }
 
         // Internal structure to keep the message object and its db representation together
