@@ -15,23 +15,23 @@ namespace Miles.MassTransit
         private readonly IMessageProcessor<TMessage> inner;
         private readonly ConsumeContext context;
         private readonly IIncomingMessageRepository incomingMessageRepo;
-        private readonly ITransaction transaction;
+        private readonly ITransactionContext transactionContext;
         private readonly ITime time;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeduplicatedMessageProcessor{TMessage}"/> class.
+        /// Initializes a new instance of the <see cref="DeduplicatedMessageProcessor{TMessage}" /> class.
         /// </summary>
         /// <param name="inner">The inner instance.</param>
         /// <param name="context">The context.</param>
         /// <param name="incomingMessageRepo">The incoming message repo.</param>
-        /// <param name="transaction">The transaction.</param>
+        /// <param name="transactionContext">The transaction context.</param>
         /// <param name="time">The time.</param>
-        public DeduplicatedMessageProcessor(IMessageProcessor<TMessage> inner, ConsumeContext context, IIncomingMessageRepository incomingMessageRepo, ITransaction transaction, ITime time)
+        public DeduplicatedMessageProcessor(IMessageProcessor<TMessage> inner, ConsumeContext context, IIncomingMessageRepository incomingMessageRepo, ITransactionContext transactionContext, ITime time)
         {
             this.inner = inner;
             this.context = context;
             this.incomingMessageRepo = incomingMessageRepo;
-            this.transaction = transaction;
+            this.transactionContext = transactionContext;
             this.time = time;
         }
 
@@ -42,26 +42,17 @@ namespace Miles.MassTransit
         /// <returns></returns>
         public async Task ProcessAsync(TMessage message)
         {
-            await transaction.BeginAsync().ConfigureAwait(false);
-            try
+            using(var transaction = await transactionContext.BeginAsync().ConfigureAwait(false))
             {
                 // De-duplication
                 var incomingMessage = new IncomingMessage(context.MessageId.Value, time.Now);
                 var processed = await incomingMessageRepo.RecordAsync(incomingMessage).ConfigureAwait(false);
                 if (processed)
-                {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
                     return;
-                }
 
                 await inner.ProcessAsync(message).ConfigureAwait(false);
 
                 await transaction.CommitAsync().ConfigureAwait(false);
-            }
-            catch
-            {
-                await transaction.RollbackAsync().ConfigureAwait(false);
-                throw;
             }
         }
     }

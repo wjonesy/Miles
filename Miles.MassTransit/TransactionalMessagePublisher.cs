@@ -28,14 +28,14 @@ namespace Miles.MassTransit
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionalMessagePublisher" /> class.
         /// </summary>
-        /// <param name="transaction">The transaction.</param>
+        /// <param name="transactionContext">The transaction context.</param>
         /// <param name="consumeContext">The consume context.</param>
         /// <param name="outgoingEventRepository">The outgoing event repository.</param>
         /// <param name="time">The time.</param>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
         public TransactionalMessagePublisher(
-            ITransaction transaction,
+            ITransactionContext transactionContext,
             ConsumeContext consumeContext,
             IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
@@ -48,7 +48,7 @@ namespace Miles.MassTransit
             var correlationId = consumeContext.CorrelationId ?? NewId.NextGuid();
 
             // Just before commit save all the outgoing messages and generate their ids.
-            transaction.PreCommit.Register(async (s, e) =>
+            transactionContext.PreCommit.Register(async (s, e) =>
             {
                 pendingDispatchMessages = pendingSaveEvents
                     .Select(evt =>
@@ -75,7 +75,7 @@ namespace Miles.MassTransit
             });
 
             // After commit dispatch the messages. Try to mark them as dispatched.
-            transaction.PostCommit.Register(async (s, e) =>
+            transactionContext.PostCommit.Register(async (s, e) =>
             {
                 foreach (var message in pendingDispatchMessages.ToList())
                 {
