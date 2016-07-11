@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="DomainContext.cs" />
     <Compile Include="Messaging\CallbackMessageProcessor.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />
