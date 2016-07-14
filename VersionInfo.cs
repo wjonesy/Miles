@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -8,8 +6,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Adam Burton")]
 [assembly: AssemblyProduct("Miles")]
 [assembly: AssemblyCopyright("Copyright © Adam Burton 2016")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -18,4 +14,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.2.0.0")]

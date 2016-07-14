@@ -54,7 +54,6 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="AutofacConsumerFactory.cs" />
     <Compile Include="ConsumerAdapter.cs" />
     <Compile Include="ContainerBuilderExtensions.cs" />
