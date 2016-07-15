@@ -35,6 +35,7 @@
     </Compile>
     <Compile Include="ConsumerAdapter.cs" />
     <Compile Include="DeduplicatedMessageInterceptor.cs" />
+    <Compile Include="PreventMultipleExecutionRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceiveEndpointConfiguratorExtensions.cs" />
     <Compile Include="UnityConsumerFactory.cs" />
