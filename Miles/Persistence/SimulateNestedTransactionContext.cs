@@ -124,7 +124,11 @@ namespace Miles.Persistence
         public void Dispose()
         {
             if (nesting > 0)
-                RollbackAsync().RunSynchronously();
+            {
+                var rollback = RollbackAsync();
+                if (!rollback.IsCompleted)
+                    rollback.RunSynchronously();
+            }
 
             DoDispose();
         }
