@@ -20,13 +20,26 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.Unity
 {
+    /// <exclude />
     public static class ReceiveEndpointConfiguratorExtensions
     {
+        /// <summary>
+        /// Configures the receive endpoint to consume the supplied message types retrieving the consumers from unity.
+        /// </summary>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="types">The message types.</param>
         public static void MilesConsumers(this IReceiveEndpointConfigurator configurator, IUnityContainer container, params Type[] types)
         {
             configurator.MilesConsumers(container, types);
         }
 
+        /// <summary>
+        /// Configures the receive endpoint to consume the supplied message types retrieving the consumers from unity.
+        /// </summary>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="types">The message types.</param>
         public static void MilesConsumers(this IReceiveEndpointConfigurator configurator, IUnityContainer container, IEnumerable<Type> types)
         {
             var genericMilesConsumerMethod = typeof(ReceiveEndpointConfiguratorExtensions)
@@ -39,6 +52,12 @@ namespace Miles.MassTransit.Unity
             }
         }
 
+        /// <summary>
+        /// Configures the receive endpoint to consume the supplied message type retrieving the consumer from unity.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="container">The container.</param>
         public static void MilesConsumer<TMessage>(this IReceiveEndpointConfigurator configurator, IUnityContainer container) where TMessage : class
         {
             configurator.Consumer(new UnityConsumerFactory<IConsumer<TMessage>>(container));

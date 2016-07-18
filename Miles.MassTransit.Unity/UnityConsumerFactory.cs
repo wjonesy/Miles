@@ -19,8 +19,8 @@ using System.Threading.Tasks;
 namespace Miles.MassTransit.Unity
 {
     /// <summary>
-    /// Lifted from straight from MassTransit.Unity.UnityConsumerFactory{TConsumer} but with some additional type registration to 
-    /// meet some injection requirements (specifically the consume context).
+    /// Lifted straight from MassTransit.Unity.UnityConsumerFactory{TConsumer} but with some additional type registration to 
+    /// meet some injection requirements (specifically the ConsumeContext).
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="MassTransit.IConsumerFactory{TConsumer}" />

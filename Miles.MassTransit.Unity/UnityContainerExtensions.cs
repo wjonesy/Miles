@@ -22,8 +22,6 @@ using Miles.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Unity
 {
@@ -70,6 +68,13 @@ namespace Miles.MassTransit.Unity
             return container;
         }
 
+        /// <summary>
+        /// Registers the message processors with unity.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
+        /// <param name="messageProcessors">The message processors.</param>
+        /// <returns></returns>
         public static IUnityContainer RegisterMessageProcessors(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, IEnumerable<Type> messageProcessors)
         {
             foreach (var messageProcessor in messageProcessors)
@@ -78,6 +83,13 @@ namespace Miles.MassTransit.Unity
             return container;
         }
 
+        /// <summary>
+        /// Registers a message processor with unity.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
+        /// <param name="messageProcessor">The message processor.</param>
+        /// <returns></returns>
         public static IUnityContainer RegisterMessageProcessor(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, Type messageProcessor)
         {
             var iMessageProcessors = messageProcessor.GetInterfaces().Where(x => x.IsMessageProcessor());
