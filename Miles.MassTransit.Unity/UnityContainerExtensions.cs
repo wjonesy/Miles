@@ -17,6 +17,7 @@ using MassTransit;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Miles.Messaging;
+using Miles.Persistence;
 using Miles.Reflection;
 using System;
 using System.Collections.Generic;
@@ -41,8 +42,22 @@ namespace Miles.MassTransit.Unity
                 .AddNewExtension<Interception>();
 
             container = container
-                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
-                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
+                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory(),
+                    new InjectionConstructor(
+                        new ResolvedParameter<ITransactionContext>(),
+                        new ResolvedParameter<IOutgoingMessageRepository>(),
+                        new ResolvedParameter<ITime>(),
+                        new ResolvedParameter<IMessageDispatcher>(),
+                        new ResolvedParameter<ConventionBasedMessageDispatcher>(),
+                        new OptionalParameter<ConsumeContext>()))
+                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory(),
+                    new InjectionConstructor(
+                        new ResolvedParameter<ITransactionContext>(),
+                        new ResolvedParameter<IOutgoingMessageRepository>(),
+                        new ResolvedParameter<ITime>(),
+                        new ResolvedParameter<IMessageDispatcher>(),
+                        new ResolvedParameter<ConventionBasedMessageDispatcher>(),
+                        new OptionalParameter<ConsumeContext>()))
                 .RegisterType(typeof(IConsumer<>), typeof(ConsumerAdapter<>), lifetimeManagerFactory())
                 .RegisterType<IConsumer<ICleanupIncomingMessages>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
                 .RegisterType<IConsumer<ICleanupOutgoingMessages>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());

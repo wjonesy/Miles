@@ -53,11 +53,11 @@ namespace Miles.MassTransit
         /// <param name="eventDispatcher">The event dispatcher.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
-            ConsumeContext consumeContext,
             IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
             IMessageDispatcher commandDispatcher,
-            ConventionBasedMessageDispatcher eventDispatcher)
+            ConventionBasedMessageDispatcher eventDispatcher,
+            ConsumeContext consumeContext = null)
         {
             this.outgoingEventRepository = outgoingEventRepository;
             this.time = time;
