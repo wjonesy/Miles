@@ -33,6 +33,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="ActivityContext.cs" />
     <Compile Include="CleanupOutgoingMessagesConsumer.cs" />
     <Compile Include="CleanupIncomingMessagesConsumer.cs" />
     <Compile Include="ConventionBasedMessageDispatcher.cs" />

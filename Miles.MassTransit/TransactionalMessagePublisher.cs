@@ -39,7 +39,7 @@ namespace Miles.MassTransit
         // State
         private readonly Stack<PendingMessageHandler> messageStack = new Stack<PendingMessageHandler>();
         private readonly List<OutgoingMessageAndObject> pendingDispatchMessages = new List<OutgoingMessageAndObject>();
-        private readonly Guid correlationId;
+        private readonly IActivityContext activityContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionalMessagePublisher" /> class.
@@ -47,22 +47,21 @@ namespace Miles.MassTransit
         /// <param name="transactionContext">The transaction context.</param>
         /// <param name="outgoingEventRepository">The outgoing event repository.</param>
         /// <param name="time">The time.</param>
+        /// <param name="activityContext">The activity context.</param>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
-        /// <param name="consumeContext">The consume context.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
             IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
+            IActivityContext activityContext,
             IMessageDispatcher commandDispatcher,
-            ConventionBasedMessageDispatcher eventDispatcher,
-            ConsumeContext consumeContext = null)
+            ConventionBasedMessageDispatcher eventDispatcher)
         {
             this.messageStack.Push(new PendingMessageHandler(this));
             this.outgoingEventRepository = outgoingEventRepository;
             this.time = time;
-
-            correlationId = consumeContext?.CorrelationId ?? NewId.NextGuid();  // TODO: maybe want to centerlize this for easy logging etc
+            this.activityContext = activityContext;
 
             transactionContext.PreCommit.Register((s, e) => messageStack.Peek().Handle());
 
@@ -185,7 +184,7 @@ namespace Miles.MassTransit
             public async Task Handle()
             {
                 // Just before commit save all the outgoing messages and generate their ids - for consistency.
-                await publisher.outgoingEventRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(publisher.correlationId, publisher.time.Now))).ConfigureAwait(false);
+                await publisher.outgoingEventRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(publisher.activityContext.CorrelationId, publisher.time.Now))).ConfigureAwait(false);
                 publisher.pendingDispatchMessages.AddRange(pendingSaveMessages);
 
                 // Execute any immediate message handlers so they are within the transaction
