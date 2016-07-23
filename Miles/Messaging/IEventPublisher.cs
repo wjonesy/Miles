@@ -27,8 +27,8 @@ namespace Miles.Messaging
         /// Registers a handler for immediate execution within a transaction.
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="evt">The event.</param>
-        void Register<TEvent>(IMessageProcessor<TEvent> evt) where TEvent : class;
+        /// <param name="processor">The message processor.</param>
+        void Register<TEvent>(IMessageProcessor<TEvent> processor) where TEvent : class;
 
         /// <summary>
         /// Publishes the specified event.

@@ -27,8 +27,8 @@ namespace Miles.Messaging
         /// Registers a handler for immediate execution within a transaction.
         /// </summary>
         /// <typeparam name="TCommand">The type of the command.</typeparam>
-        /// <param name="cmd">The command.</param>
-        void Register<TCommand>(IMessageProcessor<TCommand> cmd) where TCommand : class;
+        /// <param name="processor">The message processor.</param>
+        void Register<TCommand>(IMessageProcessor<TCommand> processor) where TCommand : class;
 
         /// <summary>
         /// Publishes the specified command.

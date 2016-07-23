@@ -37,20 +37,19 @@ namespace Miles.MassTransit
         private readonly ITime time;
 
         // State
-        private HashSet<OutgoingMessageAndObject> pendingSaveMessages = new HashSet<OutgoingMessageAndObject>();
-        private HashSet<OutgoingMessageAndObject> pendingDispatchMessages = new HashSet<OutgoingMessageAndObject>();
-        // handlers
-        private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageHandlers = new Dictionary<Type, List<IObjectMessageProcessor>>();
+        private readonly Stack<PendingMessageHandler> messageStack = new Stack<PendingMessageHandler>();
+        private readonly List<OutgoingMessageAndObject> pendingDispatchMessages = new List<OutgoingMessageAndObject>();
+        private readonly Guid correlationId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TransactionalMessagePublisher" /> class.
         /// </summary>
         /// <param name="transactionContext">The transaction context.</param>
-        /// <param name="consumeContext">The consume context.</param>
         /// <param name="outgoingEventRepository">The outgoing event repository.</param>
         /// <param name="time">The time.</param>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
+        /// <param name="consumeContext">The consume context.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
             IOutgoingMessageRepository outgoingEventRepository,
@@ -59,40 +58,30 @@ namespace Miles.MassTransit
             ConventionBasedMessageDispatcher eventDispatcher,
             ConsumeContext consumeContext = null)
         {
+            this.messageStack.Push(new PendingMessageHandler(this));
             this.outgoingEventRepository = outgoingEventRepository;
             this.time = time;
 
-            var correlationId = consumeContext?.CorrelationId ?? NewId.NextGuid();  // TODO, maybe want to centerlize this for easy logging etc
+            correlationId = consumeContext?.CorrelationId ?? NewId.NextGuid();  // TODO: maybe want to centerlize this for easy logging etc
 
-            // Just before commit save all the outgoing messages and generate their ids.
-            transactionContext.PreCommit.Register(async (s, e) =>
-            {
-                // Just before commit save all the outgoing messages and generate their ids.
-                await outgoingEventRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(correlationId, time.Now))).ConfigureAwait(false);
-                pendingDispatchMessages = pendingSaveMessages;
-                pendingSaveMessages = new HashSet<OutgoingMessageAndObject>();
+            transactionContext.PreCommit.Register((s, e) => messageStack.Peek().Handle());
 
-                // Execute any immediate message handlers so they are within transaction
-                foreach (var message in pendingDispatchMessages)
-                {
-                    List<IObjectMessageProcessor> handlers;
-                    if (immediateMessageHandlers.TryGetValue(message.MessageType, out handlers))
-                    {
-                        foreach (var handler in handlers)
-                            await handler.Process(message);
-                    }
-                }
-            });
-
-            // After commit dispatch the messages. Try to mark them as dispatched.
             transactionContext.PostCommit.Register(async (s, e) =>
             {
                 foreach (var message in pendingDispatchMessages)
                 {
-                    var dispatcher = message.OutgoingMessage.MessageType == OutgoingMessageType.Command ? commandDispatcher : eventDispatcher;
-                    await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage).ConfigureAwait(false);
-                    message.OutgoingMessage.Dispatched(time.Now);
-                    await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true).ConfigureAwait(false);
+                    // After commit try to dispatch the messages. Try to mark them as dispatched.
+                    try
+                    {
+                        var dispatcher = message.OutgoingMessage.MessageType == OutgoingMessageType.Command ? commandDispatcher : eventDispatcher;
+                        await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage).ConfigureAwait(false);
+                        message.OutgoingMessage.Dispatched(time.Now);
+                        await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true).ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                        // TODO: Report the failure, but we are intentionally hiding this problem
+                    }
                 }
                 pendingDispatchMessages.Clear();
             });
@@ -102,7 +91,7 @@ namespace Miles.MassTransit
 
         void IEventPublisher.Register<TEvent>(IMessageProcessor<TEvent> evt)
         {
-            AddMessageHandler(evt);
+            messageStack.Peek().Register(evt);
         }
 
         /// <summary>
@@ -112,7 +101,7 @@ namespace Miles.MassTransit
         /// <param name="evt">The event.</param>
         void IEventPublisher.Publish<TEvent>(TEvent evt)
         {
-            pendingSaveMessages.Add(new OutgoingMessageAndObject(OutgoingMessageType.Event, typeof(TEvent), evt));
+            messageStack.Peek().Publish(OutgoingMessageType.Event, evt);
         }
 
         #endregion
@@ -121,7 +110,7 @@ namespace Miles.MassTransit
 
         void ICommandPublisher.Register<TCommand>(IMessageProcessor<TCommand> cmd)
         {
-            AddMessageHandler(cmd);
+            messageStack.Peek().Register(cmd);
         }
 
         /// <summary>
@@ -131,10 +120,12 @@ namespace Miles.MassTransit
         /// <param name="cmd">The command.</param>
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
-            pendingSaveMessages.Add(new OutgoingMessageAndObject(OutgoingMessageType.Command, typeof(TCommand), cmd));
+            messageStack.Peek().Publish(OutgoingMessageType.Command, cmd);
         }
 
         #endregion
+
+        #region Register and calling message handlers immediately
 
         // Internal structure to keep the message object and its db representation together
         private class OutgoingMessageAndObject
@@ -161,37 +152,84 @@ namespace Miles.MassTransit
             }
         }
 
-        #region Register and calling message handlers immediately
-
-        private void AddMessageHandler<TMessage>(IMessageProcessor<TMessage> messageHandler) where TMessage : class
+        private class PendingMessageHandler
         {
-            var messageType = typeof(TMessage);
-            List<IObjectMessageProcessor> handlers;
-            if (!immediateMessageHandlers.TryGetValue(messageType, out handlers))
+            private readonly TransactionalMessagePublisher publisher;
+            private readonly List<OutgoingMessageAndObject> pendingSaveMessages = new List<OutgoingMessageAndObject>();
+            private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageHandlers = new Dictionary<Type, List<IObjectMessageProcessor>>();
+
+            public PendingMessageHandler(TransactionalMessagePublisher publisher)
             {
-                handlers = new List<IObjectMessageProcessor>();
-                immediateMessageHandlers.Add(messageType, handlers);
-            }
-            handlers.Add(new ObjectToGenericMessageProcessor<TMessage>(messageHandler));
-        }
-
-        private interface IObjectMessageProcessor
-        {
-            Task Process(object message);
-        }
-
-        private class ObjectToGenericMessageProcessor<TMessage> : IObjectMessageProcessor
-        {
-            private readonly IMessageProcessor<TMessage> processor;
-
-            public ObjectToGenericMessageProcessor(IMessageProcessor<TMessage> processor)
-            {
-                this.processor = processor;
+                this.publisher = publisher;
             }
 
-            public Task Process(object message)
+            public void Register<TMessage>(IMessageProcessor<TMessage> messageHandler) where TMessage : class
             {
-                return processor.ProcessAsync((TMessage)message);
+                var messageType = typeof(TMessage);
+
+                List<IObjectMessageProcessor> handlers;
+                if (!immediateMessageHandlers.TryGetValue(messageType, out handlers))
+                {
+                    handlers = new List<IObjectMessageProcessor>();
+                    immediateMessageHandlers.Add(messageType, handlers);
+                }
+
+                handlers.Add(new ObjectToGenericMessageProcessor<TMessage>(messageHandler));
+            }
+
+            public void Publish<TMessage>(OutgoingMessageType type, TMessage msg)
+            {
+                pendingSaveMessages.Add(new OutgoingMessageAndObject(type, typeof(TMessage), msg));
+            }
+
+            public async Task Handle()
+            {
+                // Just before commit save all the outgoing messages and generate their ids - for consistency.
+                await publisher.outgoingEventRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(publisher.correlationId, publisher.time.Now))).ConfigureAwait(false);
+                publisher.pendingDispatchMessages.AddRange(pendingSaveMessages);
+
+                // Execute any immediate message handlers so they are within the transaction
+                foreach (var message in pendingSaveMessages)
+                {
+                    List<IObjectMessageProcessor> handlers;
+                    if (immediateMessageHandlers.TryGetValue(message.MessageType, out handlers))
+                    {
+                        foreach (var handler in handlers)
+                        {
+                            publisher.messageStack.Push(new PendingMessageHandler(publisher));
+                            try
+                            {
+                                await handler.Process(message);
+                            }
+                            finally
+                            {
+                                publisher.messageStack.Pop();
+                            }
+                        }
+                    }
+                }
+
+                pendingSaveMessages.Clear();
+            }
+
+            private interface IObjectMessageProcessor
+            {
+                Task Process(object message);
+            }
+
+            private class ObjectToGenericMessageProcessor<TMessage> : IObjectMessageProcessor
+            {
+                private readonly IMessageProcessor<TMessage> processor;
+
+                public ObjectToGenericMessageProcessor(IMessageProcessor<TMessage> processor)
+                {
+                    this.processor = processor;
+                }
+
+                public Task Process(object message)
+                {
+                    return processor.ProcessAsync((TMessage)message);
+                }
             }
         }
 
