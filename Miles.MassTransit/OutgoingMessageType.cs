@@ -17,7 +17,7 @@ namespace Miles.MassTransit
 {
     public enum OutgoingMessageType
     {
-        Command,
-        Event
+        Command = 1,
+        Event = 2
     }
 }

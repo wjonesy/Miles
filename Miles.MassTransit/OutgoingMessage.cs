@@ -33,14 +33,17 @@ namespace Miles.MassTransit
         /// Initializes a new instance of the <see cref="OutgoingMessage" /> class.
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
+        /// <param name="correlationId">The correlation identifier.</param>
+        /// <param name="classTypeName">Name of the class type.</param>
         /// <param name="messageType">Type of the message.</param>
         /// <param name="serializedMessage">The serialized message.</param>
         /// <param name="eventCreated">Time service.</param>
-        public OutgoingMessage(Guid messageId, Guid correlationId, OutgoingMessageType messageType, string serializedMessage, DateTime eventCreated)
+        public OutgoingMessage(Guid messageId, Guid correlationId, string classTypeName, OutgoingMessageType messageType, string serializedMessage, DateTime eventCreated)
         {
             this.EventCreated = eventCreated;
             this.MessageId = messageId;
             this.CorrelationId = correlationId;
+            this.ClassTypeName = classTypeName;
             this.MessageType = messageType;
             this.SerializedMessage = serializedMessage;
         }
@@ -60,6 +63,14 @@ namespace Miles.MassTransit
         /// The correlation identifier.
         /// </value>
         public Guid CorrelationId { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the class type the message represents.
+        /// </summary>
+        /// <value>
+        /// The name of the class type the message represents.
+        /// </value>
+        public string ClassTypeName { get; private set; }
 
         /// <summary>
         /// Gets the message type.
