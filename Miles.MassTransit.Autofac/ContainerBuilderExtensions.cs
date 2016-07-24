@@ -33,9 +33,9 @@ namespace Miles.MassTransit.Autofac
         /// Registers common components with unity.
         /// </summary>
         /// <param name="builder">The container builder.</param>
-        /// <param name="useConventionBasedCommandDispatch">if set to <c>true</c> use convention based command dispatch.</param>
-        public static ContainerBuilder RegisterMilesMassTransitCommon(this ContainerBuilder builder, bool useConventionBasedCommandDispatch = true)
+        public static ContainerBuilder RegisterMilesMassTransitCommon(this ContainerBuilder builder)
         {
+            builder.RegisterType<ActivityContext>().As<IActivityContext>().InstancePerLifetimeScope();
             builder.RegisterType<TransactionalMessagePublisher>().As<IEventPublisher>().As<ICommandPublisher>().InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(ConsumerAdapter<>)).As(typeof(IConsumer<>)).InstancePerLifetimeScope();
             builder.RegisterType<CleanupIncomingMessagesConsumer>().As<IConsumer<ICleanupIncomingMessages>>().InstancePerLifetimeScope();
