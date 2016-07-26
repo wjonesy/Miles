@@ -30,7 +30,7 @@ namespace Miles
     /// <seealso cref="Miles.IHook{TSender, TEventArgs}" />
     public class Hook<TSender, TEventArgs> : IHook<TSender, TEventArgs> where TEventArgs : EventArgs
     {
-        private readonly List<Func<TSender, TEventArgs, Task>> hooks = new List<Func<TSender, TEventArgs, Task>>();
+        private readonly HashSet<Func<TSender, TEventArgs, Task>> hooks = new HashSet<Func<TSender, TEventArgs, Task>>();
 
         /// <summary>
         /// Gets or sets a value indicating whether each hook handler should be executed
