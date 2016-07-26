@@ -145,7 +145,7 @@ namespace Miles.MassTransit
             public OutgoingMessage GenerateOutgoingMessage(Guid correlationId, DateTime eventCreated)
             {
                 if (OutgoingMessage == null)
-                    OutgoingMessage = new OutgoingMessage(NewId.NextGuid(), correlationId, OutgoingMessageType, JsonConvert.SerializeObject(MessageObject), eventCreated);
+                    OutgoingMessage = new OutgoingMessage(NewId.NextGuid(), correlationId, MessageType.FullName, OutgoingMessageType, JsonConvert.SerializeObject(MessageObject), eventCreated);
 
                 return OutgoingMessage;
             }
