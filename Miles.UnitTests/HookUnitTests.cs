@@ -8,10 +8,12 @@ namespace Miles.UnitTests
     public class HookUnitTests
     {
         [Test]
-        public void Register_RegisteredProcessor_NoProcessorsRegistered()
+        public void Register_RegistersProcessor_WhenNoProcessorsRegistered()
         {
+            // Arrange
             var hook = new Hook<object, EventArgs>();
 
+            // Act
             bool executed = false;
             hook.Register((s, e) =>
             {
@@ -20,14 +22,17 @@ namespace Miles.UnitTests
             });
             hook.ExecuteAsync(new object(), new EventArgs()).Wait();
 
+            // Assert
             Assert.That(executed, Is.True);
         }
 
         [Test]
-        public void Register_RegisteredProcessors_NoProcessorsRegistered()
+        public void Register_RegistersProcessors_WhenNoProcessorsRegistered()
         {
+            // Arrange
             var hook = new Hook<object, EventArgs>();
 
+            // Act
             bool executedOne = false;
             hook.Register((s, e) =>
             {
@@ -43,13 +48,15 @@ namespace Miles.UnitTests
 
             hook.ExecuteAsync(new object(), new EventArgs()).Wait();
 
+            // Assert
             Assert.That(executedOne, Is.True);
             Assert.That(executedTwo, Is.True);
         }
 
         [Test]
-        public void Register_DuplicateNotRegistered_IfAlreadyRegistered()
+        public void Register_DoesNotRegister_IfAlreadyRegistered()
         {
+            // Arrange
             var hook = new Hook<object, EventArgs>();
             int calls = 0;
             var handler = new Func<object, EventArgs, Task>((s, e) =>
@@ -58,12 +65,179 @@ namespace Miles.UnitTests
                 return Task.FromResult(0);
             });
 
+            // Act
             hook.Register(handler);
             hook.Register(handler);
 
             hook.ExecuteAsync(new object(), new EventArgs()).Wait();
 
+            // Assert
             Assert.That(calls, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void UnRegister_HasNoAffect_WhenNoProcessorsRegistered()
+        {
+            // Arrange
+            var hook = new Hook<object, EventArgs>();
+
+            bool executed = false;
+            Func<object, EventArgs, Task> method = (s, e) =>
+            {
+                executed = true;
+                return Task.FromResult(0);
+            };
+
+            // Act
+            hook.UnRegister(method);
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+
+            // Assert
+            Assert.That(executed, Is.False);
+        }
+
+        [Test]
+        public void UnRegister_HasNoAffect_WhenOthersRegistered()
+        {
+            // Arrange
+            var hook = new Hook<object, EventArgs>();
+
+            bool executedOne = false;
+            Func<object, EventArgs, Task> methodOne = (s, e) =>
+            {
+                executedOne = true;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodOne);
+
+            bool executedTwo = false;
+            Func<object, EventArgs, Task> methodTwo = (s, e) =>
+            {
+                executedTwo = true;
+                return Task.FromResult(0);
+            };
+
+            // Act
+            hook.UnRegister(methodTwo);
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+
+            // Assert
+            Assert.That(executedOne, Is.True);
+            Assert.That(executedTwo, Is.False);
+        }
+
+        [Test]
+        public void UnRegister_UnRegisters_WhenRegistered()
+        {
+            // Arrange
+            var hook = new Hook<object, EventArgs>();
+
+            bool executed = false;
+            Func<object, EventArgs, Task> method = (s, e) =>
+            {
+                executed = true;
+                return Task.FromResult(0);
+            };
+            hook.Register(method);
+
+            // Act
+            hook.UnRegister(method);
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+
+            // Assert
+            Assert.That(executed, Is.False);
+        }
+
+        [Test]
+        public void UnRegister_UnRegistersButLeavesOthers_WhenManyRegistered()
+        {
+            // Arrange
+            var hook = new Hook<object, EventArgs>();
+
+            bool executedOne = false;
+            Func<object, EventArgs, Task> methodOne = (s, e) =>
+            {
+                executedOne = true;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodOne);
+
+            bool executedTwo = false;
+            Func<object, EventArgs, Task> methodTwo = (s, e) =>
+            {
+                executedTwo = true;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodTwo);
+
+            // Act
+            hook.UnRegister(methodOne);
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+
+            // Assert
+            Assert.That(executedOne, Is.False);
+            Assert.That(executedTwo, Is.True);
+        }
+
+        [Test]
+        public void ExecuteAsync_RunsEachHook_WhenManyRegistered()
+        {
+            // Arrange
+            var hook = new Hook<object, EventArgs>();
+
+            bool executedOne = false;
+            Func<object, EventArgs, Task> methodOne = (s, e) =>
+            {
+                executedOne = true;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodOne);
+
+            bool executedTwo = false;
+            Func<object, EventArgs, Task> methodTwo = (s, e) =>
+            {
+                executedTwo = true;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodTwo);
+
+            // Act
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+
+            // Assert
+            Assert.That(executedOne, Is.True);
+            Assert.That(executedTwo, Is.True);
+        }
+
+        [Test]
+        public void ExecuteAsync_RunsEachHookMultipleTimes_WhenManyRegistered()
+        {
+            // Arrange
+            var hook = new Hook<object, EventArgs>();
+
+            int callOneCount = 0;
+            Func<object, EventArgs, Task> methodOne = (s, e) =>
+            {
+                ++callOneCount;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodOne);
+
+            int callTwoCount = 0;
+            Func<object, EventArgs, Task> methodTwo = (s, e) =>
+            {
+                ++callTwoCount;
+                return Task.FromResult(0);
+            };
+            hook.Register(methodTwo);
+
+            // Act
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+            hook.ExecuteAsync(new object(), new EventArgs()).Wait();
+
+            // Assert
+            Assert.That(callOneCount, Is.EqualTo(2));
+            Assert.That(callTwoCount, Is.EqualTo(2));
         }
     }
 }
