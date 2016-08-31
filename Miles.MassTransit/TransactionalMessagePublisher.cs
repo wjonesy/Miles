@@ -37,7 +37,7 @@ namespace Miles.MassTransit
         private readonly ITime time;
 
         // State
-        private readonly Stack<PendingMessageHandler> messageStack = new Stack<PendingMessageHandler>();
+        private readonly Stack<PublisherStackInstance> publisherStack = new Stack<PublisherStackInstance>();
         private readonly List<OutgoingMessageAndObject> pendingDispatchMessages = new List<OutgoingMessageAndObject>();
         private readonly IActivityContext activityContext;
 
@@ -58,12 +58,12 @@ namespace Miles.MassTransit
             IMessageDispatcher commandDispatcher,
             ConventionBasedMessageDispatcher eventDispatcher)
         {
-            this.messageStack.Push(new PendingMessageHandler(this));
+            this.publisherStack.Push(new PublisherStackInstance(this));
             this.outgoingEventRepository = outgoingEventRepository;
             this.time = time;
             this.activityContext = activityContext;
 
-            transactionContext.PreCommit.Register((s, e) => messageStack.Peek().Handle());
+            transactionContext.PreCommit.Register((s, e) => publisherStack.Peek().Handle());
 
             transactionContext.PostCommit.Register(async (s, e) =>
             {
@@ -90,7 +90,7 @@ namespace Miles.MassTransit
 
         void IEventPublisher.Register<TEvent>(IMessageProcessor<TEvent> evt)
         {
-            messageStack.Peek().Register(evt);
+            publisherStack.Peek().Register(evt);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Miles.MassTransit
         /// <param name="evt">The event.</param>
         void IEventPublisher.Publish<TEvent>(TEvent evt)
         {
-            messageStack.Peek().Publish(OutgoingMessageType.Event, evt);
+            publisherStack.Peek().Publish(OutgoingMessageType.Event, evt);
         }
 
         #endregion
@@ -109,7 +109,7 @@ namespace Miles.MassTransit
 
         void ICommandPublisher.Register<TCommand>(IMessageProcessor<TCommand> cmd)
         {
-            messageStack.Peek().Register(cmd);
+            publisherStack.Peek().Register(cmd);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Miles.MassTransit
         /// <param name="cmd">The command.</param>
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
-            messageStack.Peek().Publish(OutgoingMessageType.Command, cmd);
+            publisherStack.Peek().Publish(OutgoingMessageType.Command, cmd);
         }
 
         #endregion
@@ -151,13 +151,13 @@ namespace Miles.MassTransit
             }
         }
 
-        private class PendingMessageHandler
+        private class PublisherStackInstance
         {
             private readonly TransactionalMessagePublisher publisher;
             private readonly List<OutgoingMessageAndObject> pendingSaveMessages = new List<OutgoingMessageAndObject>();
             private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageHandlers = new Dictionary<Type, List<IObjectMessageProcessor>>();
 
-            public PendingMessageHandler(TransactionalMessagePublisher publisher)
+            public PublisherStackInstance(TransactionalMessagePublisher publisher)
             {
                 this.publisher = publisher;
             }
@@ -195,14 +195,14 @@ namespace Miles.MassTransit
                     {
                         foreach (var handler in handlers)
                         {
-                            publisher.messageStack.Push(new PendingMessageHandler(publisher));
+                            publisher.publisherStack.Push(new PublisherStackInstance(publisher));
                             try
                             {
                                 await handler.Process(message);
                             }
                             finally
                             {
-                                publisher.messageStack.Pop();
+                                publisher.publisherStack.Pop();
                             }
                         }
                     }
