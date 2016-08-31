@@ -33,7 +33,7 @@ namespace Miles.MassTransit
     /// <seealso cref="Miles.Events.ICommandPublisher" />
     public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher
     {
-        private readonly IOutgoingMessageRepository outgoingEventRepository;
+        private readonly IOutgoingMessageRepository outgoingMessageRepository;
         private readonly ITime time;
 
         // State
@@ -45,19 +45,19 @@ namespace Miles.MassTransit
         /// Initializes a new instance of the <see cref="TransactionalMessagePublisher" /> class.
         /// </summary>
         /// <param name="transactionContext">The transaction context.</param>
-        /// <param name="outgoingEventRepository">The outgoing event repository.</param>
+        /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
         /// <param name="time">The time service.</param>
         /// <param name="activityContext">The activity context.</param>
         /// <param name="messageDispatcher">The message dispatcher.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
-            IOutgoingMessageRepository outgoingEventRepository,
+            IOutgoingMessageRepository outgoingMessageRepository,
             ITime time,
             IActivityContext activityContext,
             IMessageDispatcher messageDispatcher)
         {
             this.publisherStack.Push(new PublisherStackInstance(this));
-            this.outgoingEventRepository = outgoingEventRepository;
+            this.outgoingMessageRepository = outgoingMessageRepository;
             this.time = time;
             this.activityContext = activityContext;
 
@@ -171,7 +171,7 @@ namespace Miles.MassTransit
             public async Task Handle()
             {
                 // Just before commit save all the outgoing messages and generate their ids - for consistency.
-                await publisher.outgoingEventRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(publisher.activityContext.CorrelationId, publisher.time.Now))).ConfigureAwait(false);
+                await publisher.outgoingMessageRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(publisher.activityContext.CorrelationId, publisher.time.Now))).ConfigureAwait(false);
                 publisher.pendingDispatchMessages.AddRange(pendingSaveMessages);
 
                 // Execute any immediate message handlers so they are within the transaction
