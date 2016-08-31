@@ -38,7 +38,7 @@ namespace Miles.MassTransit
 
         // State
         private readonly Stack<PublisherStackInstance> publisherStack = new Stack<PublisherStackInstance>();
-        private readonly List<OutgoingMessageAndObject> pendingDispatchMessages = new List<OutgoingMessageAndObject>();
+        private List<OutgoingMessageForDispatch> pendingDispatchMessages = new List<OutgoingMessageForDispatch>();
         private readonly IActivityContext activityContext;
 
         /// <summary>
@@ -46,17 +46,15 @@ namespace Miles.MassTransit
         /// </summary>
         /// <param name="transactionContext">The transaction context.</param>
         /// <param name="outgoingEventRepository">The outgoing event repository.</param>
-        /// <param name="time">The time.</param>
+        /// <param name="time">The time service.</param>
         /// <param name="activityContext">The activity context.</param>
-        /// <param name="commandDispatcher">The command dispatcher.</param>
-        /// <param name="eventDispatcher">The event dispatcher.</param>
+        /// <param name="messageDispatcher">The message dispatcher.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
             IOutgoingMessageRepository outgoingEventRepository,
             ITime time,
             IActivityContext activityContext,
-            IMessageDispatcher commandDispatcher,
-            ConventionBasedMessageDispatcher eventDispatcher)
+            IMessageDispatcher messageDispatcher)
         {
             this.publisherStack.Push(new PublisherStackInstance(this));
             this.outgoingEventRepository = outgoingEventRepository;
@@ -67,22 +65,11 @@ namespace Miles.MassTransit
 
             transactionContext.PostCommit.Register(async (s, e) =>
             {
-                foreach (var message in pendingDispatchMessages)
-                {
-                    // After commit try to dispatch the messages. Try to mark them as dispatched.
-                    try
-                    {
-                        var dispatcher = message.OutgoingMessage.MessageType == OutgoingMessageType.Command ? commandDispatcher : eventDispatcher;
-                        await dispatcher.DispatchAsync(message.MessageObject, message.OutgoingMessage).ConfigureAwait(false);
-                        message.OutgoingMessage.Dispatched(time.Now);
-                        await outgoingEventRepository.SaveAsync(message.OutgoingMessage, ignoreTransaction: true).ConfigureAwait(false);
-                    }
-                    catch
-                    {
-                        // TODO: Report the failure, but we are intentionally hiding this problem
-                    }
-                }
-                pendingDispatchMessages.Clear();
+                // relinquish control of the collection, let the dispatcher own it
+                var messagesForDispatch = pendingDispatchMessages;
+                pendingDispatchMessages = new List<OutgoingMessageForDispatch>();
+
+                await messageDispatcher.DispatchAsync(messagesForDispatch);
             });
         }
 
