@@ -15,6 +15,8 @@
  */
 using MassTransit;
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 
 namespace Miles.MassTransit
 {
@@ -35,6 +37,11 @@ namespace Miles.MassTransit
         public ConventionBasedMessageDispatcher(IPublishEndpoint publishEndpoint)
         {
             this.publishEndpoint = publishEndpoint;
+        }
+
+        public Task DispatchAsync(IEnumerable<OutgoingMessageForDispatch> ignored)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

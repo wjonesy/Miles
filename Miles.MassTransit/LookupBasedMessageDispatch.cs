@@ -15,6 +15,8 @@
  */
 using MassTransit;
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 
 namespace Miles.MassTransit
 {
@@ -51,6 +53,11 @@ namespace Miles.MassTransit
             var endpointUri = await endpointUriLookup.LookupAsync(message.GetType()).ConfigureAwait(false);
             var sendEndpoint = await sendEndpointProvider.GetSendEndpoint(endpointUri).ConfigureAwait(false);
             await sendEndpoint.Send(message, c => { c.MessageId = messageDetails.MessageId; c.CorrelationId = messageDetails.CorrelationId; }).ConfigureAwait(false);
+        }
+
+        public Task DispatchAsync(IEnumerable<OutgoingMessageForDispatch> ignored)
+        {
+            throw new NotImplementedException();
         }
     }
 }

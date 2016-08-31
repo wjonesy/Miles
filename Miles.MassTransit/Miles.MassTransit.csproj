@@ -47,6 +47,7 @@
     <Compile Include="DeduplicatedMessageProcessor.cs" />
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="IOutgoingMessageRepository.cs" />
+    <Compile Include="OutgoingMessageForDispatch.cs" />
     <Compile Include="OutgoingMessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionalMessagePublisher.cs" />
