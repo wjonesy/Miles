@@ -1,4 +1,19 @@
-﻿using FakeItEasy;
+﻿/*
+ *     Copyright 2016 Adam Burton (adz21c@gmail.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+using FakeItEasy;
 using Miles.MassTransit;
 using Miles.Messaging;
 using Miles.Persistence;
@@ -22,8 +37,9 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
+            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, null, null);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
 
             // Act
             ((IEventPublisher)publisher).Publish(eventType);
@@ -43,8 +59,9 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
+            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, null, null);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -71,7 +88,7 @@ namespace Miles.UnitTests.MassTransit
             var fakeActivityContext = CreateActivityContext();
             var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher, null);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -98,7 +115,7 @@ namespace Miles.UnitTests.MassTransit
             var fakeActivityContext = CreateActivityContext();
             var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher, null);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -121,7 +138,7 @@ namespace Miles.UnitTests.MassTransit
             var eventType = new EventType();
             var commandType = new CommandType();
 
-            var fakeTransactionContext = CreateTransactionContext(failCommit: true);
+            var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
             var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
@@ -129,7 +146,7 @@ namespace Miles.UnitTests.MassTransit
             var fakeEventProcessor = A.Fake<IMessageProcessor<EventType>>();
             var fakeCommandProcessor = A.Fake<IMessageProcessor<CommandType>>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher, null);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())

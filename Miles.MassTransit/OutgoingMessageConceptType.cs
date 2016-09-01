@@ -15,9 +15,14 @@
  */
 namespace Miles.MassTransit
 {
-    public enum OutgoingMessageType
+    /// <summary>
+    /// Indicates whether a message represents a Command or an Event
+    /// </summary>
+    public enum OutgoingMessageConceptType
     {
+#pragma warning disable 1591
         Command = 1,
         Event = 2
+#pragma warning restore 1591
     }
 }

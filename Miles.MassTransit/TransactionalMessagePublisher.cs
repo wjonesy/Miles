@@ -26,7 +26,7 @@ namespace Miles.MassTransit
 {
     /// <summary>
     /// Dispatches events and commands on transaction commit. Stores messages and events
-    /// within a data store, subject to the transaction, with consistant message Ids to aid
+    /// within a data store, subject to the transaction, with consistant message identifiers to aid
     /// in message de-duplication.
     /// </summary>
     /// <seealso cref="Miles.Events.IEventPublisher" />
@@ -61,7 +61,7 @@ namespace Miles.MassTransit
             this.time = time;
             this.activityContext = activityContext;
 
-            transactionContext.PreCommit.Register((s, e) => publisherStack.Peek().Handle());
+            transactionContext.PreCommit.Register((s, e) => publisherStack.Peek().Process());
 
             transactionContext.PostCommit.Register(async (s, e) =>
             {
@@ -80,14 +80,9 @@ namespace Miles.MassTransit
             publisherStack.Peek().Register(evt);
         }
 
-        /// <summary>
-        /// Publishes the specified event.
-        /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="evt">The event.</param>
         void IEventPublisher.Publish<TEvent>(TEvent evt)
         {
-            publisherStack.Peek().Publish(OutgoingMessageType.Event, evt);
+            publisherStack.Peek().Publish(OutgoingMessageConceptType.Event, evt);
         }
 
         #endregion
@@ -99,103 +94,90 @@ namespace Miles.MassTransit
             publisherStack.Peek().Register(cmd);
         }
 
-        /// <summary>
-        /// Publishes the specified command.
-        /// </summary>
-        /// <typeparam name="TCommand">The type of the command.</typeparam>
-        /// <param name="cmd">The command.</param>
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
-            publisherStack.Peek().Publish(OutgoingMessageType.Command, cmd);
+            publisherStack.Peek().Publish(OutgoingMessageConceptType.Command, cmd);
         }
 
         #endregion
 
-        #region Register and calling message handlers immediately
+        #region Register and calling message processors immediately
 
-        // Internal structure to keep the message object and its db representation together
-        private class OutgoingMessageAndObject
-        {
-            public OutgoingMessageAndObject(OutgoingMessageType outgoingMessageType, Type messageType, Object messageObject)
-            {
-                this.MessageType = messageType;
-                this.MessageObject = messageObject;
-                this.OutgoingMessageType = outgoingMessageType;
-            }
-
-            public OutgoingMessageType OutgoingMessageType { get; private set; }
-            public Type MessageType { get; private set; }
-            public Object MessageObject { get; private set; }
-
-            public OutgoingMessage OutgoingMessage { get; private set; }
-
-            public OutgoingMessage GenerateOutgoingMessage(Guid correlationId, DateTime eventCreated)
-            {
-                if (OutgoingMessage == null)
-                    OutgoingMessage = new OutgoingMessage(NewId.NextGuid(), correlationId, MessageType.FullName, OutgoingMessageType, JsonConvert.SerializeObject(MessageObject), eventCreated);
-
-                return OutgoingMessage;
-            }
-        }
-
+        /// <summary>
+        /// As we call immediate message processors we create a stack of scopes. This is so processors don't register other processors multiple times (each registering the same)
+        /// as each scope has its own set of registered processors. I think it also feels conceptually more logical, less unexpected corner cases.
+        /// </summary>
         private class PublisherStackInstance
         {
-            private readonly TransactionalMessagePublisher publisher;
-            private readonly List<OutgoingMessageAndObject> pendingSaveMessages = new List<OutgoingMessageAndObject>();
-            private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageHandlers = new Dictionary<Type, List<IObjectMessageProcessor>>();
+            private readonly TransactionalMessagePublisher publicPublisher;
+            private List<OutgoingMessageForDispatch> pendingSaveMessages = new List<OutgoingMessageForDispatch>();
+            private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageProcessors = new Dictionary<Type, List<IObjectMessageProcessor>>();
 
             public PublisherStackInstance(TransactionalMessagePublisher publisher)
             {
-                this.publisher = publisher;
+                this.publicPublisher = publisher;
             }
 
             public void Register<TMessage>(IMessageProcessor<TMessage> messageHandler) where TMessage : class
             {
                 var messageType = typeof(TMessage);
 
-                List<IObjectMessageProcessor> handlers;
-                if (!immediateMessageHandlers.TryGetValue(messageType, out handlers))
+                List<IObjectMessageProcessor> processors;
+                if (!immediateMessageProcessors.TryGetValue(messageType, out processors))
                 {
-                    handlers = new List<IObjectMessageProcessor>();
-                    immediateMessageHandlers.Add(messageType, handlers);
+                    processors = new List<IObjectMessageProcessor>();
+                    immediateMessageProcessors.Add(messageType, processors);
                 }
 
-                handlers.Add(new ObjectToGenericMessageProcessor<TMessage>(messageHandler));
+                processors.Add(new ObjectToGenericMessageProcessor<TMessage>(messageHandler));
             }
 
-            public void Publish<TMessage>(OutgoingMessageType type, TMessage msg)
+            public void Publish<TMessage>(OutgoingMessageConceptType type, TMessage msg)
             {
-                pendingSaveMessages.Add(new OutgoingMessageAndObject(type, typeof(TMessage), msg));
+                pendingSaveMessages.Add(new OutgoingMessageForDispatch(type, typeof(TMessage), msg, NewId.NextGuid(), publicPublisher.activityContext.CorrelationId));
             }
 
-            public async Task Handle()
+            public async Task Process()
             {
-                // Just before commit save all the outgoing messages and generate their ids - for consistency.
-                await publisher.outgoingMessageRepository.SaveAsync(pendingSaveMessages.Select(x => x.GenerateOutgoingMessage(publisher.activityContext.CorrelationId, publisher.time.Now))).ConfigureAwait(false);
-                publisher.pendingDispatchMessages.AddRange(pendingSaveMessages);
+                var processingMessages = pendingSaveMessages;
+                pendingSaveMessages = new List<OutgoingMessageForDispatch>();
 
-                // Execute any immediate message handlers so they are within the transaction
-                foreach (var message in pendingSaveMessages)
+                // Just before commit save all the outgoing messages and their ids were already generated - for consistency.
+                var currentTime = publicPublisher.time.Now;
+                var outgoingMessages = processingMessages.Select(x => new OutgoingMessage(
+                    x.MessageId,
+                    x.CorrelationId,
+                    x.MessageType.FullName,
+                    x.ConceptType,
+                    JsonConvert.SerializeObject(x.MessageObject),
+                    currentTime));
+                await publicPublisher.outgoingMessageRepository.SaveAsync(outgoingMessages).ConfigureAwait(false);
+
+                // Transition messages ready for dispatch
+                publicPublisher.pendingDispatchMessages.AddRange(processingMessages);
+
+                // Execute any immediate message processors so they are within the transaction
+                foreach (var message in processingMessages)
                 {
-                    List<IObjectMessageProcessor> handlers;
-                    if (immediateMessageHandlers.TryGetValue(message.MessageType, out handlers))
+                    List<IObjectMessageProcessor> processors;
+                    if (immediateMessageProcessors.TryGetValue(message.MessageType, out processors))
                     {
-                        foreach (var handler in handlers)
+                        foreach (var processor in processors)
                         {
-                            publisher.publisherStack.Push(new PublisherStackInstance(publisher));
+                            // lets get recursive
+                            publicPublisher.publisherStack.Push(new PublisherStackInstance(publicPublisher));
                             try
                             {
-                                await handler.Process(message);
+                                await processor.Process(message.MessageObject);
                             }
                             finally
                             {
-                                publisher.publisherStack.Pop();
+                                // and recurse out
+                                publicPublisher.publisherStack.Pop();
                             }
                         }
                     }
                 }
-
-                pendingSaveMessages.Clear();
             }
 
             private interface IObjectMessageProcessor
@@ -203,6 +185,7 @@ namespace Miles.MassTransit
                 Task Process(object message);
             }
 
+            // Allows us to return the message reference to the real type reference ready for calling the processor
             private class ObjectToGenericMessageProcessor<TMessage> : IObjectMessageProcessor
             {
                 private readonly IMessageProcessor<TMessage> processor;

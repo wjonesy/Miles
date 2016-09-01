@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 using MassTransit;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {

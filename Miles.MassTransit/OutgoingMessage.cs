@@ -37,14 +37,14 @@ namespace Miles.MassTransit
         /// <param name="classTypeName">Name of the class type.</param>
         /// <param name="messageType">Type of the message.</param>
         /// <param name="serializedMessage">The serialized message.</param>
-        /// <param name="eventCreated">Time service.</param>
-        public OutgoingMessage(Guid messageId, Guid correlationId, string classTypeName, OutgoingMessageType messageType, string serializedMessage, DateTime eventCreated)
+        /// <param name="eventCreated">The date the event was created.</param>
+        public OutgoingMessage(Guid messageId, Guid correlationId, string classTypeName, OutgoingMessageConceptType messageType, string serializedMessage, DateTime eventCreated)
         {
             this.EventCreated = eventCreated;
             this.MessageId = messageId;
             this.CorrelationId = correlationId;
             this.ClassTypeName = classTypeName;
-            this.MessageType = messageType;
+            this.ConceptType = messageType;
             this.SerializedMessage = serializedMessage;
         }
 
@@ -73,12 +73,12 @@ namespace Miles.MassTransit
         public string ClassTypeName { get; private set; }
 
         /// <summary>
-        /// Gets the message type.
+        /// Gets a value indicating if the message is a Command or Event.
         /// </summary>
         /// <value>
-        /// The message type.
+        /// Command or Event.
         /// </value>
-        public OutgoingMessageType MessageType { get; private set; }
+        public OutgoingMessageConceptType ConceptType { get; private set; }
 
         /// <summary>
         /// Gets the serialized message.
@@ -107,10 +107,10 @@ namespace Miles.MassTransit
         /// <summary>
         /// Indicate the message has been dispatched.
         /// </summary>
-        /// <param name="time">The time.</param>
-        public void Dispatched(DateTime time)
+        /// <param name="when">When the message was dispatched.</param>
+        public void Dispatched(DateTime when)
         {
-            EventDispatched = time;
+            EventDispatched = when;
         }
     }
 }
