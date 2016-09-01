@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 using MassTransit;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
     /// <summary>
     /// Dispatches messages to a specific endpoint by looking up the endpoint uri
-    /// based on the message type.
+    /// based on the message type to the message queue.
     /// </summary>
     /// <remarks>Uses MassTransit's Send method.</remarks>
     /// <seealso cref="Miles.MassTransit.IMessageDispatcher" />
@@ -46,18 +44,12 @@ namespace Miles.MassTransit
         /// Dispatches the specified message.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="messageDetails">The message details.</param>
         /// <returns></returns>
-        public async Task DispatchAsync(object message, OutgoingMessage messageDetails)
+        public async Task DispatchAsync(OutgoingMessageForDispatch message)
         {
             var endpointUri = await endpointUriLookup.LookupAsync(message.GetType()).ConfigureAwait(false);
             var sendEndpoint = await sendEndpointProvider.GetSendEndpoint(endpointUri).ConfigureAwait(false);
-            await sendEndpoint.Send(message, c => { c.MessageId = messageDetails.MessageId; c.CorrelationId = messageDetails.CorrelationId; }).ConfigureAwait(false);
-        }
-
-        public Task DispatchAsync(IEnumerable<OutgoingMessageForDispatch> ignored)
-        {
-            throw new NotImplementedException();
+            await sendEndpoint.Send(message.MessageObject, c => { c.MessageId = message.MessageId; c.CorrelationId = message.CorrelationId; }).ConfigureAwait(false);
         }
     }
 }

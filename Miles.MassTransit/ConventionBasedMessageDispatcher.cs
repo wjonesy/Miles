@@ -15,13 +15,11 @@
  */
 using MassTransit;
 using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
 
 namespace Miles.MassTransit
 {
     /// <summary>
-    /// Dispatches messages based on the contract type.
+    /// Dispatches messages based on the contract type to the message queue.
     /// </summary>
     /// <remarks>Uses MassTransit's Publish method.</remarks>
     /// <seealso cref="Miles.MassTransit.IMessageDispatcher" />
@@ -39,20 +37,14 @@ namespace Miles.MassTransit
             this.publishEndpoint = publishEndpoint;
         }
 
-        public Task DispatchAsync(IEnumerable<OutgoingMessageForDispatch> ignored)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Dispatches the specified message.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="messageDetails">The message details.</param>
         /// <returns></returns>
-        public Task DispatchAsync(object message, OutgoingMessage messageDetails)
+        public Task DispatchAsync(OutgoingMessageForDispatch message)
         {
-            return publishEndpoint.Publish(message, c => { c.MessageId = messageDetails.MessageId; c.CorrelationId = messageDetails.CorrelationId; });
+            return publishEndpoint.Publish(message.MessageObject, c => { c.MessageId = message.MessageId; c.CorrelationId = message.CorrelationId; });
         }
     }
 }

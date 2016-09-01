@@ -37,9 +37,9 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
-            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
+            var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
             ((IEventPublisher)publisher).Publish(eventType);
@@ -59,9 +59,9 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
-            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
+            var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -86,9 +86,9 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
-            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
+            var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -100,7 +100,7 @@ namespace Miles.UnitTests.MassTransit
             }
 
             // Assert
-            A.CallTo(() => fakeMessageDispatcher.DispatchAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened();
+            A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened();
         }
 
         [Test]
@@ -113,9 +113,9 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext(failCommit: true);
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
-            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
+            var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -128,7 +128,7 @@ namespace Miles.UnitTests.MassTransit
 
             // Assert
             A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened();
-            A.CallTo(() => fakeMessageDispatcher.DispatchAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustNotHaveHappened();
+            A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustNotHaveHappened();
         }
 
         [Test]
@@ -141,12 +141,12 @@ namespace Miles.UnitTests.MassTransit
             var fakeTransactionContext = CreateTransactionContext();
             var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
             var fakeActivityContext = CreateActivityContext();
-            var fakeMessageDispatcher = A.Fake<IMessageDispatcher>();
+            var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
 
             var fakeEventProcessor = A.Fake<IMessageProcessor<EventType>>();
             var fakeCommandProcessor = A.Fake<IMessageProcessor<CommandType>>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatcher);
+            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
             using (var transaction = await fakeTransactionContext.BeginAsync())
@@ -163,11 +163,11 @@ namespace Miles.UnitTests.MassTransit
             // Assert
             A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened().Then(
                 A.CallTo(() => fakeEventProcessor.ProcessAsync(A<EventType>.Ignored)).MustHaveHappened()).Then(
-                A.CallTo(() => fakeMessageDispatcher.DispatchAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
+                A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
 
             A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened().Then(
                 A.CallTo(() => fakeCommandProcessor.ProcessAsync(A<CommandType>.Ignored)).MustHaveHappened()).Then(
-                A.CallTo(() => fakeMessageDispatcher.DispatchAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
+                A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
         }
 
         private ITransactionContext CreateTransactionContext(bool failCommit = false)

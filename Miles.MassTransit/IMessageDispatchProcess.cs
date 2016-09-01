@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
     /// <summary>
-    /// Dispatches a message to the message queue.
+    /// Implementations have the responsibility of initiating the dispatch of messages to the message queue.
     /// </summary>
-    public interface IMessageDispatcher
+    public interface IMessageDispatchProcess
     {
         /// <summary>
-        /// Dispatches the specified message.
+        /// Initiates the dispatch of messages to the message queue
         /// </summary>
-        /// <param name="message">The message.</param>
+        /// <param name="messages">The messages.</param>
         /// <returns></returns>
-        Task DispatchAsync(OutgoingMessageForDispatch message);
+        Task ExecuteAsync(IEnumerable<OutgoingMessageForDispatch> messages);
     }
 }

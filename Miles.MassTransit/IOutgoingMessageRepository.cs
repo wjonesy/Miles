@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,22 +23,40 @@ namespace Miles.MassTransit
     /// Interface to the storage mechanism of <see cref="OutgoingMessage" />.
     /// </summary>
     /// <remarks>
-    /// The idea is this will sit within the transaction of a handler.
+    /// The idea is this will sit within the transaction of a handler unless otherwise specified.
     /// </remarks>
     public interface IOutgoingMessageRepository
     {
         /// <summary>
         /// Saves the specified events to the storage mechanism.
         /// </summary>
-        /// <param name="evts">The events.</param>
-        Task SaveAsync(IEnumerable<OutgoingMessage> evts);
+        /// <param name="messages">The messages.</param>
+        /// <returns></returns>
+        Task SaveAsync(IEnumerable<OutgoingMessage> messages);
 
         /// <summary>
-        /// Saves the specified event to the storage mechanism.
+        /// Records a message as dispatched at the supplied time.
         /// </summary>
-        /// <param name="evt">The event.</param>
-        /// <param name="ignoreTransaction">if set to <c>true</c> then the save shouldn't be part of a transaction; this change should save in isolation.</param>
-        Task SaveAsync(OutgoingMessage evt, bool ignoreTransaction = false);
+        /// <param name="when">When the message was dispatched.</param>
+        /// <param name="messageId">The message identifier.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// This should not sit within the current transaction context.
+        /// The message is gone, we don't want this rolled back on failure.
+        /// </remarks>
+        Task RecordMessageDispatchAsync(DateTime when, Guid messageId);
+
+        /// <summary>
+        /// Records messages as dispatched at the supplied time.
+        /// </summary>
+        /// <param name="when">When the message was dispatched.</param>
+        /// <param name="messageIds">The message identifiers.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// This should not sit within the current transaction context.
+        /// The messages are gone, we don't want this rolled back on failure.
+        /// </remarks>
+        Task RecordMessageDispatchAsync(DateTime when, IEnumerable<Guid> messageIds);
 
         /// <summary>
         /// Deletes the old dispatched outgoing messages.

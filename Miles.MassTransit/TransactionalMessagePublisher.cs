@@ -48,13 +48,13 @@ namespace Miles.MassTransit
         /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
         /// <param name="time">The time service.</param>
         /// <param name="activityContext">The activity context.</param>
-        /// <param name="messageDispatcher">The message dispatcher.</param>
+        /// <param name="messageDispatchProcess">The message dispatch process.</param>
         public TransactionalMessagePublisher(
             ITransactionContext transactionContext,
             IOutgoingMessageRepository outgoingMessageRepository,
             ITime time,
             IActivityContext activityContext,
-            IMessageDispatcher messageDispatcher)
+            IMessageDispatchProcess messageDispatchProcess)
         {
             this.publisherStack.Push(new PublisherStackInstance(this));
             this.outgoingMessageRepository = outgoingMessageRepository;
@@ -65,11 +65,11 @@ namespace Miles.MassTransit
 
             transactionContext.PostCommit.Register(async (s, e) =>
             {
-                // relinquish control of the collection, let the dispatcher own it
+                // relinquish control of the collection, let the dispatcher process own it
                 var messagesForDispatch = pendingDispatchMessages;
                 pendingDispatchMessages = new List<OutgoingMessageForDispatch>();
 
-                await messageDispatcher.DispatchAsync(messagesForDispatch);
+                await messageDispatchProcess.ExecuteAsync(messagesForDispatch);
             });
         }
 

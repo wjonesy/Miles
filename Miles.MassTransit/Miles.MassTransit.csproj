@@ -42,9 +42,11 @@
     <Compile Include="IIncomingMessageRepository.cs" />
     <Compile Include="ILookupEndpointUri.cs" />
     <Compile Include="IMessageDispatcher.cs" />
+    <Compile Include="IMessageDispatchProcess.cs" />
     <Compile Include="IncomingMessage.cs" />
     <Compile Include="LookupBasedMessageDispatch.cs" />
     <Compile Include="DeduplicatedMessageProcessor.cs" />
+    <Compile Include="MessageDispatchProcess.cs" />
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageForDispatch.cs" />
