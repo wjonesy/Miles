@@ -48,7 +48,7 @@
     <Compile Include="IncomingMessage.cs" />
     <Compile Include="LookupBasedMessageDispatch.cs" />
     <Compile Include="DeduplicatedMessageProcessor.cs" />
-    <Compile Include="MessageDispatchProcess.cs" />
+    <Compile Include="ImmediateMessageDispatchProcess.cs" />
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageForDispatch.cs" />

@@ -7,7 +7,7 @@ namespace Miles.MassTransit
     /// Default implementation of <see cref="IMessageDispatchProcess"/> that immediately dispatches the messages.
     /// </summary>
     /// <seealso cref="Miles.MassTransit.IMessageDispatchProcess" />
-    public class MessageDispatchProcess : IMessageDispatchProcess
+    public class ImmediateMessageDispatchProcess : IMessageDispatchProcess
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
         private readonly ITime time;
@@ -15,13 +15,13 @@ namespace Miles.MassTransit
         private readonly ConventionBasedMessageDispatcher eventDispatcher;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageDispatchProcess"/> class.
+        /// Initializes a new instance of the <see cref="ImmediateMessageDispatchProcess"/> class.
         /// </summary>
         /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
         /// <param name="time">The time.</param>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
-        public MessageDispatchProcess(
+        public ImmediateMessageDispatchProcess(
             IOutgoingMessageRepository outgoingMessageRepository,
             ITime time,
             IMessageDispatcher commandDispatcher,
