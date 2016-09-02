@@ -38,6 +38,9 @@ namespace Miles.Messaging
         void Publish<TCommand>(TCommand cmd) where TCommand : class;
     }
 
+    /// <summary>
+    /// Convenience helpers for <see cref="ICommandPublisher"/> .
+    /// </summary>
     public static class CommandPublisherExtensions
     {
         /// <summary>

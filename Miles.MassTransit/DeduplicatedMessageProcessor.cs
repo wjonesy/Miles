@@ -24,7 +24,7 @@ namespace Miles.MassTransit
     /// Ensures a message is not processed twice.
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
-    /// <seealso cref="MassTransit.IConsumer{TMessage}" />
+    /// <seealso cref="IConsumer{TMessage}"/>
     public class DeduplicatedMessageProcessor<TMessage> : IMessageProcessor<TMessage> where TMessage : class
     {
         private readonly IMessageProcessor<TMessage> inner;

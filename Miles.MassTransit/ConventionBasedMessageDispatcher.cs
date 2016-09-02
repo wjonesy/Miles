@@ -30,7 +30,6 @@ namespace Miles.MassTransit
         /// <summary>
         /// Initializes a new instance of the <see cref="ConventionBasedMessageDispatcher" /> class.
         /// </summary>
-        /// <param name="bus">The bus.</param>
         /// <param name="publishEndpoint">The publish endpoint.</param>
         public ConventionBasedMessageDispatcher(IPublishEndpoint publishEndpoint)
         {

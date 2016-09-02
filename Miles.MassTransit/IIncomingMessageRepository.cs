@@ -17,6 +17,12 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
+    /// <summary>
+    /// Interface to the storage mechanism of <see cref="IncomingMessage" />.
+    /// </summary>
+    /// <remarks>
+    /// The idea is this will sit within the transaction of a handler unless otherwise specified.
+    /// </remarks>
     public interface IIncomingMessageRepository
     {
         /// <summary>

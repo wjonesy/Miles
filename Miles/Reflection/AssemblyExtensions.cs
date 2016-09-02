@@ -20,18 +20,36 @@ using System.Linq;
 
 namespace Miles.Reflection
 {
+    /// <summary>
+    /// Reflection extension methods
+    /// </summary>
     public static class AssemblyExtensions
     {
+        /// <summary>
+        /// Determines whether the tyoe is a message processor.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the type is a message processor; otherwise <c>false</c></returns>
         public static bool IsMessageProcessor(this Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IMessageProcessor<>);
         }
 
+        /// <summary>
+        /// Filters the type list to message processor types.
+        /// </summary>
+        /// <param name="types">The types.</param>
+        /// <returns></returns>
         public static IEnumerable<Type> GetMessageProcessors(this IEnumerable<Type> types)
         {
             return types.Where(x => x.GetInterfaces().Any(i => i.IsMessageProcessor()));
         }
 
+        /// <summary>
+        /// Gets a list of message types based on the message processors in the supplied type list.
+        /// </summary>
+        /// <param name="types">The types.</param>
+        /// <returns></returns>
         public static IEnumerable<Type> GetProcessedMessageTypes(this IEnumerable<Type> types)
         {
             return types.Concat(types.SelectMany(x => x.GetInterfaces()))

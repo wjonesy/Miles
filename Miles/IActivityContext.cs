@@ -17,6 +17,10 @@ using System;
 
 namespace Miles
 {
+    /// <summary>
+    /// Gives each piece of activity in a system a unique Id that can be stored and/or logged to allow
+    /// developers to see the affect user activity has had across a whole system.
+    /// </summary>
     public interface IActivityContext
     {
         /// <summary>

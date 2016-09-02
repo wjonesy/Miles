@@ -18,13 +18,27 @@ using System;
 
 namespace Miles.MassTransit
 {
+    /// <summary>
+    /// MassTransit implementation that uses the consumer context correlation identifier if available.
+    /// </summary>
+    /// <seealso cref="Miles.IActivityContext" />
     public class ActivityContext : IActivityContext
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActivityContext"/> class.
+        /// </summary>
+        /// <param name="consumeContext">The consume context.</param>
         public ActivityContext(ConsumeContext consumeContext)
         {
             CorrelationId = consumeContext?.CorrelationId ?? NewId.NextGuid();
         }
 
+        /// <summary>
+        /// Gets the correlation identifier. Represents an Id to correlate activity across multiple events.
+        /// </summary>
+        /// <value>
+        /// The correlation identifier.
+        /// </value>
         public Guid CorrelationId { get; private set; }
     }
 }

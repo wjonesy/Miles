@@ -64,7 +64,7 @@ namespace Miles
         /// Calls the registered hooks.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="TEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The TEventArgs instance containing the event data.</param>
         /// <returns></returns>
         public async Task ExecuteAsync(TSender sender, TEventArgs args)
         {

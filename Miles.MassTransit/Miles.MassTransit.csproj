@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Miles.MassTransit.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Miles.MassTransit.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\VersionInfo.cs">
@@ -37,8 +39,8 @@
     <Compile Include="CleanupOutgoingMessagesConsumer.cs" />
     <Compile Include="CleanupIncomingMessagesConsumer.cs" />
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
-    <Compile Include="ICleanupIncomingMessages.cs" />
-    <Compile Include="ICleanupOutgoingMessages.cs" />
+    <Compile Include="ICleanupIncomingMessagesCommand.cs" />
+    <Compile Include="ICleanupOutgoingMessagesCommand.cs" />
     <Compile Include="IIncomingMessageRepository.cs" />
     <Compile Include="ILookupEndpointUri.cs" />
     <Compile Include="IMessageDispatcher.cs" />

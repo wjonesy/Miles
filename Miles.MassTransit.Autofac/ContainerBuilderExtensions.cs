@@ -38,8 +38,8 @@ namespace Miles.MassTransit.Autofac
             builder.RegisterType<ActivityContext>().As<IActivityContext>().InstancePerLifetimeScope();
             builder.RegisterType<TransactionalMessagePublisher>().As<IEventPublisher>().As<ICommandPublisher>().InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(ConsumerAdapter<>)).As(typeof(IConsumer<>)).InstancePerLifetimeScope();
-            builder.RegisterType<CleanupIncomingMessagesConsumer>().As<IConsumer<ICleanupIncomingMessages>>().InstancePerLifetimeScope();
-            builder.RegisterType<CleanupOutgoingMessagesConsumer>().As<IConsumer<ICleanupOutgoingMessages>>().InstancePerLifetimeScope();
+            builder.RegisterType<CleanupIncomingMessagesConsumer>().As<IConsumer<ICleanupIncomingMessagesCommand>>().InstancePerLifetimeScope();
+            builder.RegisterType<CleanupOutgoingMessagesConsumer>().As<IConsumer<ICleanupOutgoingMessagesCommand>>().InstancePerLifetimeScope();
 
             builder.RegisterGenericDecorator(typeof(DeduplicatedMessageProcessor<>), typeof(IMessageProcessor<>), DeduplicatedMessage).InstancePerLifetimeScope();
             return builder;

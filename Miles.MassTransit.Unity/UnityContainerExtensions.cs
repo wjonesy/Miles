@@ -43,8 +43,8 @@ namespace Miles.MassTransit.Unity
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
                 .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
                 .RegisterType(typeof(IConsumer<>), typeof(ConsumerAdapter<>), lifetimeManagerFactory())
-                .RegisterType<IConsumer<ICleanupIncomingMessages>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
-                .RegisterType<IConsumer<ICleanupOutgoingMessages>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());
+                .RegisterType<IConsumer<ICleanupIncomingMessagesCommand>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
+                .RegisterType<IConsumer<ICleanupOutgoingMessagesCommand>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());
 
             container.Configure<Interception>()
                 .AddPolicy("MessageProcessor.Deduplication")

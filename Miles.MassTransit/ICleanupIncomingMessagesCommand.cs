@@ -15,7 +15,11 @@
  */
 namespace Miles.MassTransit
 {
-    public interface ICleanupIncomingMessages
+    /// <summary>
+    /// Command type so a message can be scheduled to cause old incoming messages
+    /// to be cleaned up.
+    /// </summary>
+    public interface ICleanupIncomingMessagesCommand
     {
     }
 }

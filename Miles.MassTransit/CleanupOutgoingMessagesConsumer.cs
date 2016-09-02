@@ -21,15 +21,15 @@ namespace Miles.MassTransit
     /// <summary>
     /// MassTransit consumer that cleans up old outgoing messages.
     /// </summary>
-    /// <seealso cref="MassTransit.IConsumer{Miles.MassTransit.ICleanupOutgoingMessages}" />
-    public class CleanupOutgoingMessagesConsumer : IConsumer<ICleanupOutgoingMessages>
+    /// <seealso cref="IConsumer{ICleanupOutgoingMessages}" />
+    public class CleanupOutgoingMessagesConsumer : IConsumer<ICleanupOutgoingMessagesCommand>
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CleanupIncomingMessagesConsumer"/> class.
+        /// Initializes a new instance of the <see cref="CleanupIncomingMessagesConsumer" /> class.
         /// </summary>
-        /// <param name="incomingMessageRepository">The incoming message repository.</param>
+        /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
 
         public CleanupOutgoingMessagesConsumer(IOutgoingMessageRepository outgoingMessageRepository)
         {
@@ -41,7 +41,7 @@ namespace Miles.MassTransit
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public Task Consume(ConsumeContext<ICleanupOutgoingMessages> context)
+        public Task Consume(ConsumeContext<ICleanupOutgoingMessagesCommand> context)
         {
             return outgoingMessageRepository.DeleteOldDispatchedAsync();
         }

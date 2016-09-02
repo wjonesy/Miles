@@ -29,8 +29,8 @@ namespace Miles.MassTransit
     /// within a data store, subject to the transaction, with consistant message identifiers to aid
     /// in message de-duplication.
     /// </summary>
-    /// <seealso cref="Miles.Events.IEventPublisher" />
-    /// <seealso cref="Miles.Events.ICommandPublisher" />
+    /// <seealso cref="Messaging.IEventPublisher" />
+    /// <seealso cref="Messaging.ICommandPublisher" />
     public class TransactionalMessagePublisher : IEventPublisher, ICommandPublisher
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;

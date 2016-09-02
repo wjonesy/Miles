@@ -38,6 +38,9 @@ namespace Miles.Messaging
         void Publish<TEvent>(TEvent evt) where TEvent : class;
     }
 
+    /// <summary>
+    /// Convenience helpers for <see cref="IEventPublisher"/> .
+    /// </summary>
     public static class EventPublisherExtensions
     {
         /// <summary>

@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.Persistence
 {
+    /// <summary>
+    /// Represents a transaction throughout a request. Simulates nesting of transactions
+    /// such that <see cref="Miles.Messaging.IMessageProcessor{TMessage}"/> can be nested 
+    /// and transaction behaviour is not confusing.
+    /// 
+    /// Ultimately this has events that the <see cref="Miles.Messaging.IEventPublisher"/> and
+    /// <see cref="Miles.Messaging.ICommandPublisher"/> monitor to release events to message
+    /// queues or whatever mechanism exists.
+    /// </summary>
     public interface ITransactionContext
     {
         /// <summary>

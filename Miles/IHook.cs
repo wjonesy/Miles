@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace Miles
 {
     /// <summary>
-    /// Subset of <see cref="Hook"/>'s public interface that exposes only registration to the hook.
+    /// Subset of <see cref="Miles.Hook{TSender, TEventArgs}"/>'s public interface that exposes only registration to the hook.
     /// The idea is to make the interface public and only use the full implementation within a class
     /// to prevent calling code executing hooks.
     /// </summary>
