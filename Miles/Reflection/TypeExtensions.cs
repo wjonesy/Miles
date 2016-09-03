@@ -23,7 +23,7 @@ namespace Miles.Reflection
     /// <summary>
     /// Reflection extension methods
     /// </summary>
-    public static class AssemblyExtensions
+    public static class TypeExtensions
     {
         /// <summary>
         /// Determines whether the tyoe is a message processor.

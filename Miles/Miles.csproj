@@ -49,7 +49,7 @@
     <Compile Include="Persistence\ITransactionContext.cs" />
     <Compile Include="Persistence\SimulateNestedTransactionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\AssemblyExtensions.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>
   <ItemGroup>
