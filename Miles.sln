@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Sample.Web", "Miles.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Sample.Processor", "Miles.Sample.Processor\Miles.Sample.Processor.csproj", "{D4C55BEF-07B7-401B-969A-A6A36F930A7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.Sample.Persistence.EF", "Miles.Sample.Persistence.EF\Miles.Sample.Persistence.EF.csproj", "{4C004035-8464-46D6-93E5-51C5694DF6C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{D4C55BEF-07B7-401B-969A-A6A36F930A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4C55BEF-07B7-401B-969A-A6A36F930A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4C55BEF-07B7-401B-969A-A6A36F930A7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C004035-8464-46D6-93E5-51C5694DF6C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C004035-8464-46D6-93E5-51C5694DF6C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C004035-8464-46D6-93E5-51C5694DF6C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C004035-8464-46D6-93E5-51C5694DF6C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +74,6 @@ Global
 		{D0E9E5A3-B55E-4940-89C6-3516F2CB7CDE} = {29D7CE88-5AC2-47FE-ACB3-4E33F6AB971A}
 		{558DE8E3-64C8-46B2-8368-C730CE123F48} = {29D7CE88-5AC2-47FE-ACB3-4E33F6AB971A}
 		{D4C55BEF-07B7-401B-969A-A6A36F930A7F} = {29D7CE88-5AC2-47FE-ACB3-4E33F6AB971A}
+		{4C004035-8464-46D6-93E5-51C5694DF6C1} = {29D7CE88-5AC2-47FE-ACB3-4E33F6AB971A}
 	EndGlobalSection
 EndGlobal

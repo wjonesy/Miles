@@ -28,6 +28,8 @@ namespace Miles.Sample.Domain.Command.Fixtures
             this.ScheduledDateTime = scheduledDateTime;
         }
 
+        public int SurrogateId { get; private set; }
+
         public FixtureId Id { get; private set; }
 
         public LeagueAbbreviation League { get; private set; }

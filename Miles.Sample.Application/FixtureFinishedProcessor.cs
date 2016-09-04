@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Miles.Sample.Application
 {
-    class FixtureFinishedProcessor : IMessageProcessor<FixtureFinished>
+    public class FixtureFinishedProcessor : IMessageProcessor<FixtureFinished>
     {
         private readonly ILeagueRepository leagueRepository;
 
