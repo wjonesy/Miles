@@ -55,6 +55,11 @@
     <Compile Include="Conventions\DateTime2Convention.cs" />
     <Compile Include="Conventions\SurrogateIdConvention.cs" />
     <Compile Include="Domain.Command\Leagues\LeagueRepository.cs" />
+    <Compile Include="Migrations\201609041321414_InitialCreate.cs" />
+    <Compile Include="Migrations\201609041321414_InitialCreate.Designer.cs">
+      <DependentUpon>201609041321414_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Miles.MassTransit\IncomingMessageRepository.cs" />
     <Compile Include="Miles.MassTransit\OutgoingMessageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,6 +87,11 @@
       <Project>{63b7fa97-8619-4ea0-b594-71fbb10481e5}</Project>
       <Name>Miles</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201609041321414_InitialCreate.resx">
+      <DependentUpon>201609041321414_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

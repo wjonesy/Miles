@@ -13,6 +13,8 @@ namespace Miles.Sample.Domain.Command.Leagues
             this.Team = team;
         }
 
+        public int SurrogateId { get; private set; }
+
         public virtual League League { get; private set; }
 
         public TeamAbbreviation Team { get; private set; }

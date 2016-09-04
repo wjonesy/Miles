@@ -12,8 +12,8 @@ namespace Miles.Sample.Domain.Command.Fixtures
             this.Fixture = fixture.ToString();
             this.League = league.ToString();
             this.Result = (int)result;
-            this.TeamA = new Team(teamA.ToString(), teamAPoints);
-            this.TeamB = new Team(teamB.ToString(), teamBPoints);
+            this.TeamA = new FixtureTeam(teamA.ToString(), teamAPoints);
+            this.TeamB = new FixtureTeam(teamB.ToString(), teamBPoints);
         }
 
         public DateTime When { get; private set; }
@@ -24,13 +24,13 @@ namespace Miles.Sample.Domain.Command.Fixtures
 
         public int Result { get; private set; }
 
-        public Team TeamA { get; private set; }
+        public FixtureTeam TeamA { get; private set; }
 
-        public Team TeamB { get; private set; }
+        public FixtureTeam TeamB { get; private set; }
 
-        public class Team
+        public class FixtureTeam
         {
-            public Team(string abbr, int points)
+            public FixtureTeam(string abbr, int points)
             {
                 this.Abbreviation = abbr;
                 this.Points = points;

@@ -19,6 +19,8 @@ namespace Miles.Sample.Domain.Command.Leagues
             this.Name = name;
         }
 
+        public int SurrogateId { get; private set; }
+
         public LeagueAbbreviation Abbreviation { get; private set; }
 
         public string Name { get; private set; }

@@ -1,14 +1,9 @@
 ﻿using Miles.MassTransit;
 using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Leagues;
-using System;
-using System.Collections.Generic;
+using Miles.Sample.Domain.Command.Teams;
 using System.Data.Entity;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static Miles.Sample.Domain.Command.Fixtures.FixtureFinished;
 
 namespace Miles.Sample.Persistence.EF
 {
