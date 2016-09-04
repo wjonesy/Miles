@@ -1,0 +1,64 @@
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace Miles.Sample.Domain.Command.Leagues
+{
+    public class LeagueAbbreviation
+    {
+        private static readonly Regex Valid = new Regex("[a-z]+", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+        public static LeagueAbbreviation Parse(string abbr)
+        {
+            LeagueAbbreviation leagueAbbr;
+            if (!TryParse(abbr, out leagueAbbr))
+                throw new FormatException("The supplied abbreviation is not correctly formatted.");
+
+            return leagueAbbr;
+        }
+
+        public static bool TryParse(string abbr, out LeagueAbbreviation leagueAbbr)
+        {
+            leagueAbbr = null;
+            if (!Valid.IsMatch(abbr))
+                return false;
+
+            leagueAbbr = new LeagueAbbreviation(abbr);
+            return true;
+        }
+
+        protected LeagueAbbreviation()
+        { }
+
+        private LeagueAbbreviation(string abbreviation)
+        {
+            if (!Valid.IsMatch(abbreviation))
+                throw new ArgumentOutOfRangeException("abbreviation");
+
+            this.Abbreviation = abbreviation;
+        }
+
+        public string Abbreviation { get; private set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            var otherObj = obj as LeagueAbbreviation;
+            if (otherObj == null)
+                return false;
+
+            return this.Abbreviation.Equals(otherObj.Abbreviation);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Abbreviation.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return this.Abbreviation;
+        }
+    }
+}
