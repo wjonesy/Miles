@@ -54,7 +54,9 @@
     <Compile Include="Configurations\Miles.MassTransit\IncomingMessageConfiguration.cs" />
     <Compile Include="Conventions\DateTime2Convention.cs" />
     <Compile Include="Conventions\SurrogateIdConvention.cs" />
+    <Compile Include="Domain.Command\Fixtures\FixtureRepository.cs" />
     <Compile Include="Domain.Command\Leagues\LeagueRepository.cs" />
+    <Compile Include="Domain.Command\Teams\TeamRepository.cs" />
     <Compile Include="Migrations\201609041321414_InitialCreate.cs" />
     <Compile Include="Migrations\201609041321414_InitialCreate.Designer.cs">
       <DependentUpon>201609041321414_InitialCreate.cs</DependentUpon>
@@ -70,10 +72,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Domain.Command\Fixtures\" />
-    <Folder Include="Domain.Command\Teams\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Miles.MassTransit\Miles.MassTransit.csproj">
       <Project>{BC322498-9FAA-4258-B728-ED4DE372BFE8}</Project>

@@ -1,7 +1,10 @@
 using Microsoft.Practices.Unity;
 using Miles.MassTransit;
 using Miles.MassTransit.Unity;
+using Miles.Persistence;
+using Miles.Sample.Persistence.EF;
 using System;
+using System.Linq;
 
 namespace Miles.Sample.Web.App_Start
 {
@@ -33,16 +36,17 @@ namespace Miles.Sample.Web.App_Start
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
-            // container.LoadConfiguration();
-
-            // TODO: Register your types here
-            // container.RegisterType<IProductRepository, ProductRepository>();
+            container.RegisterTypes(
+                AllClasses.FromLoadedAssemblies().Where(x => x.Namespace.StartsWith("Miles.Sample")),
+                t => WithMappings.FromMatchingInterface(t),
+                WithName.Default,
+                t => new PerRequestLifetimeManager());
 
             container.RegisterMilesMassTransitCommon(() => new PerRequestLifetimeManager())
                 .RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(new PerRequestLifetimeManager());
 
             container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(new PerRequestLifetimeManager());
+            container.RegisterType<ITransactionContext, SampleTransactionContext>(new PerRequestLifetimeManager());
         }
     }
 }

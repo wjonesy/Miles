@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="Command\Fixtures\FixtureId.cs" />
     <Compile Include="Command\Fixtures\FixtureResults.cs" />
+    <Compile Include="Command\Fixtures\IFixtureRepository.cs" />
     <Compile Include="Command\Leagues\ILeagueRepository.cs" />
     <Compile Include="Command\Leagues\League.cs" />
     <Compile Include="Command\Leagues\LeagueAbbreviation.cs" />
@@ -44,6 +45,7 @@
     <Compile Include="Command\Fixtures\FixtureStarted.cs" />
     <Compile Include="Command\Fixtures\FixtureStates.cs" />
     <Compile Include="Command\Leagues\LeagueStanding.cs" />
+    <Compile Include="Command\Teams\ITeamRepository.cs" />
     <Compile Include="Command\Teams\Team.cs" />
     <Compile Include="Command\Teams\TeamAbbreviation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
