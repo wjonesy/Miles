@@ -27,7 +27,10 @@ namespace Miles.Sample.Persistence.EF
         protected override Task DoCommitAsync()
         {
             if (transaction != null)
+            {
                 transaction.Commit();
+                transaction = null;
+            }
 
             return Task.FromResult(0);
         }
@@ -35,13 +38,19 @@ namespace Miles.Sample.Persistence.EF
         protected override void DoDispose()
         {
             if (transaction != null)
+            {
                 transaction.Rollback();
+                transaction = null;
+            }
         }
 
         protected override Task DoRollbackAsync()
         {
             if (transaction != null)
+            {
                 transaction.Rollback();
+                transaction = null;
+            }
 
             return Task.FromResult(0);
         }

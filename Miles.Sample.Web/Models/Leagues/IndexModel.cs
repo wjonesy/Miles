@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Miles.Sample.Web.Models.Leagues
+namespace Miles.Sample.Web.Models.Teams
 {
     public class IndexModel
     {
-        public List<IndexModelLeague> Leagues { get; set; }
+        public List<IndexModelTeam> Teams { get; set; }
     }
 
-    public class IndexModelLeague
+    public class IndexModelTeam
     {
         public string Abbreviation { get; set; }
 

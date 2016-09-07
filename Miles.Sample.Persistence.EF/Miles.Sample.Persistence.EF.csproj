@@ -43,6 +43,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Access\Domain\Read\LeagueReader.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureIdConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Leagues\LeagueAbbreviationConfiguration.cs" />
@@ -54,9 +55,9 @@
     <Compile Include="Configurations\Miles.MassTransit\IncomingMessageConfiguration.cs" />
     <Compile Include="Conventions\DateTime2Convention.cs" />
     <Compile Include="Conventions\SurrogateIdConvention.cs" />
-    <Compile Include="Access\Domain.Command\Fixtures\FixtureRepository.cs" />
-    <Compile Include="Access\Domain.Command\Leagues\LeagueRepository.cs" />
-    <Compile Include="Access\Domain.Command\Teams\TeamRepository.cs" />
+    <Compile Include="Access\Domain\Command\Fixtures\FixtureRepository.cs" />
+    <Compile Include="Access\Domain\Command\Leagues\LeagueRepository.cs" />
+    <Compile Include="Access\Domain\Command\Teams\TeamRepository.cs" />
     <Compile Include="Migrations\201609041321414_InitialCreate.cs" />
     <Compile Include="Migrations\201609041321414_InitialCreate.Designer.cs">
       <DependentUpon>201609041321414_InitialCreate.cs</DependentUpon>

@@ -39,18 +39,11 @@ namespace Miles.Sample.Web.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            try
-            {
-                await teamManager.CreateTeam(
-                    TeamAbbreviation.Parse(model.Abbreviation),
-                    model.Name);
+            await teamManager.CreateTeam(
+                TeamAbbreviation.Parse(model.Abbreviation),
+                model.Name);
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View(model);
-            }
+            return RedirectToAction("Index");
         }
     }
 }

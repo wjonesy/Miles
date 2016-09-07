@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.Practices.Unity;
 using Miles.MassTransit;
 using Miles.MassTransit.Unity;
@@ -42,11 +43,15 @@ namespace Miles.Sample.Web.App_Start
                 WithName.Default,
                 t => new PerRequestLifetimeManager());
 
+            container.RegisterType<ITime, Time>(new PerRequestLifetimeManager());
             container.RegisterMilesMassTransitCommon(() => new PerRequestLifetimeManager())
                 .RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(new PerRequestLifetimeManager());
 
             container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(new PerRequestLifetimeManager());
             container.RegisterType<ITransactionContext, SampleTransactionContext>(new PerRequestLifetimeManager());
+
+            container.RegisterInstance<IBus>(MassTransitBusConfig.GetBus());
+            container.RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());
         }
     }
 }

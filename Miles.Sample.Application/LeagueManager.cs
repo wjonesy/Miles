@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Miles.Sample.Application
 {
-    class LeagueManager
+    public class LeagueManager
     {
         private readonly ITransactionContext transactionContext;
         private readonly ILeagueRepository leagueRepository;
