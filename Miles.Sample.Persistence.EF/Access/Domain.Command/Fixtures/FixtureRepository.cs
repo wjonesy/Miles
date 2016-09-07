@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Miles.Sample.Persistence.EF.Domain.Command.Fixtures
+namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Fixtures
 {
     public class FixtureRepository : IFixtureRepository
     {

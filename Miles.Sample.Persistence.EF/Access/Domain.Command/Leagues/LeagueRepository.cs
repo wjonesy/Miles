@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Miles.Sample.Persistence.EF.Domain.Command.Leagues
+namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Leagues
 {
     public class LeagueRepository : ILeagueRepository
     {

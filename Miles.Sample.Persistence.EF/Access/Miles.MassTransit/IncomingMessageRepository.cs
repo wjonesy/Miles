@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Miles.Sample.Persistence.EF.Miles.MassTransit
+namespace Miles.Sample.Persistence.EF.AccessMiles.MassTransit
 {
     public class IncomingMessageRepository : IIncomingMessageRepository
     {

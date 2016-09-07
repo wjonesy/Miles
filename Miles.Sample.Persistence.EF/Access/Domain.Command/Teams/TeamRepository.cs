@@ -1,6 +1,5 @@
 ﻿using Miles.Sample.Domain.Command.Leagues;
 using Miles.Sample.Domain.Command.Teams;
-using Miles.Sample.Persistence.EF.Domain.Command.Teams;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Miles.Sample.Persistence.EF.Domain.Command.Teams
+namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Teams
 {
     public class TeamRepository : ITeamRepository
     {
