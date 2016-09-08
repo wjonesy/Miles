@@ -49,8 +49,11 @@
     <Compile Include="Command\Teams\Team.cs" />
     <Compile Include="Command\Teams\TeamAbbreviation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Read\Leagues\Fixture.cs" />
     <Compile Include="Read\Leagues\ILeagueReader.cs" />
     <Compile Include="Read\Leagues\League.cs" />
+    <Compile Include="Read\Leagues\Standing.cs" />
+    <Compile Include="Read\Teams\ITeamReader.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

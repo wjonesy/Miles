@@ -43,6 +43,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Access\Domain\Read\TeamReader.cs" />
     <Compile Include="Access\Domain\Read\LeagueReader.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureIdConfiguration.cs" />

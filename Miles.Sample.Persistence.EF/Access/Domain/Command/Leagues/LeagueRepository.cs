@@ -24,7 +24,9 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Leagues
 
         public Task SaveAsync(League league)
         {
-            dbContext.Leagues.Add(league);
+            var entry = dbContext.Entry(league);
+            if (entry == null || entry.State == EntityState.Detached || entry.State == EntityState.Deleted)
+                dbContext.Leagues.Add(league);
             return dbContext.SaveChangesAsync();
         }
     }

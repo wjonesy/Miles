@@ -170,14 +170,18 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Controllers\FixturesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LeaguesController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Fixtures\IndexModel.cs" />
     <Compile Include="Models\Leagues\CreateModel.cs" />
     <Compile Include="Models\Leagues\IndexModel.cs" />
+    <Compile Include="Models\Leagues\RegisterTeamModel.cs" />
+    <Compile Include="Models\Leagues\StandingsModel.cs" />
     <Compile Include="Models\Teams\CreateModel.cs" />
     <Compile Include="Models\Teams\IndexModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -227,6 +231,9 @@
     <Content Include="Views\Teams\Index.cshtml" />
     <Content Include="Views\Leagues\Index.cshtml" />
     <Content Include="Views\Leagues\Create.cshtml" />
+    <Content Include="Views\Leagues\Standings.cshtml" />
+    <Content Include="Views\Fixtures\Index.cshtml" />
+    <Content Include="Views\Leagues\RegisterTeam.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

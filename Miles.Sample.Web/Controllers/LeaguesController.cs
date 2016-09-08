@@ -1,6 +1,8 @@
 ﻿using Miles.Sample.Application;
 using Miles.Sample.Domain.Command.Leagues;
+using Miles.Sample.Domain.Command.Teams;
 using Miles.Sample.Domain.Read.Leagues;
+using Miles.Sample.Domain.Read.Teams;
 using Miles.Sample.Web.Models.Leagues;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,16 @@ namespace Miles.Sample.Web.Controllers
     {
         private readonly LeagueManager leagueManager;
         private readonly ILeagueReader leagueReader;
+        private readonly ITeamReader teamReader;
 
         public LeaguesController(
             LeagueManager leagueManager,
-            ILeagueReader leagueReader)
+            ILeagueReader leagueReader,
+            ITeamReader teamReader)
         {
             this.leagueManager = leagueManager;
             this.leagueReader = leagueReader;
+            this.teamReader = teamReader;
         }
 
         // GET: Leagues
@@ -52,6 +57,53 @@ namespace Miles.Sample.Web.Controllers
             await leagueManager.CreateLeagueAsync(
                 LeagueAbbreviation.Parse(model.Abbreviation),
                 model.Name);
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Standings(string id)
+        {
+            var standings = await leagueReader.GetStandingsAsync(id);
+            return View(new StandingsModel
+            {
+                Teams = standings.Select(x => new StandingModelTeam
+                {
+                    Name = x.Name,
+                    Played = x.Played,
+                    Wins = x.Wins,
+                    Draws = x.Draws,
+                    Losses = x.Losses,
+                    PointsFor = x.PointsFor,
+                    PointsAgainst = x.PointsAgainst,
+                    Points = x.Points
+                }).ToList()
+            });
+        }
+
+        public async Task<ActionResult> RegisterTeam(string id)
+        {
+            var teams = await teamReader.GetTeamsNotInLeagueAsync(id);
+            return View(new RegisterTeamModel
+            {
+                LeagueId = id,
+                Teams = teams
+            });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RegisterTeam(string id, RegisterTeamModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var teams = await teamReader.GetTeamsNotInLeagueAsync(id);
+                model.Teams = teams;
+                return View(model);
+            }
+
+            var team = TeamAbbreviation.Parse(model.Team);
+            var league = LeagueAbbreviation.Parse(id);
+
+            await leagueManager.RegisterTeam(league, team);
 
             return RedirectToAction("Index");
         }

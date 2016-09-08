@@ -20,7 +20,9 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Teams
 
         public Task SaveAsync(Team team)
         {
-            dbContext.Teams.Add(team);
+            var entry = dbContext.Entry(team);
+            if (entry == null || entry.State == EntityState.Detached || entry.State == EntityState.Deleted)
+                dbContext.Teams.Add(team);
             return dbContext.SaveChangesAsync();
         }
     }

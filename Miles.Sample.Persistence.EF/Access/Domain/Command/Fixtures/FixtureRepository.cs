@@ -20,7 +20,9 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Fixtures
 
         public Task SaveAsync(Fixture fixture)
         {
-            dbContext.Fixtures.Add(fixture);
+            var entry = dbContext.Entry(fixture);
+            if (entry == null || entry.State == EntityState.Detached || entry.State == EntityState.Deleted)
+                dbContext.Fixtures.Add(fixture);
             return dbContext.SaveChangesAsync();
         }
     }
