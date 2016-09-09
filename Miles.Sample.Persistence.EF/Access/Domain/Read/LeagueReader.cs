@@ -56,6 +56,7 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
                    .Where(x => x.League.Abbreviation == leagueId)
                    .Select(x => new Fixture
                    {
+                       Id = x.Id.Id,
                        TeamA = x.TeamA.Abbreviation,
                        TeamAPoints = !x.Started.HasValue ? new int?() : x.TeamAPoints,
                        TeamB = x.TeamB.Abbreviation,

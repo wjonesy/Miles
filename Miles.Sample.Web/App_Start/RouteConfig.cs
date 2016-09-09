@@ -14,9 +14,19 @@ namespace Miles.Sample.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                name: "Teams",
+                url: "Teams/{action}/{id}",
+                defaults: new { controller = "Teams", action = "Index", id = UrlParameter.Optional }
+            );
+            routes.MapRoute(
+                name: "Leagues",
+                url: "Leagues/{id}/{action}",
+                defaults: new { controller = "Leagues", action = "Index", id = UrlParameter.Optional }
+            );
+            routes.MapRoute(
+                name: "Fixtures",
+                url: "Leagues/{leagueId}/Fixtures/{action}/{fixtureId}",
+                defaults: new { controller = "Fixtures", action = "Index", fixtureId = UrlParameter.Optional }
             );
         }
     }

@@ -61,6 +61,23 @@ namespace Miles.Sample.Domain.Command.Fixtures
             domainContext.EventPublisher.Publish(new FixtureStarted(Started.Value));
         }
 
+        public void IncreasePoints(TeamAbbreviation team, int points)
+        {
+            if (team == null)
+                throw new ArgumentNullException("team");
+
+            if (team != TeamA && team != TeamB)
+                throw new ArgumentOutOfRangeException("team", "Must be one of the team fixtures");
+
+            if (points < 1)
+                throw new ArgumentOutOfRangeException("points", "Must be greater than 0");
+
+            if (team == TeamA)
+                TeamAPoints += points;
+            else
+                TeamBPoints += points;
+        }
+
         public void Finish(DomainContext domainContext)
         {
             if (State != FixtureStates.InProgress)

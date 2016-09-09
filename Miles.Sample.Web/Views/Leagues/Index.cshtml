@@ -22,9 +22,9 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.ActionLink("Standings", "Standings", new { id = item.Abbreviation }) |
-            @Html.ActionLink("Fixtures", "Index", "Fixtures", new { id = item.Abbreviation }, null) |
-            @Html.ActionLink("Register Team", "RegisterTeam", new { id = item.Abbreviation }, null)
+            @Html.RouteLink("Standings", "Leagues", new { action = "Standings", id = item.Abbreviation }) |
+            @Html.RouteLink("Fixtures", "Fixtures", new { action = "Index", leagueId = item.Abbreviation }) |
+            @Html.RouteLink("Register Team", "Leagues", new { action = "RegisterTeam", leagueId = item.Abbreviation })
         </td>
     </tr>
 }

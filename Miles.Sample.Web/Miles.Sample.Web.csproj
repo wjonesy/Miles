@@ -177,7 +177,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Fixtures\IndexModel.cs" />
+    <Compile Include="Models\Leagues\FixturesModel.cs" />
     <Compile Include="Models\Leagues\CreateModel.cs" />
     <Compile Include="Models\Leagues\IndexModel.cs" />
     <Compile Include="Models\Leagues\RegisterTeamModel.cs" />
@@ -232,11 +232,12 @@
     <Content Include="Views\Leagues\Index.cshtml" />
     <Content Include="Views\Leagues\Create.cshtml" />
     <Content Include="Views\Leagues\Standings.cshtml" />
-    <Content Include="Views\Fixtures\Index.cshtml" />
+    <Content Include="Views\Leagues\Fixtures.cshtml" />
     <Content Include="Views\Leagues\RegisterTeam.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\Fixtures\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

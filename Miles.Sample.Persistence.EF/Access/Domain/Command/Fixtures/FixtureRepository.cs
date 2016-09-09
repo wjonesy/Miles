@@ -18,6 +18,11 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Fixtures
             this.dbContext = dbContext;
         }
 
+        public Task<Fixture> GetByIdAsync(FixtureId fixtureId)
+        {
+            return dbContext.Fixtures.SingleOrDefaultAsync(x => x.Id.Id == fixtureId.Id);
+        }
+
         public Task SaveAsync(Fixture fixture)
         {
             var entry = dbContext.Entry(fixture);

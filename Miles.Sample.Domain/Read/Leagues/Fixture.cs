@@ -4,6 +4,8 @@ namespace Miles.Sample.Domain.Read.Leagues
 {
     public class Fixture
     {
+        public string Id { get; set; }
+
         public string TeamA { get; set; }
 
         public int? TeamAPoints { get; set; }

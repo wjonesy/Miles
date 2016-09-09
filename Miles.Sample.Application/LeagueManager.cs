@@ -65,5 +65,41 @@ namespace Miles.Sample.Application
                 await transaction.CommitAsync();
             }
         }
+
+        public async Task StartFixture(FixtureId fixtureId)
+        {
+            using (var transaction = await transactionContext.BeginAsync())
+            {
+                var fixture = await fixtureRepository.GetByIdAsync(fixtureId);
+                fixture.Start(domainContext);
+                await fixtureRepository.SaveAsync(fixture);
+
+                await transaction.CommitAsync();
+            }
+        }
+
+        public async Task IncreatePoints(FixtureId fixtureId, TeamAbbreviation team, int points)
+        {
+            using (var transaction = await transactionContext.BeginAsync())
+            {
+                var fixture = await fixtureRepository.GetByIdAsync(fixtureId);
+                fixture.IncreasePoints(team, points);
+                await fixtureRepository.SaveAsync(fixture);
+
+                await transaction.CommitAsync();
+            }
+        }
+
+        public async Task FinishFixture(FixtureId fixtureId)
+        {
+            using (var transaction = await transactionContext.BeginAsync())
+            {
+                var fixture = await fixtureRepository.GetByIdAsync(fixtureId);
+                fixture.Finish(domainContext);
+                await fixtureRepository.SaveAsync(fixture);
+
+                await transaction.CommitAsync();
+            }
+        }
     }
 }

@@ -8,6 +8,8 @@ namespace Miles.Sample.Domain.Command.Fixtures
 {
     public interface IFixtureRepository
     {
+        Task<Fixture> GetByIdAsync(FixtureId fixtureId);
+
         Task SaveAsync(Fixture fixture);
     }
 }

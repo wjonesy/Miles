@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Miles.Sample.Web.Models.Fixtures
+namespace Miles.Sample.Web.Models.Leagues
 {
-    public class IndexModel
+    public class FixturesModel
     {
         public string LeagueId { get; set; }
 
@@ -17,11 +17,13 @@ namespace Miles.Sample.Web.Models.Fixtures
 
         public DateTime ScheduledDateTime { get; set; }
 
-        public List<IndexModelFixture> Fixtures { get; set; }
+        public List<FixturesModelFixture> Fixtures { get; set; }
     }
 
-    public class IndexModelFixture
+    public class FixturesModelFixture
     {
+        public string Id { get; set; }
+
         public string TeamA { get; set; }
 
         public int? TeamAPoints { get; set; }

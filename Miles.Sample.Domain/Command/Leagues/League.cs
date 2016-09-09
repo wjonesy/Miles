@@ -61,7 +61,7 @@ namespace Miles.Sample.Domain.Command.Leagues
 
         public Fixture ScheduleFixture(DomainContext domainContext, TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
         {
-            var fixtureId = new FixtureId(this.Abbreviation, teamA, teamB, scheduledDateTime);
+            var fixtureId = FixtureId.Generate(this.Abbreviation, teamA, teamB, scheduledDateTime);
             var fixture = new Fixture(fixtureId, Abbreviation, teamA, teamB, scheduledDateTime);
             return fixture;
         }

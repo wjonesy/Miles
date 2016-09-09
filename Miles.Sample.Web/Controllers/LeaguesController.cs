@@ -80,6 +80,28 @@ namespace Miles.Sample.Web.Controllers
             });
         }
 
+        public async Task<ActionResult> Fixtures(string id)
+        {
+            var teams = await leagueReader.GetTeamsAsync(id);
+            var fixtures = await leagueReader.GetFixturesAsync(id);
+            return View(new FixturesModel
+            {
+                LeagueId = id,
+                Teams = teams,
+                Fixtures = fixtures.Select(x => new FixturesModelFixture
+                {
+                    Id = x.Id,
+                    TeamA = x.TeamA,
+                    TeamAPoints = x.TeamAPoints,
+                    TeamB = x.TeamB,
+                    TeamBPoints = x.TeamBPoints,
+                    ScheduledDateTime = x.ScheduledDateTime,
+                    Active = x.Active,
+                    Completed = x.Completed
+                }).ToList()
+            });
+        }
+
         public async Task<ActionResult> RegisterTeam(string id)
         {
             var teams = await teamReader.GetTeamsNotInLeagueAsync(id);
