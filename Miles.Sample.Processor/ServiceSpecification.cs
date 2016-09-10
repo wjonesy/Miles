@@ -3,6 +3,7 @@ using MassTransit.Hosting;
 
 namespace Miles.Sample.Processor
 {
+
     /// <summary>
     /// Configures the bus settings for the service and all endpoints in the same assembly.
     /// </summary>

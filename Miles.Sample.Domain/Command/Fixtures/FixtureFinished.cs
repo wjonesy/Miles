@@ -6,6 +6,9 @@ namespace Miles.Sample.Domain.Command.Fixtures
 {
     public class FixtureFinished
     {
+        public FixtureFinished()
+        { }
+
         public FixtureFinished(DateTime when, FixtureId fixture, LeagueAbbreviation league, FixtureResults result, TeamAbbreviation teamA, int teamAPoints, TeamAbbreviation teamB, int teamBPoints)
         {
             this.When = when;
@@ -30,6 +33,9 @@ namespace Miles.Sample.Domain.Command.Fixtures
 
         public class FixtureTeam
         {
+            public FixtureTeam()
+            { }
+
             public FixtureTeam(string abbr, int points)
             {
                 this.Abbreviation = abbr;

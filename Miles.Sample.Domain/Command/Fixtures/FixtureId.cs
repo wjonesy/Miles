@@ -6,6 +6,29 @@ namespace Miles.Sample.Domain.Command.Fixtures
 {
     public class FixtureId
     {
+        public static bool operator ==(FixtureId a, FixtureId b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(FixtureId a, FixtureId b)
+        {
+            return !(a == b);
+        }
+
         public static FixtureId Parse(string value)
         {
             FixtureId fixtureId;

@@ -25,7 +25,7 @@ namespace Miles.Sample.Domain.Command.Leagues
 
         public string Name { get; private set; }
 
-        public ICollection<LeagueStanding> Standings { get; private set; }
+        public virtual ICollection<LeagueStanding> Standings { get; private set; }
 
         public void RegisterTeam(TeamAbbreviation team)
         {

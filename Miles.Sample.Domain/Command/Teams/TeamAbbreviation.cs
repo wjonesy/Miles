@@ -7,6 +7,29 @@ namespace Miles.Sample.Domain.Command.Teams
     {
         private static readonly Regex Valid = new Regex("[a-z]+", RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
+        public static bool operator ==(TeamAbbreviation a, TeamAbbreviation b)
+        {
+            // If both are null, or both are same instance, return true.
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(TeamAbbreviation a, TeamAbbreviation b)
+        {
+            return !(a == b);
+        }
+
         public static TeamAbbreviation Parse(string abbr)
         {
             TeamAbbreviation teamAbbr;

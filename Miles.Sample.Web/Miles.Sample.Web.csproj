@@ -260,6 +260,10 @@
       <Project>{DB495F33-3A5C-479F-9620-089A7A7ABFD2}</Project>
       <Name>Miles.Sample.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miles.Sample.Infrastructure.Unity\Miles.Sample.Infrastructure.Unity.csproj">
+      <Project>{ccf74eab-5e6f-4964-b31c-8c76c0a527b7}</Project>
+      <Name>Miles.Sample.Infrastructure.Unity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles.Sample.Persistence.EF\Miles.Sample.Persistence.EF.csproj">
       <Project>{4C004035-8464-46D6-93E5-51C5694DF6C1}</Project>
       <Name>Miles.Sample.Persistence.EF</Name>

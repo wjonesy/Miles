@@ -31,11 +31,11 @@ namespace Miles.Sample.Persistence.EF.AccessMiles.MassTransit
             try
             {
                 await dbContext.SaveChangesAsync();
-                return true;
+                return false;
             }
             catch
             {
-                return false;
+                return true;
             }
         }
     }
