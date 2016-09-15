@@ -69,7 +69,7 @@ namespace Miles.MassTransit
                 var messagesForDispatch = pendingDispatchMessages;
                 pendingDispatchMessages = new List<OutgoingMessageForDispatch>();
 
-                await messageDispatchProcess.ExecuteAsync(messagesForDispatch);
+                await messageDispatchProcess.ExecuteAsync(messagesForDispatch).ConfigureAwait(false);
             });
         }
 
@@ -168,7 +168,7 @@ namespace Miles.MassTransit
                             publicPublisher.publisherStack.Push(new PublisherStackInstance(publicPublisher));
                             try
                             {
-                                await processor.Process(message.MessageObject);
+                                await processor.Process(message.MessageObject).ConfigureAwait(false);
                             }
                             finally
                             {

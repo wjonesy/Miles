@@ -59,7 +59,7 @@ namespace Miles.Persistence
         public async Task<ITransaction> BeginAsync()
         {
             if (nesting == 0)
-                await DoBeginAsync();
+                await DoBeginAsync().ConfigureAwait(false);
             ++nesting;
             return this;
         }
@@ -80,14 +80,14 @@ namespace Miles.Persistence
             if (nesting == 0)
                 throw new InvalidOperationException("Attempting to commit a transaction without beginning");
 
-            await preCommitHook.ExecuteAsync(this, new EventArgs());
+            await preCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
 
             // Only commit when on the outter most transaction
             if (nesting == 1)
-                await DoCommitAsync();
+                await DoCommitAsync().ConfigureAwait(false);
             --nesting;
 
-            await postCommitHook.ExecuteAsync(this, new EventArgs());
+            await postCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -100,10 +100,10 @@ namespace Miles.Persistence
             if (nesting == 0)
                 throw new InvalidOperationException();
 
-            await preRollbackHook.ExecuteAsync(this, new EventArgs());
-            await DoRollbackAsync();
+            await preRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+            await DoRollbackAsync().ConfigureAwait(false);
             nesting = 0;    // we rollback everything and reset
-            await postRollbackHook.ExecuteAsync(this, new EventArgs());
+            await postRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
         }
 
         /// <summary>

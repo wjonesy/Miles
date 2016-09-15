@@ -70,9 +70,9 @@ namespace Miles
         {
             if (InitiateSynchronously)
                 foreach (var hook in hooks)
-                    await hook(sender, args);
+                    await hook(sender, args).ConfigureAwait(false);
             else
-                await Task.WhenAll(hooks.Select(x => x(sender, args)));
+                await Task.WhenAll(hooks.Select(x => x(sender, args))).ConfigureAwait(false);
         }
     }
 }
