@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Miles.Persistence
@@ -23,7 +25,7 @@ namespace Miles.Persistence
     /// to perform the transaction commits and rollbacks.
     /// </summary>
     /// <seealso cref="Miles.Persistence.ITransaction" />
-    public abstract class SimulateNestedTransactionContext : ITransactionContext, ITransaction
+    public abstract class SimulateNestedTransactionContext : ITransactionContext
     {
         private readonly Hook<object, EventArgs> preCommitHook = new Hook<object, EventArgs>();
         private readonly Hook<object, EventArgs> postCommitHook = new Hook<object, EventArgs>();
@@ -50,7 +52,7 @@ namespace Miles.Persistence
         /// </summary>
         public IHook<object, EventArgs> PostRollback { get { return postRollbackHook; } }
 
-        private int nesting = 0;
+        private readonly HashSet<TransactionInstance> transactionInstances = new HashSet<TransactionInstance>();
 
         /// <summary>
         /// Begins the transaction.
@@ -58,10 +60,13 @@ namespace Miles.Persistence
         /// <returns></returns>
         public async Task<ITransaction> BeginAsync()
         {
-            if (nesting == 0)
-                await DoBeginAsync();
-            ++nesting;
-            return this;
+            if (!transactionInstances.Any())
+                await DoBeginAsync().ConfigureAwait(false);
+
+            var newTransactionInstance = new TransactionInstance(this);
+            transactionInstances.Add(newTransactionInstance);   // register with context
+
+            return newTransactionInstance;
         }
 
         /// <summary>
@@ -69,42 +74,6 @@ namespace Miles.Persistence
         /// </summary>
         /// <returns></returns>
         protected abstract Task DoBeginAsync();
-
-        /// <summary>
-        /// Commits the transaction.
-        /// </summary>
-        /// <returns></returns>
-        public async Task CommitAsync()
-        {
-            // Can't commit without beginning
-            if (nesting == 0)
-                throw new InvalidOperationException("Attempting to commit a transaction without beginning");
-
-            await preCommitHook.ExecuteAsync(this, new EventArgs());
-
-            // Only commit when on the outter most transaction
-            if (nesting == 1)
-                await DoCommitAsync();
-            --nesting;
-
-            await postCommitHook.ExecuteAsync(this, new EventArgs());
-        }
-
-        /// <summary>
-        /// Initiates the rollback of the transaction.
-        /// </summary>
-        /// <returns></returns>
-        public async Task RollbackAsync()
-        {
-            // Can't rollback without beginning
-            if (nesting == 0)
-                throw new InvalidOperationException();
-
-            await preRollbackHook.ExecuteAsync(this, new EventArgs());
-            await DoRollbackAsync();
-            nesting = 0;    // we rollback everything and reset
-            await postRollbackHook.ExecuteAsync(this, new EventArgs());
-        }
 
         /// <summary>
         /// Override to perform the actual commit.
@@ -119,23 +88,106 @@ namespace Miles.Persistence
         protected abstract Task DoRollbackAsync();
 
         /// <summary>
+        /// Does the dispose.
+        /// </summary>
+        protected abstract void DoDispose();
+
+        private async Task DoNestedCommitAsync(TransactionInstance instance)
+        {
+            if (!transactionInstances.Contains(instance))
+                throw new InvalidOperationException("Transaction instance is no-longer registered with the Transaction Context");
+
+            await preCommitHook.ExecuteAsync(this, new EventArgs());
+
+            // Only commit when on the outter most transaction
+            if (transactionInstances.Count == 1)
+                await DoCommitAsync().ConfigureAwait(false);
+
+            instance.Completed = true;
+            transactionInstances.Remove(instance);  // unregister from context
+
+            await postCommitHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+        }
+
+        private async Task DoNestedRollbackAsync(TransactionInstance instance)
+        {
+            if (!transactionInstances.Contains(instance))
+                throw new InvalidOperationException("Transaction instance is no-longer registered with the Transaction Context");
+
+            await preRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+
+            await DoRollbackAsync().ConfigureAwait(false);
+
+            // we rollback everything and reset so now everything is obsolete
+            foreach (var registeredInstance in transactionInstances)
+                instance.Completed = true;    
+            transactionInstances.Clear();
+
+            await postRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
-            if (nesting > 0)
+            if (transactionInstances != null && transactionInstances.Any())
             {
-                var rollback = RollbackAsync();
+                var rollback = DoRollbackAsync();
                 if (!rollback.IsCompleted)
                     rollback.RunSynchronously();
             }
-
-            DoDispose();
         }
 
-        /// <summary>
-        /// Does the dispose.
-        /// </summary>
-        protected abstract void DoDispose();
+        class TransactionInstance : ITransaction
+        {
+            private readonly SimulateNestedTransactionContext context;
+
+            public TransactionInstance(SimulateNestedTransactionContext context)
+            {
+                this.context = context;
+            }
+
+            public bool Completed { get; set; } = false;
+
+            /// <summary>
+            /// Commits the transaction.
+            /// </summary>
+            /// <returns></returns>
+            public async Task CommitAsync()
+            {
+                // transaction shouldn't be used anymore
+                if (Completed)
+                    throw new InvalidOperationException("Transaction instance already completed");
+
+                await context.DoNestedCommitAsync(this);
+            }
+
+            /// <summary>
+            /// Initiates the rollback of the transaction.
+            /// </summary>
+            /// <returns></returns>
+            public async Task RollbackAsync()
+            {
+                // transaction shouldn't be used anymore
+                if (Completed)
+                    throw new InvalidOperationException("Transaction instance already completed");
+
+                await context.DoNestedRollbackAsync(this);
+            }
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose()
+            {
+                if (!Completed && context != null && context.transactionInstances.Contains(this))
+                {
+                    var rollback = context.DoNestedRollbackAsync(this);
+                    if (!rollback.IsCompleted)
+                        rollback.RunSynchronously();
+                }
+            }
+        }
     }
 }
