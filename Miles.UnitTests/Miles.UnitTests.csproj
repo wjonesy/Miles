@@ -82,6 +82,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Persistence\SimulateNestedTransactionContextUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MassTransit\TransactionalMessagePublisherTests.cs" />
     <Compile Include="HookUnitTests.cs" />
