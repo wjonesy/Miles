@@ -27,7 +27,7 @@ namespace Miles.Persistence
     /// <see cref="Miles.Messaging.ICommandPublisher"/> monitor to release events to message
     /// queues or whatever mechanism exists.
     /// </summary>
-    public interface ITransactionContext
+    public interface ITransactionContext : IDisposable
     {
         /// <summary>
         /// Creates a new transaction within the context.
