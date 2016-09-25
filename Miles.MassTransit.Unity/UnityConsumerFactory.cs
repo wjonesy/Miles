@@ -37,6 +37,8 @@ namespace Miles.MassTransit.Unity
         {
             using (IUnityContainer childContainer = _container.CreateChildContainer())
             {
+                context.GetOrAddPayload(() => childContainer);
+
                 // register with the container for injection
                 childContainer.RegisterInstance<ConsumeContext>(context)
                     .RegisterInstance<ConsumeContext<T>>(context)

@@ -38,7 +38,14 @@
     <Compile Include="ActivityContext.cs" />
     <Compile Include="CleanupOutgoingMessagesConsumer.cs" />
     <Compile Include="CleanupIncomingMessagesConsumer.cs" />
+    <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
+    <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
+    <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
+    <Compile Include="EnsureMessageDispatch\DeleteOldConsumedRecordsConsumer.cs" />
+    <Compile Include="EnsureMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
+    <Compile Include="EnsureMessageDispatch\RecordMessageDispatchFilter.cs" />
+    <Compile Include="EnsureMessageDispatch\RecordMessageDispatchSpecification.cs" />
     <Compile Include="ICleanupIncomingMessagesCommand.cs" />
     <Compile Include="ICleanupOutgoingMessagesCommand.cs" />
     <Compile Include="IIncomingMessageRepository.cs" />
@@ -49,16 +56,28 @@
     <Compile Include="LookupBasedMessageDispatch.cs" />
     <Compile Include="DeduplicatedMessageProcessor.cs" />
     <Compile Include="ImmediateMessageDispatchProcess.cs" />
+    <Compile Include="MessageDeduplication\DeleteOldConsumedRecordsConsumer.cs" />
+    <Compile Include="MessageDeduplication\IConsumedRepository.cs" />
+    <Compile Include="EnsureMessageDispatch\IDispatchedRepository.cs" />
+    <Compile Include="MessageDeduplication\IDeleteOldConsumedRecordsCommand.cs" />
+    <Compile Include="MessageDeduplication\MessageDeduplicationFilter.cs" />
+    <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
     <Compile Include="OutgoingMessage.cs" />
     <Compile Include="IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageForDispatch.cs" />
     <Compile Include="OutgoingMessageConceptType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionalMessagePublisher.cs" />
+    <Compile Include="TransactionContext\TransactionContextFilter.cs" />
+    <Compile Include="TransactionContext\TransactionContextSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MassTransit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
       <HintPath>..\packages\MassTransit.3.4.0\lib\net452\MassTransit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NewId, Version=2.1.3.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
