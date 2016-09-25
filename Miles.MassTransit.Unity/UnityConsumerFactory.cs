@@ -13,6 +13,7 @@
 using MassTransit;
 using MassTransit.Pipeline;
 using MassTransit.Util;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using System.Threading.Tasks;
 
@@ -37,7 +38,7 @@ namespace Miles.MassTransit.Unity
         {
             using (IUnityContainer childContainer = _container.CreateChildContainer())
             {
-                context.GetOrAddPayload(() => childContainer);
+                context.GetOrAddPayload<IServiceLocator>(() => new UnityServiceLocator(childContainer));
 
                 // register with the container for injection
                 childContainer.RegisterInstance<ConsumeContext>(context)

@@ -15,6 +15,7 @@
  */
 using MassTransit;
 using Microsoft.Practices.Unity;
+using Miles.MassTransit.Configuration;
 using System;
 using System.Collections.Generic;
 
@@ -60,7 +61,7 @@ namespace Miles.MassTransit.Unity
         /// <param name="container">The container.</param>
         public static void MilesConsumer<TMessage>(this IReceiveEndpointConfigurator configurator, IUnityContainer container) where TMessage : class
         {
-            configurator.Consumer(new UnityConsumerFactory<IConsumer<TMessage>>(container));
+            configurator.Consumer(new UnityConsumerFactory<IConsumer<TMessage>>(container), c => c.UseMessageDeduplication());
         }
     }
 }

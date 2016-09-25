@@ -15,6 +15,7 @@
  */
 using FakeItEasy;
 using Miles.MassTransit;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.Messaging;
 using Miles.Persistence;
 using NUnit.Framework;

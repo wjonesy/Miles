@@ -36,8 +36,6 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
-    <Compile Include="CleanupOutgoingMessagesConsumer.cs" />
-    <Compile Include="CleanupIncomingMessagesConsumer.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
@@ -46,15 +44,10 @@
     <Compile Include="EnsureMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchFilter.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchSpecification.cs" />
-    <Compile Include="ICleanupIncomingMessagesCommand.cs" />
-    <Compile Include="ICleanupOutgoingMessagesCommand.cs" />
-    <Compile Include="IIncomingMessageRepository.cs" />
     <Compile Include="ILookupEndpointUri.cs" />
     <Compile Include="IMessageDispatcher.cs" />
     <Compile Include="IMessageDispatchProcess.cs" />
-    <Compile Include="IncomingMessage.cs" />
     <Compile Include="LookupBasedMessageDispatch.cs" />
-    <Compile Include="DeduplicatedMessageProcessor.cs" />
     <Compile Include="ImmediateMessageDispatchProcess.cs" />
     <Compile Include="MessageDeduplication\DeleteOldConsumedRecordsConsumer.cs" />
     <Compile Include="MessageDeduplication\IConsumedRepository.cs" />
@@ -62,8 +55,8 @@
     <Compile Include="MessageDeduplication\IDeleteOldConsumedRecordsCommand.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationFilter.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
-    <Compile Include="OutgoingMessage.cs" />
-    <Compile Include="IOutgoingMessageRepository.cs" />
+    <Compile Include="MessageDeduplication\OutgoingMessage.cs" />
+    <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageForDispatch.cs" />
     <Compile Include="OutgoingMessageConceptType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

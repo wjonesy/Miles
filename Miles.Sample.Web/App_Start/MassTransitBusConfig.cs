@@ -1,9 +1,8 @@
 ﻿using MassTransit;
+using Miles.MassTransit.Configuration;
+using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Web.App_Start;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(MassTransitBusConfig), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(MassTransitBusConfig), "Stop")]
@@ -26,6 +25,13 @@ namespace Miles.Sample.Web.App_Start
                     cfg.Username("guest");
                     cfg.Password("guest");
                 });
+
+                c.ConfigureSend(s =>
+                {
+                    s.UseEnsureMessageDispatch();
+                    s.UseEnsureMessageDispatch<FixtureFinished>();
+                });
+                c.ConfigurePublish(p => p.UseEnsureMessageDispatch<FixtureFinished>());
             });
 
             return bus;

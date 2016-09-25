@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Miles.MassTransit
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Miles.MassTransit.MessageDeduplication
 {
     /// <summary>
-    /// Command type so a message can be scheduled to cause old incoming messages
-    /// to be cleaned up.
+    /// Interface to the storage mechanism of <see cref="OutgoingMessage" />.
     /// </summary>
-    public interface ICleanupIncomingMessagesCommand
+    /// <remarks>
+    /// The idea is this will sit within the transaction of a handler unless otherwise specified.
+    /// </remarks>
+    public interface IOutgoingMessageRepository
     {
+        /// <summary>
+        /// Saves the specified messages to the storage mechanism.
+        /// </summary>
+        /// <param name="messages">The messages.</param>
+        /// <returns></returns>
+        Task SaveAsync(IEnumerable<OutgoingMessage> messages);
     }
 }

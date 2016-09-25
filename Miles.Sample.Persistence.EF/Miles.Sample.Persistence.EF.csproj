@@ -38,13 +38,29 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MassTransit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\MassTransit.3.4.0\lib\net452\MassTransit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NewId, Version=2.1.3.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\NewId.2.1.3\lib\net45\NewId.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Access\Domain\Read\TeamReader.cs" />
     <Compile Include="Access\Domain\Read\LeagueReader.cs" />
+    <Compile Include="Access\Miles.MassTransit\EnsureMessageDispatch\DispatchedRepository.cs" />
+    <Compile Include="Access\Miles.MassTransit\MessageDeduplication\IncomingMessage.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureIdConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Leagues\LeagueAbbreviationConfiguration.cs" />
@@ -52,8 +68,8 @@
     <Compile Include="Configurations\Domain.Command\Leagues\LeagueStandingConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Teams\TeamAbbreviationConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Teams\TeamConfiguration.cs" />
-    <Compile Include="Configurations\Miles.MassTransit\OutgoingMessageConfiguration.cs" />
-    <Compile Include="Configurations\Miles.MassTransit\IncomingMessageConfiguration.cs" />
+    <Compile Include="Configurations\Miles.MassTransit\MessageDeduplication\OutgoingMessageConfiguration.cs" />
+    <Compile Include="Configurations\Miles.MassTransit\MessageDeduplication\IncomingMessageConfiguration.cs" />
     <Compile Include="Conventions\DateTime2Convention.cs" />
     <Compile Include="Conventions\SurrogateIdConvention.cs" />
     <Compile Include="Access\Domain\Command\Fixtures\FixtureRepository.cs" />
@@ -63,9 +79,13 @@
     <Compile Include="Migrations\201609041321414_InitialCreate.Designer.cs">
       <DependentUpon>201609041321414_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609252230413_MessageRecordingChanges.cs" />
+    <Compile Include="Migrations\201609252230413_MessageRecordingChanges.Designer.cs">
+      <DependentUpon>201609252230413_MessageRecordingChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Access\Miles.MassTransit\IncomingMessageRepository.cs" />
-    <Compile Include="Access\Miles.MassTransit\OutgoingMessageRepository.cs" />
+    <Compile Include="Access\Miles.MassTransit\MessageDeduplication\ConsumedRepository.cs" />
+    <Compile Include="Access\Miles.MassTransit\MessageDeduplication\OutgoingMessageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDbContext.cs" />
     <Compile Include="SampleTransactionContext.cs" />
@@ -92,6 +112,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201609041321414_InitialCreate.resx">
       <DependentUpon>201609041321414_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609252230413_MessageRecordingChanges.resx">
+      <DependentUpon>201609252230413_MessageRecordingChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

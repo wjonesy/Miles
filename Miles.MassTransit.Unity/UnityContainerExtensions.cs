@@ -42,14 +42,9 @@ namespace Miles.MassTransit.Unity
                 .RegisterType<IActivityContext, ActivityContext>(lifetimeManagerFactory(), new InjectionConstructor(new OptionalParameter<ConsumeContext>()))
                 .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
                 .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
-                .RegisterType(typeof(IConsumer<>), typeof(ConsumerAdapter<>), lifetimeManagerFactory())
-                .RegisterType<IConsumer<ICleanupIncomingMessagesCommand>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
-                .RegisterType<IConsumer<ICleanupOutgoingMessagesCommand>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());
-
-            container.Configure<Interception>()
-                .AddPolicy("MessageProcessor.Deduplication")
-                .AddMatchingRule<PreventMultipleExecutionRule>()
-                .AddCallHandler<DeduplicatedMessagehandler>(lifetimeManagerFactory());
+                .RegisterType(typeof(IConsumer<>), typeof(ConsumerAdapter<>), lifetimeManagerFactory());
+            //.RegisterType<IConsumer<IDeleteOld>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
+            //.RegisterType<IConsumer<ICleanupOutgoingMessagesCommand>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());
 
             return container;
         }
@@ -86,9 +81,7 @@ namespace Miles.MassTransit.Unity
                 container = container.RegisterType(
                     iMessageProcessor,
                     messageProcessor,
-                    lifetimeManagerFactory(),
-                    new Interceptor<TransparentProxyInterceptor>(),
-                    new InterceptionBehavior<PolicyInjectionBehavior>());
+                    lifetimeManagerFactory());
 
             return container;
         }

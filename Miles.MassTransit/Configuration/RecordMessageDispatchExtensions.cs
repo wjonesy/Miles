@@ -16,7 +16,7 @@ namespace Miles.MassTransit.Configuration
             where TMessage : class
         {
             var spec = new RecordMessageDispatchSpecification<TMessage>();
-            configurator.AddPipeSpecification<TMessage>(spec);
+            configurator.AddPipeSpecification(spec);
             return configurator;
         }
     }

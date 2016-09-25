@@ -15,7 +15,7 @@
  */
 using System;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDeduplication
 {
     /// <summary>
     /// Represents the outgoing message serialized for data storage.
@@ -37,10 +37,10 @@ namespace Miles.MassTransit
         /// <param name="classTypeName">Name of the class type.</param>
         /// <param name="messageType">Type of the message.</param>
         /// <param name="serializedMessage">The serialized message.</param>
-        /// <param name="eventCreated">The date the event was created.</param>
-        public OutgoingMessage(Guid messageId, Guid correlationId, string classTypeName, OutgoingMessageConceptType messageType, string serializedMessage, DateTime eventCreated)
+        /// <param name="createdDate">The date the message was created.</param>
+        public OutgoingMessage(Guid messageId, Guid correlationId, string classTypeName, OutgoingMessageConceptType messageType, string serializedMessage, DateTime createdDate)
         {
-            this.EventCreated = eventCreated;
+            this.CreatedDate = createdDate;
             this.MessageId = messageId;
             this.CorrelationId = correlationId;
             this.ClassTypeName = classTypeName;
@@ -89,20 +89,20 @@ namespace Miles.MassTransit
         public string SerializedMessage { get; private set; }
 
         /// <summary>
-        /// Gets when the event was created.
+        /// Gets when the message was created.
         /// </summary>
         /// <value>
-        /// When the event was created.
+        /// When the message was created.
         /// </value>
-        public DateTime EventCreated { get; private set; }
+        public DateTime CreatedDate { get; private set; }
 
         /// <summary>
-        /// Gets when the event was dispatched. If <c>null</c> then the message has not yet been dispatched.
+        /// Gets when the message was dispatched. If <c>null</c> then the message has not yet been dispatched.
         /// </summary>
         /// <value>
-        /// When the event was dispatched.
+        /// When the message was dispatched.
         /// </value>
-        public DateTime? EventDispatched { get; private set; }
+        public DateTime? DispatchedDate { get; private set; }
 
         /// <summary>
         /// Indicate the message has been dispatched.
@@ -110,7 +110,7 @@ namespace Miles.MassTransit
         /// <param name="when">When the message was dispatched.</param>
         public void Dispatched(DateTime when)
         {
-            EventDispatched = when;
+            DispatchedDate = when;
         }
     }
 }

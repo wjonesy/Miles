@@ -1,14 +1,13 @@
-using System;
 using MassTransit;
 using MassTransit.Hosting;
 using Microsoft.Practices.Unity;
-using System.Linq;
 using Miles.MassTransit;
-using Miles.Sample.Infrastructure.Unity;
 using Miles.MassTransit.Unity;
 using Miles.Reflection;
-using System.Reflection;
 using Miles.Sample.Application;
+using Miles.Sample.Infrastructure.Unity;
+using System;
+using System.Reflection;
 
 namespace Miles.Sample.Processor
 {

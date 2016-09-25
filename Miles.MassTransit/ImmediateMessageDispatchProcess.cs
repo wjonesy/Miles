@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Miles.MassTransit.MessageDeduplication;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -58,15 +59,7 @@ namespace Miles.MassTransit
             foreach (var message in messages)
             {
                 var dispatcher = message.ConceptType == OutgoingMessageConceptType.Command ? commandDispatcher : eventDispatcher;
-                try
-                {
-                    await dispatcher.DispatchAsync(message).ConfigureAwait(false);
-                    await outgoingMessageRepository.RecordMessageDispatchAsync(time.Now, message.MessageId).ConfigureAwait(false);
-                }
-                catch
-                {
-                    // TODO: Report the failure, but we are intentionally hiding this problem
-                }
+                await dispatcher.DispatchAsync(message).ConfigureAwait(false);
             }
         }
     }

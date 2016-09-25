@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 using MassTransit;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.Messaging;
 using Miles.Persistence;
 using Newtonsoft.Json;
