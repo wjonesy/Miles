@@ -37,9 +37,12 @@
     </Compile>
     <Compile Include="ActivityContext.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
+    <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
+    <Compile Include="Configuration\EnsureMessageDispatchExtensions.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
+    <Compile Include="Configuration\ConfigurationValidationResult.cs" />
     <Compile Include="EnsureMessageDispatch\DeleteOldConsumedRecordsConsumer.cs" />
     <Compile Include="EnsureMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchFilter.cs" />

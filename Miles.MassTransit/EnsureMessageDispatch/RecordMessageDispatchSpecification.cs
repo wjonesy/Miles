@@ -2,34 +2,35 @@
 using MassTransit.Configurators;
 using MassTransit.PipeBuilders;
 using MassTransit.PipeConfigurators;
+using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Miles.MassTransit.EnsureMessageDispatch
 {
-    class RecordMessageDispatchSpecification : IPipeSpecification<SendContext>
+    class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>, IRecordMessageDispatchConfigurator
+        where TContext : class, SendContext
     {
+        public IDispatchedRepository DispatchedRepository { get; private set; }
+
+        public IRecordMessageDispatchConfigurator UseDispatchedRepository(IDispatchedRepository repository)
+        {
+            this.DispatchedRepository = repository;
+            return this;
+        }
+
         public IEnumerable<ValidationResult> Validate()
         {
-            return Enumerable.Empty<ValidationResult>();
+            if (DispatchedRepository == null)
+                yield return new ConfigurationValidationResult(
+                    ValidationResultDisposition.Failure,
+                    "DispatchedRepository",
+                    "Cannot be null",
+                    DispatchedRepository.ToString());
         }
 
-        public void Apply(IPipeBuilder<SendContext> builder)
+        public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new RecordMessageDispatchFilter());
-        }
-    }
-
-    class RecordMessageDispatchSpecification<TMessage> : IPipeSpecification<SendContext<TMessage>> where TMessage : class
-    {
-        public IEnumerable<ValidationResult> Validate()
-        {
-            return Enumerable.Empty<ValidationResult>();
-        }
-
-        public void Apply(IPipeBuilder<SendContext<TMessage>> builder)
-        {
-            builder.AddFilter(new RecordMessageDispatchFilter<TMessage>());
+            builder.AddFilter(new RecordMessageDispatchFilter<TContext>(DispatchedRepository));
         }
     }
 }

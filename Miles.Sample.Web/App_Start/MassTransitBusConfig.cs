@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using Miles.MassTransit.Configuration;
-using Miles.Sample.Domain.Command.Fixtures;
+using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.EnsureMessageDispatch;
 using Miles.Sample.Web.App_Start;
 using System;
 
@@ -26,12 +26,7 @@ namespace Miles.Sample.Web.App_Start
                     cfg.Password("guest");
                 });
 
-                c.ConfigureSend(s =>
-                {
-                    s.UseEnsureMessageDispatch();
-                    s.UseEnsureMessageDispatch<FixtureFinished>();
-                });
-                c.ConfigurePublish(p => p.UseEnsureMessageDispatch<FixtureFinished>());
+                c.UseEnsureMessageDispatch(cfg => cfg.UseDispatchedRepository(new DispatchedRepository()));
             });
 
             return bus;
