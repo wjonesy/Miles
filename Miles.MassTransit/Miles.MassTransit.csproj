@@ -43,7 +43,7 @@
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
-    <Compile Include="EnsureMessageDispatch\DeleteOldConsumedRecordsConsumer.cs" />
+    <Compile Include="EnsureMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />
     <Compile Include="EnsureMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchFilter.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchSpecification.cs" />

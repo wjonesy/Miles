@@ -7,9 +7,9 @@ namespace Miles.MassTransit.EnsureMessageDispatch
     {
         private readonly IDispatchedRepository dispatchedRepository;
 
-        public DeleteOldDispatchRecordsConsumer(IDispatchedRepository consumedRepository)
+        public DeleteOldDispatchRecordsConsumer(IDispatchedRepository dispatchedRepository)
         {
-            this.dispatchedRepository = consumedRepository;
+            this.dispatchedRepository = dispatchedRepository;
         }
 
         public Task Consume(ConsumeContext<IDeleteOldDispatchRecordsCommand> context)
