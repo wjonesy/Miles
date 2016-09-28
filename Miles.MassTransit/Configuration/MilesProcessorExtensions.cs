@@ -16,6 +16,7 @@
 using MassTransit;
 using MassTransit.ConsumeConfigurators;
 using Miles.Messaging;
+using Miles.Reflection;
 using System;
 
 namespace Miles.MassTransit.Configuration
@@ -61,11 +62,8 @@ namespace Miles.MassTransit.Configuration
             where TProcessor : class, IMessageProcessor<TMessage>
             where TMessage : class
         {
-            if (overridingAttributes)
-            {
-                // TODO: Inspect attributes
+            if (overridingAttributes || typeof(TProcessor).IsMessageDeduplicationEnabled())
                 configurator.UseMessageDeduplication();
-            }
 
             configure?.Invoke(configurator);
         }

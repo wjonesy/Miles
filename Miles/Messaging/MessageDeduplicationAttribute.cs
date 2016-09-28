@@ -18,19 +18,19 @@ using System;
 namespace Miles.Messaging
 {
     /// <summary>
-    /// Allows the developer to indicate if we want to prevent the multiple execution
-    /// of and event handler
+    /// Allows message deduplication to be enabled and/or disabled at an assembly or class level.
+    /// If not speecified we assume enabled.
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage(AttributeTargets.Class)]
-    public class PreventMultipleExecution : Attribute
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple = false)]
+    public class MessageDeduplicationAttribute : Attribute
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the annotated class should be prevented from handling an event or command multiple times.
+        /// Gets or sets a value indicating whether the annotated class or assembly should be prevented from handling an event or command multiple times.
         /// </summary>
         /// <value>
         ///   <c>true</c> if preventing; otherwise, <c>false</c>.
         /// </value>
-        public bool Prevent { get; set; } = true;
+        public bool Enabled { get; set; } = true;
     }
 }
