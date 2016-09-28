@@ -17,14 +17,14 @@ using MassTransit;
 using Miles.Messaging;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.Unity
+namespace Miles.MassTransit
 {
     /// <summary>
     /// Adapts the message processor to a MassTransit consumer.
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
     /// <seealso cref="MassTransit.IConsumer{TMessage}" />
-    class ConsumerAdapter<TMessage> : IConsumer<TMessage> where TMessage : class
+    public class ConsumerAdapter<TMessage> : IConsumer<TMessage> where TMessage : class
     {
         private readonly IMessageProcessor<TMessage> processor;
 
