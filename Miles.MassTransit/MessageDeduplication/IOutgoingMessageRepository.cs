@@ -32,5 +32,16 @@ namespace Miles.MassTransit.MessageDeduplication
         /// <param name="messages">The messages.</param>
         /// <returns></returns>
         Task SaveAsync(IEnumerable<OutgoingMessage> messages);
+
+        /// <summary>
+        /// Deletes the old outgoing messages.
+        /// </summary>
+        /// <remarks>
+        /// This doesn't need to mean deleting, it could mean archiving. The aim is to keep the data lean for fast processing.
+        /// If using you are dispatch recording then careful not to delete messages that have not been sent or only sent recently
+        /// (since you might need recent dispatches in the not too distant future).
+        /// </remarks>
+        /// <returns></returns>
+        Task DeleteOldRecordsAsync();
     }
 }

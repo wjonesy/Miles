@@ -33,7 +33,5 @@ namespace Miles.MassTransit.EnsureMessageDispatch
         /// <param name="context">The message context details.</param>
         /// <returns></returns>
         Task RecordAsync(SendContext context);
-
-        Task DeleteOldRecordsAsync();
     }
 }

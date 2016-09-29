@@ -21,17 +21,5 @@ namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.EnsureMessageDisp
                 await command.ExecuteNonQueryAsync();
             }
         }
-
-        public async Task DeleteOldRecordsAsync()
-        {
-            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Miles.Sample"].ConnectionString))
-            using (var command = new SqlCommand("DELETE FROM [dbo].[OutgoingMessages] WHERE [DispatchedDate] <= @DispatchDate", connection))
-            {
-                command.Parameters.AddWithValue("@DispatchedDate", DateTime.Now);
-
-                await connection.OpenAsync();
-                await command.ExecuteNonQueryAsync();
-            }
-        }
     }
 }

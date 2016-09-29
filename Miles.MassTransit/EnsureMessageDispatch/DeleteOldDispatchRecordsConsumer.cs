@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 using MassTransit;
+using Miles.MassTransit.MessageDeduplication;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.EnsureMessageDispatch
@@ -26,16 +27,16 @@ namespace Miles.MassTransit.EnsureMessageDispatch
     /// </remarks>
     class DeleteOldDispatchRecordsConsumer : IConsumer<IDeleteOldDispatchRecordsCommand>
     {
-        private readonly IDispatchedRepository dispatchedRepository;
+        private readonly IOutgoingMessageRepository outgoingMessageRepository;
 
-        public DeleteOldDispatchRecordsConsumer(IDispatchedRepository dispatchedRepository)
+        public DeleteOldDispatchRecordsConsumer(IOutgoingMessageRepository outgoingMessageRepository)
         {
-            this.dispatchedRepository = dispatchedRepository;
+            this.outgoingMessageRepository = outgoingMessageRepository;
         }
 
         public Task Consume(ConsumeContext<IDeleteOldDispatchRecordsCommand> context)
         {
-            return dispatchedRepository.DeleteOldRecordsAsync();
+            return outgoingMessageRepository.DeleteOldRecordsAsync();
         }
     }
 }
