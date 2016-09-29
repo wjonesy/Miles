@@ -17,6 +17,7 @@ using MassTransit;
 using MassTransit.Pipeline;
 using Microsoft.Practices.ServiceLocation;
 using Miles.Persistence;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.TransactionContext
@@ -32,9 +33,17 @@ namespace Miles.MassTransit.TransactionContext
 #pragma warning restore CS1658 // Warning is overriding an error
 #pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute
     {
+        private IsolationLevel? _hintIsolationLevel;
+
+        public TransactionContextFilter(IsolationLevel? hintIsolationLevel)
+        {
+            this._hintIsolationLevel = hintIsolationLevel;
+        }
+
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("transaction-context");
+            var scope = context.CreateFilterScope("transaction-context");
+            scope.Add("HintIsolationLevel", _hintIsolationLevel);
         }
 
         public async Task Send(ConsumerConsumeContext<TConsumer> context, IPipe<ConsumerConsumeContext<TConsumer>> next)
@@ -43,7 +52,7 @@ namespace Miles.MassTransit.TransactionContext
             var container = context.GetPayload<IServiceLocator>();
             var transactionContext = container.GetInstance<ITransactionContext>();
 
-            var transaction = await transactionContext.BeginAsync().ConfigureAwait(false);
+            var transaction = await transactionContext.BeginAsync(_hintIsolationLevel).ConfigureAwait(false);
             try
             {
                 await next.Send(context).ConfigureAwait(false);

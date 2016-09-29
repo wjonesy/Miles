@@ -27,8 +27,10 @@ namespace Miles.MassTransit.Configuration
     public static class MessageDeduplicationExtensions
     {
         /// <summary>
-        /// Wraps message in a <see cref="ITransactionContext"/> in which the message is recorded to ensure it is processed only once.
+        /// The message is recorded to ensure it is processed only once.
         /// On identifying a message as already processed the message is removed from the queue without doing any work.
+        /// This should be wrapped in an <see cref="ITransactionContext"/> to ensure the processing and recording
+        /// of the message are a single unit of work.
         /// </summary>
         /// <remarks>
         /// This assumes a container will have registered itself as an <see cref="IServiceLocator"/> payload to 
@@ -40,10 +42,6 @@ namespace Miles.MassTransit.Configuration
         public static IConsumerConfigurator<TConsumer> UseMessageDeduplication<TConsumer>(this IConsumerConfigurator<TConsumer> configurator)
             where TConsumer : class, IConsumer
         {
-            // Transaction is required to ensure recording and
-            // processing of message are a single unit of work
-            configurator.UseTransactionContext();
-
             var spec = new MessageDeduplicationSpecification<TConsumer>();
             configurator.AddPipeSpecification(spec);
             return configurator;

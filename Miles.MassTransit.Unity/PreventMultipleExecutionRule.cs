@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 using Microsoft.Practices.Unity.InterceptionExtension;
-using Miles.Messaging;
 using Miles.Reflection;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Unity
 {
@@ -37,8 +32,7 @@ namespace Miles.MassTransit.Unity
             if (declaringType.IsInterface || !declaringType.GetInterfaces().Any(x => x.IsMessageProcessor()))
                 return false;
 
-            var preventMultipleExecAttrib = declaringType.GetCustomAttribute<PreventMultipleExecution>();
-            return preventMultipleExecAttrib?.Prevent ?? true;
+            return declaringType.IsMessageDeduplicationEnabled();
         }
     }
 }

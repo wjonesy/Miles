@@ -1,9 +1,6 @@
 ﻿using Miles.Persistence;
-using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.Sample.Persistence.EF
@@ -18,9 +15,13 @@ namespace Miles.Sample.Persistence.EF
             this.dbContext = dbContext;
         }
 
-        protected override Task DoBeginAsync()
+        protected override Task DoBeginAsync(IsolationLevel? hintIsolationLevel = null)
         {
-            transaction = dbContext.Database.BeginTransaction();
+            if (hintIsolationLevel.HasValue)
+                transaction = dbContext.Database.BeginTransaction(hintIsolationLevel.Value);
+            else
+                transaction = dbContext.Database.BeginTransaction();
+
             return Task.FromResult(0);
         }
 

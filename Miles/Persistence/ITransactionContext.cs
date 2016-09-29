@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Miles.Persistence
@@ -32,8 +33,9 @@ namespace Miles.Persistence
         /// <summary>
         /// Creates a new transaction within the context.
         /// </summary>
+        /// <param name="hintIsolationLevel">The isolation level hint.</param>
         /// <returns></returns>
-        Task<ITransaction> BeginAsync();
+        Task<ITransaction> BeginAsync(IsolationLevel? hintIsolationLevel = null);
 
         /// <summary>
         /// Hook executed prior to commiting the current transaction.

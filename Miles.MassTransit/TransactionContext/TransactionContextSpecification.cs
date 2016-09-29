@@ -17,13 +17,24 @@ using MassTransit;
 using MassTransit.Configurators;
 using MassTransit.PipeBuilders;
 using MassTransit.PipeConfigurators;
+using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace Miles.MassTransit.TransactionContext
 {
-    class TransactionContextSpecification<TConsumer> : IPipeSpecification<ConsumerConsumeContext<TConsumer>> where TConsumer : class, IConsumer
+    class TransactionContextSpecification<TConsumer> : IPipeSpecification<ConsumerConsumeContext<TConsumer>>, ITransactionContextConfigurator
+        where TConsumer : class, IConsumer
     {
+        private IsolationLevel? _hintIsolationLevel;
+
+        public ITransactionContextConfigurator HintIsolationLevel(IsolationLevel? isolationLevel)
+        {
+            _hintIsolationLevel = isolationLevel;
+            return this;
+        }
+
         public IEnumerable<ValidationResult> Validate()
         {
             return Enumerable.Empty<ValidationResult>();
@@ -31,7 +42,7 @@ namespace Miles.MassTransit.TransactionContext
 
         public void Apply(IPipeBuilder<ConsumerConsumeContext<TConsumer>> builder)
         {
-            builder.AddFilter(new TransactionContextFilter<TConsumer>());
+            builder.AddFilter(new TransactionContextFilter<TConsumer>(_hintIsolationLevel));
         }
     }
 }

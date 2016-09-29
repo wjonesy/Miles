@@ -21,6 +21,7 @@ using Miles.Persistence;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Miles.UnitTests.MassTransit
@@ -65,7 +66,7 @@ namespace Miles.UnitTests.MassTransit
             var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
-            using (var transaction = await fakeTransactionContext.BeginAsync())
+            using (var transaction = await fakeTransactionContext.BeginAsync(new IsolationLevel?()))
             {
                 ((IEventPublisher)publisher).Publish(eventType);
                 ((ICommandPublisher)publisher).Publish(commandType);
@@ -92,7 +93,7 @@ namespace Miles.UnitTests.MassTransit
             var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
-            using (var transaction = await fakeTransactionContext.BeginAsync())
+            using (var transaction = await fakeTransactionContext.BeginAsync(new IsolationLevel?()))
             {
                 ((IEventPublisher)publisher).Publish(eventType);
                 ((ICommandPublisher)publisher).Publish(commandType);
@@ -119,7 +120,7 @@ namespace Miles.UnitTests.MassTransit
             var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
-            using (var transaction = await fakeTransactionContext.BeginAsync())
+            using (var transaction = await fakeTransactionContext.BeginAsync(new IsolationLevel?()))
             {
                 ((IEventPublisher)publisher).Publish(eventType);
                 ((ICommandPublisher)publisher).Publish(commandType);
@@ -150,7 +151,7 @@ namespace Miles.UnitTests.MassTransit
             var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
             // Act
-            using (var transaction = await fakeTransactionContext.BeginAsync())
+            using (var transaction = await fakeTransactionContext.BeginAsync(new IsolationLevel?()))
             {
                 ((IEventPublisher)publisher).Register(fakeEventProcessor);
                 ((ICommandPublisher)publisher).Register(fakeCommandProcessor);
@@ -188,7 +189,7 @@ namespace Miles.UnitTests.MassTransit
                 await postCommitHook.ExecuteAsync(fakeTransactionContext, new EventArgs());
             }).Returns(Task.FromResult(0));
 
-            A.CallTo(() => fakeTransactionContext.BeginAsync()).Returns(Task.FromResult(fakeTransaction));
+            A.CallTo(() => fakeTransactionContext.BeginAsync(new IsolationLevel?())).Returns(Task.FromResult(fakeTransaction));
             A.CallTo(() => fakeTransactionContext.PreCommit).Returns(preCommitHook);
             A.CallTo(() => fakeTransactionContext.PostCommit).Returns(postCommitHook);
             return fakeTransactionContext;

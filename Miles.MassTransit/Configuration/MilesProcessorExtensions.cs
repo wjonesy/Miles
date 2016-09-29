@@ -39,7 +39,7 @@ namespace Miles.MassTransit.Configuration
             this IReceiveEndpointConfigurator configurator,
             Func<IConsumer<TMessage>> consumerFactory,
             Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,
-            bool overrideAttributes = false)
+            bool ignoreAttributes = false)
             where TProcessor : class, IMessageProcessor<TMessage>
             where TMessage : class
         {
@@ -50,20 +50,30 @@ namespace Miles.MassTransit.Configuration
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
             this IReceiveEndpointConfigurator configurator,
             Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,
-            bool overrideAttributes = false)
+            bool ignoreAttributes = false)
             where TProcessor : class, IMessageProcessor<TMessage>, new()
             where TMessage : class
         {
-            configurator.MessageProcessor<TProcessor, TMessage>(() => new ConsumerAdapter<TMessage>(new TProcessor()), configure, overrideAttributes);
+            configurator.MessageProcessor<TProcessor, TMessage>(() => new ConsumerAdapter<TMessage>(new TProcessor()), configure, ignoreAttributes);
             return configurator;
         }
 
-        private static void ConfigureConsumer<TProcessor, TMessage>(IConsumerConfigurator<IConsumer<TMessage>> configurator, Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null, bool overridingAttributes = false)
+        private static void ConfigureConsumer<TProcessor, TMessage>(IConsumerConfigurator<IConsumer<TMessage>> configurator, Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null, bool ignoreAttributes = false)
             where TProcessor : class, IMessageProcessor<TMessage>
             where TMessage : class
         {
-            if (overridingAttributes || typeof(TProcessor).IsMessageDeduplicationEnabled())
-                configurator.UseMessageDeduplication();
+            // ignore attributes or not
+            if (!ignoreAttributes)
+            {
+                // first apply the transaction if desired to wrap the message deduplication handling
+                // In case someone applied the attrib at a method level start as ProcessAsync and work backwards
+                var transactionContextAttribute = typeof(TProcessor).GetMethod("ProcessAsync").GetTransactionConfig();
+                if (transactionContextAttribute.Enabled)
+                    configurator.UseTransactionContext(c => c.HintIsolationLevel(transactionContextAttribute.HintIsolationLevel));
+
+                if (typeof(TProcessor).IsMessageDeduplicationEnabled())
+                    configurator.UseMessageDeduplication();
+            }
 
             configure?.Invoke(configurator);
         }

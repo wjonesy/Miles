@@ -17,6 +17,7 @@ using FakeItEasy;
 using Miles.Persistence;
 using NUnit.Framework;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Miles.UnitTests.Persistence
@@ -31,7 +32,7 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
                 // Do nothing
             }
@@ -48,9 +49,9 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
-                using (var innerTransaction = await transactionContext.BeginAsync())
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
                 {
                     // Do nothing
                 }
@@ -68,7 +69,7 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
                 await transaction.RollbackAsync();
             }
@@ -85,9 +86,9 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
-                using (var innerTransaction = await transactionContext.BeginAsync())
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
                 {
                     await innerTransaction.RollbackAsync();
                 }
@@ -105,9 +106,9 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
-                using (var innerTransaction = await transactionContext.BeginAsync())
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
                 {
                     await innerTransaction.RollbackAsync();
                 }
@@ -128,7 +129,7 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
                 await transaction.CommitAsync();
             }
@@ -146,9 +147,9 @@ namespace Miles.UnitTests.Persistence
             var transactionContext = A.Fake<SimulateNestedTransactionContext>();
 
             // Act
-            using (var transaction = await transactionContext.BeginAsync())
+            using (var transaction = await transactionContext.BeginAsync(new IsolationLevel?()))
             {
-                using (var innerTransaction = await transactionContext.BeginAsync())
+                using (var innerTransaction = await transactionContext.BeginAsync(new IsolationLevel?()))
                 {
                     await innerTransaction.CommitAsync();
                 }

@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,11 +58,12 @@ namespace Miles.Persistence
         /// <summary>
         /// Begins the transaction.
         /// </summary>
+        /// <param name="hintIsolationLevel">The isolation level hint.</param>
         /// <returns></returns>
-        public async Task<ITransaction> BeginAsync()
+        public async Task<ITransaction> BeginAsync(IsolationLevel? hintIsolationLevel = null)
         {
             if (!transactionInstances.Any())
-                await DoBeginAsync().ConfigureAwait(false);
+                await DoBeginAsync(hintIsolationLevel).ConfigureAwait(false);
 
             var newTransactionInstance = new TransactionInstance(this);
             transactionInstances.Add(newTransactionInstance);   // register with context
@@ -72,8 +74,9 @@ namespace Miles.Persistence
         /// <summary>
         /// Begins the actual transaction.
         /// </summary>
+        /// <param name="hintIsolationLevel">The isolation level hint.</param>
         /// <returns></returns>
-        protected abstract Task DoBeginAsync();
+        protected abstract Task DoBeginAsync(IsolationLevel? hintIsolationLevel = null);
 
         /// <summary>
         /// Override to perform the actual commit.
@@ -120,7 +123,7 @@ namespace Miles.Persistence
 
             // we rollback everything and reset so now everything is obsolete
             foreach (var registeredInstance in transactionInstances)
-                instance.Completed = true;    
+                instance.Completed = true;
             transactionInstances.Clear();
 
             await postRollbackHook.ExecuteAsync(this, new EventArgs()).ConfigureAwait(false);

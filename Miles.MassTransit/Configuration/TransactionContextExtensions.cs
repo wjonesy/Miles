@@ -17,6 +17,7 @@ using MassTransit;
 using MassTransit.ConsumeConfigurators;
 using Miles.MassTransit.TransactionContext;
 using Miles.Persistence;
+using System;
 
 namespace Miles.MassTransit.Configuration
 {
@@ -31,10 +32,11 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <returns></returns>
-        public static IConsumerConfigurator<TConsumer> UseTransactionContext<TConsumer>(this IConsumerConfigurator<TConsumer> configurator)
+        public static IConsumerConfigurator<TConsumer> UseTransactionContext<TConsumer>(this IConsumerConfigurator<TConsumer> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TConsumer : class, IConsumer
         {
             var spec = new TransactionContextSpecification<TConsumer>();
+            configure?.Invoke(spec);
 
             configurator.AddPipeSpecification(spec);
             return configurator;
