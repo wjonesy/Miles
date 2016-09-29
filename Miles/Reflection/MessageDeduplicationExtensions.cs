@@ -19,8 +19,17 @@ using System.Reflection;
 
 namespace Miles.Reflection
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MessageDeduplicationExtensions
     {
+        /// <summary>
+        /// Determines whether the message processor is interested in message deduplication.
+        /// Looks at the class type first and works up to the assembly type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
         public static bool IsMessageDeduplicationEnabled(this Type type)
         {
             var typeAttrib = type.GetCustomAttribute<MessageDeduplicationAttribute>();

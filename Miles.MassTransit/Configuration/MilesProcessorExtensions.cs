@@ -21,13 +21,27 @@ using System;
 
 namespace Miles.MassTransit.Configuration
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MilesProcessorExtensions
     {
+        /// <summary>
+        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
+        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
+        /// </summary>
+        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="configurator">The receive endpoint configurator.</param>
+        /// <param name="consumerFactory">The consumer factory.</param>
+        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
+        /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
             this IReceiveEndpointConfigurator configurator,
             IConsumerFactory<IConsumer<TMessage>> consumerFactory,
             Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,
-            bool overrideAttributes = false)
+            bool ignoreAttributes = false)
             where TProcessor : class, IMessageProcessor<TMessage>
             where TMessage : class
         {
@@ -35,6 +49,17 @@ namespace Miles.MassTransit.Configuration
             return configurator;
         }
 
+        /// <summary>
+        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
+        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
+        /// </summary>
+        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="configurator">The receive endpoint configurator.</param>
+        /// <param name="consumerFactory">The consumer factory method.</param>
+        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
+        /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
             this IReceiveEndpointConfigurator configurator,
             Func<IConsumer<TMessage>> consumerFactory,
@@ -47,6 +72,15 @@ namespace Miles.MassTransit.Configuration
             return configurator;
         }
 
+        /// <summary>
+        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
+        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
+        /// </summary>
+        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="configurator">The receive endpoint configurator.</param>
+        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
             this IReceiveEndpointConfigurator configurator,
             Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,

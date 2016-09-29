@@ -17,8 +17,18 @@ using System.Data;
 
 namespace Miles.MassTransit.Configuration
 {
+    /// <summary>
+    /// Configures a UseTransactionContext middleware.
+    /// </summary>
     public interface ITransactionContextConfigurator
     {
+        /// <summary>
+        /// Sets a hint for what level of isolation the transaction context should use.
+        /// This is only a hint since implementations might not have a concept of isolation levels or 
+        /// only the first transaction in the context governs the isolation level so the rest follow.
+        /// </summary>
+        /// <param name="isolationLevel">The isolation level.</param>
+        /// <returns></returns>
         ITransactionContextConfigurator HintIsolationLevel(IsolationLevel? isolationLevel);
     }
 }

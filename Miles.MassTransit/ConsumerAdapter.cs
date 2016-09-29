@@ -19,12 +19,14 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit
 {
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Adapts the message processor to a MassTransit consumer.
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
     /// <seealso cref="MassTransit.IConsumer{TMessage}" />
     public class ConsumerAdapter<TMessage> : IConsumer<TMessage> where TMessage : class
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
         private readonly IMessageProcessor<TMessage> processor;
 
