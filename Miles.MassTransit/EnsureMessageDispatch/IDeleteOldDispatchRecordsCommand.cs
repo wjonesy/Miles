@@ -15,6 +15,9 @@
  */
 namespace Miles.MassTransit.EnsureMessageDispatch
 {
+    /// <summary>
+    /// Command to initiate record cleanup
+    /// </summary>
     interface IDeleteOldDispatchRecordsCommand
     {
     }
