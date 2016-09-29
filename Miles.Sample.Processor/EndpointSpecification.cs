@@ -1,15 +1,12 @@
 using MassTransit;
 using MassTransit.Hosting;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit;
 using Miles.MassTransit.Configuration;
 using Miles.MassTransit.Unity;
 using Miles.Reflection;
-using Miles.Sample.Application;
 using Miles.Sample.Infrastructure.Unity;
 using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.EnsureMessageDispatch;
 using System;
-using System.Reflection;
 
 namespace Miles.Sample.Processor
 {
@@ -43,10 +40,10 @@ namespace Miles.Sample.Processor
         {
             var container = new UnityContainer()
                 .ConfigureSample(t => new HierarchicalLifetimeManager())
-                .RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(new HierarchicalLifetimeManager())
-                .RegisterMessageProcessors(() => new HierarchicalLifetimeManager(), AllClasses.FromLoadedAssemblies().GetMessageProcessors());
+                .RegisterMessageProcessors(AllClasses.FromLoadedAssemblies().GetMessageProcessors());
+
             configurator.UseEnsureMessageDispatch(c => c.UseDispatchedRepository(new DispatchedRepository()));
-            configurator.MilesConsumers(container, Assembly.GetAssembly(typeof(FixtureFinishedProcessor)).DefinedTypes.GetProcessedMessageTypes());
+            configurator.MilesConsumers(container, AllClasses.FromLoadedAssemblies().GetProcessedMessageTypes());
         }
     }
 }

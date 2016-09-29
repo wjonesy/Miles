@@ -25,7 +25,7 @@ namespace Miles.MassTransit.Unity
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="MassTransit.IConsumerFactory{TConsumer}" />
-    public class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
+    class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
     {
         readonly IUnityContainer _container;
 
@@ -58,7 +58,7 @@ namespace Miles.MassTransit.Unity
 
         void IProbeSite.Probe(ProbeContext context)
         {
-            context.CreateConsumerFactoryScope<TConsumer>("unity");
+            context.CreateConsumerFactoryScope<TConsumer>("miles-unity");
         }
     }
 }

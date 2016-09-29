@@ -13,26 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Microsoft.Practices.Unity.InterceptionExtension;
-using Miles.Reflection;
+using Microsoft.Practices.Unity;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Miles.MassTransit.Unity
 {
-    class PreventMultipleExecutionRule : IMatchingRule
+    public class UnityRegistrationConfiguration
     {
-        public bool Matches(MethodBase member)
-        {
-            if (member.Name != "ProcessAsync")
-                return false;
+        public Func<Type, LifetimeManager> ChildContainerLifetimeManagerFactory { get; set; } = t => new HierarchicalLifetimeManager();
 
-            // Not the interface itself, but the actual processor implementation
-            var declaringType = member.DeclaringType;
-            if (declaringType.IsInterface || !declaringType.GetInterfaces().Any(x => x.IsMessageProcessor()))
-                return false;
+        public CommandDispatcherTypes CommandDispatcher { get; set; } = CommandDispatcherTypes.Publish;
 
-            return declaringType.IsMessageDeduplicationEnabled();
-        }
+        public MessageDispatchProcesses MessageDispatchProcess { get; set; } = MessageDispatchProcesses.Immediate;
+
+        public IEnumerable<Type> ProcessorTypes { get; set; } = Enumerable.Empty<Type>();
     }
 }

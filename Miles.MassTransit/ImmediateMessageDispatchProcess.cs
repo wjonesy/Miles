@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.MassTransit.MessageDeduplication;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,26 +24,18 @@ namespace Miles.MassTransit
     /// <seealso cref="Miles.MassTransit.IMessageDispatchProcess" />
     public class ImmediateMessageDispatchProcess : IMessageDispatchProcess
     {
-        private readonly IOutgoingMessageRepository outgoingMessageRepository;
-        private readonly ITime time;
         private readonly IMessageDispatcher commandDispatcher;
         private readonly ConventionBasedMessageDispatcher eventDispatcher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImmediateMessageDispatchProcess"/> class.
         /// </summary>
-        /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
-        /// <param name="time">The time.</param>
         /// <param name="commandDispatcher">The command dispatcher.</param>
         /// <param name="eventDispatcher">The event dispatcher.</param>
         public ImmediateMessageDispatchProcess(
-            IOutgoingMessageRepository outgoingMessageRepository,
-            ITime time,
             IMessageDispatcher commandDispatcher,
             ConventionBasedMessageDispatcher eventDispatcher)
         {
-            this.outgoingMessageRepository = outgoingMessageRepository;
-            this.time = time;
             this.commandDispatcher = commandDispatcher;
             this.eventDispatcher = eventDispatcher;
         }

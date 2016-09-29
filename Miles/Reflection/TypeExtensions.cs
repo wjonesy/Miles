@@ -42,7 +42,10 @@ namespace Miles.Reflection
         /// <returns></returns>
         public static IEnumerable<Type> GetMessageProcessors(this IEnumerable<Type> types)
         {
-            return types.Where(x => x.GetInterfaces().Any(i => i.IsMessageProcessor()));
+            return types
+                .Where(x => x.IsClass)
+                .Where(x => !x.IsAbstract)
+                .Where(x => x.GetInterfaces().Any(i => i.IsMessageProcessor()));
         }
 
         /// <summary>
@@ -52,8 +55,12 @@ namespace Miles.Reflection
         /// <returns></returns>
         public static IEnumerable<Type> GetProcessedMessageTypes(this IEnumerable<Type> types)
         {
-            return types.Concat(types.SelectMany(x => x.GetInterfaces()))
-                .Where(x => x.IsMessageProcessor()).Select(x => x.GetGenericArguments().First());
+            return types
+                .Where(x => x.IsClass)
+                .Where(x => !x.IsAbstract)
+                .SelectMany(x => x.GetInterfaces())
+                .Where(x => x.IsMessageProcessor())
+                .Select(x => x.GetGenericArguments().First());
         }
     }
 }

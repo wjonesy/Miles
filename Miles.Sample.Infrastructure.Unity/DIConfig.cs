@@ -1,14 +1,9 @@
 ﻿using Microsoft.Practices.Unity;
-using Miles;
-using Miles.MassTransit;
 using Miles.MassTransit.Unity;
 using Miles.Persistence;
 using Miles.Sample.Persistence.EF;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Miles.Sample.Infrastructure.Unity
 {
@@ -23,8 +18,7 @@ namespace Miles.Sample.Infrastructure.Unity
                 lifetimeManager);
 
             container.RegisterType<ITime, Time>(lifetimeManager(null));
-            container.RegisterMilesMassTransitCommon(() => lifetimeManager(null))
-                .RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(lifetimeManager(null));
+            container.RegisterMilesMassTransit(new UnityRegistrationConfiguration { ChildContainerLifetimeManagerFactory = lifetimeManager });
 
             container.RegisterType<ITransactionContext, SampleTransactionContext>(lifetimeManager(null));
 

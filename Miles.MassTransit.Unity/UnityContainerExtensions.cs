@@ -15,73 +15,47 @@
  */
 using MassTransit;
 using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.InterceptionExtension;
 using Miles.Messaging;
-using Miles.Reflection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Miles.MassTransit.Unity
 {
     /// <exclude />
     public static class UnityContainerExtensions
     {
-        /// <summary>
-        /// Registers common components with unity.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
-        /// <returns></returns>
-        public static IUnityContainer RegisterMilesMassTransitCommon(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory)
+        public static IUnityContainer RegisterMilesMassTransit(this IUnityContainer container, UnityRegistrationConfiguration configuration = null)
         {
-            container = container
-                .AddNewExtension<Interception>();
+            configuration = configuration ?? new UnityRegistrationConfiguration();
 
-            container = container
-                .RegisterType<IActivityContext, ActivityContext>(lifetimeManagerFactory(), new InjectionConstructor(new OptionalParameter<ConsumeContext>()))
-                .RegisterType<IEventPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
-                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>(lifetimeManagerFactory())
-                .RegisterType(typeof(IConsumer<>), typeof(ConsumerAdapter<>), lifetimeManagerFactory());
-            //.RegisterType<IConsumer<IDeleteOld>, CleanupIncomingMessagesConsumer>(lifetimeManagerFactory())
-            //.RegisterType<IConsumer<ICleanupOutgoingMessagesCommand>, CleanupOutgoingMessagesConsumer>(lifetimeManagerFactory());
+            container
+                .RegisterType<IActivityContext, ActivityContext>(configuration.ChildContainerLifetimeManagerFactory(typeof(ActivityContext)), new InjectionConstructor(new OptionalParameter<ConsumeContext>()))
+                .RegisterType(typeof(IConsumer<>), typeof(ConsumerAdapter<>), configuration.ChildContainerLifetimeManagerFactory(typeof(ConsumerAdapter<>)));
 
-            return container;
-        }
+            container
+                .RegisterType<IEventPublisher, TransactionalMessagePublisher>()
+                .RegisterType<ICommandPublisher, TransactionalMessagePublisher>()
+                .RegisterType<TransactionalMessagePublisher>(configuration.ChildContainerLifetimeManagerFactory(typeof(TransactionalMessagePublisher)));
 
-        /// <summary>
-        /// Registers the message processors with unity.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
-        /// <param name="messageProcessors">The message processors.</param>
-        /// <returns></returns>
-        public static IUnityContainer RegisterMessageProcessors(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, IEnumerable<Type> messageProcessors)
-        {
-            foreach (var messageProcessor in messageProcessors)
-                container = container.RegisterMessageProcessor(lifetimeManagerFactory, messageProcessor);
+            switch (configuration.CommandDispatcher)
+            {
+                case CommandDispatcherTypes.Lookup:
+                    container.RegisterType<IMessageDispatcher, LookupBasedMessageDispatch>(configuration.ChildContainerLifetimeManagerFactory(typeof(LookupBasedMessageDispatch)));
+                    break;
+                default:
+                    container.RegisterType<IMessageDispatcher, ConventionBasedMessageDispatcher>(configuration.ChildContainerLifetimeManagerFactory(typeof(ConventionBasedMessageDispatcher)));
+                    break;
+            }
 
-            return container;
-        }
+            switch (configuration.MessageDispatchProcess)
+            {
+                default:
+                    container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(configuration.ChildContainerLifetimeManagerFactory(typeof(ImmediateMessageDispatchProcess)));
+                    break;
+            }
 
-        /// <summary>
-        /// Registers a message processor with unity.
-        /// </summary>
-        /// <param name="container">The container.</param>
-        /// <param name="lifetimeManagerFactory">The lifetime manager factory.</param>
-        /// <param name="messageProcessor">The message processor.</param>
-        /// <returns></returns>
-        public static IUnityContainer RegisterMessageProcessor(this IUnityContainer container, Func<LifetimeManager> lifetimeManagerFactory, Type messageProcessor)
-        {
-            var iMessageProcessors = messageProcessor.GetInterfaces().Where(x => x.IsMessageProcessor());
-            var typeRegistration = container.RegisterType(messageProcessor);
+            //.RegisterType<IConsumer<IDeleteOld>, CleanupIncomingMessagesConsumer>(configuration.ChildContainerLifetimeManagerFactory())
+            //.RegisterType<IConsumer<ICleanupOutgoingMessagesCommand>, CleanupOutgoingMessagesConsumer>(configuration.ChildContainerLifetimeManagerFactory());
 
-            // Assume we want this by default
-            foreach (var iMessageProcessor in iMessageProcessors)
-                container = container.RegisterType(
-                    iMessageProcessor,
-                    messageProcessor,
-                    lifetimeManagerFactory());
+            container.RegisterMessageProcessors(configuration.ProcessorTypes, configuration.ChildContainerLifetimeManagerFactory);
 
             return container;
         }
