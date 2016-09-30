@@ -47,6 +47,9 @@ namespace Miles.MassTransit.Unity
 
             switch (configuration.MessageDispatchProcess)
             {
+                case MessageDispatchProcesses.OutOfThread:
+                    container.RegisterInstance<IMessageDispatchProcess>(new OutOfThreadMessageDispatchProcess(), new ContainerControlledLifetimeManager());
+                    break;
                 default:
                     container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(configuration.ChildContainerLifetimeManagerFactory(typeof(ImmediateMessageDispatchProcess)));
                     break;

@@ -65,6 +65,7 @@
     <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
     <Compile Include="OutgoingMessageForDispatch.cs" />
     <Compile Include="OutgoingMessageConceptType.cs" />
+    <Compile Include="OutOfThreadMessageDispatchProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransactionalMessagePublisher.cs" />
     <Compile Include="TransactionContext\TransactionContextFilter.cs" />

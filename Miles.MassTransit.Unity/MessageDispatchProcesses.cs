@@ -17,6 +17,7 @@ namespace Miles.MassTransit.Unity
 {
     public enum MessageDispatchProcesses
     {
-        Immediate = 1
+        Immediate = 1,
+        OutOfThread = 2
     }
 }
