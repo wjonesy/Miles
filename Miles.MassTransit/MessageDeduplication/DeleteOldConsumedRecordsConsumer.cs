@@ -24,7 +24,7 @@ namespace Miles.MassTransit.MessageDeduplication
     /// <remarks>
     /// This doesn't need to mean deleting, it could mean archiving. The aim is to keep the data lean for fast processing.
     /// </remarks>
-    class DeleteOldConsumedRecordsConsumer : IConsumer<IDeleteOldConsumedRecordsCommand>
+    public class DeleteOldConsumedRecordsConsumer : IConsumer<IDeleteOldConsumedRecordsCommand>
     {
         private readonly IConsumedRepository consumedRepository;
 

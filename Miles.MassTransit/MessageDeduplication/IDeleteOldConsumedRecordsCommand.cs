@@ -18,7 +18,7 @@ namespace Miles.MassTransit.MessageDeduplication
     /// <summary>
     /// Command to initiate record cleanup
     /// </summary>
-    interface IDeleteOldConsumedRecordsCommand
+    public interface IDeleteOldConsumedRecordsCommand
     {
     }
 }

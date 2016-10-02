@@ -25,7 +25,7 @@ namespace Miles.MassTransit.EnsureMessageDispatch
     /// <remarks>
     /// This doesn't need to mean deleting, it could mean archiving. The aim is to keep the data lean for fast processing.
     /// </remarks>
-    class DeleteOldDispatchRecordsConsumer : IConsumer<IDeleteOldDispatchRecordsCommand>
+    public class DeleteOldDispatchRecordsConsumer : IConsumer<IDeleteOldDispatchRecordsCommand>
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
 
