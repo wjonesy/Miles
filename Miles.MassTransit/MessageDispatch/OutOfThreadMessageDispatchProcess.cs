@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     public class OutOfThreadMessageDispatchProcess : IMessageDispatchProcess
     {

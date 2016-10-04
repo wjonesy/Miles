@@ -15,6 +15,7 @@
  */
 using MassTransit;
 using Miles.MassTransit.MessageDeduplication;
+using Miles.MassTransit.MessageDispatch;
 using Miles.Messaging;
 using Miles.Persistence;
 using Newtonsoft.Json;
@@ -23,7 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.TransactionContext
 {
     /// <summary>
     /// Dispatches events and commands on transaction commit. Stores messages and events

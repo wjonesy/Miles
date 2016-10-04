@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
-    /// Implementations have the responsibility of initiating the dispatch of messages to the message queue.
+    /// Indicates whether a message represents a Command or an Event
     /// </summary>
-    public interface IMessageDispatchProcess
+    public enum OutgoingMessageConceptType
     {
-        /// <summary>
-        /// Initiates the dispatch of messages to the message queue
-        /// </summary>
-        /// <param name="messages">The messages.</param>
-        /// <returns></returns>
-        Task ExecuteAsync(IEnumerable<OutgoingMessageForDispatch> messages);
+#pragma warning disable 1591
+        Command = 1,
+        Event = 2
+#pragma warning restore 1591
     }
 }

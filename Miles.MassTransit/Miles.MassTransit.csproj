@@ -44,17 +44,17 @@
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="ConsumerAdapter.cs" />
-    <Compile Include="ConventionBasedMessageDispatcher.cs" />
+    <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
     <Compile Include="EnsureMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />
     <Compile Include="EnsureMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchFilter.cs" />
     <Compile Include="EnsureMessageDispatch\RecordMessageDispatchSpecification.cs" />
-    <Compile Include="ILookupEndpointUri.cs" />
-    <Compile Include="IMessageDispatcher.cs" />
-    <Compile Include="IMessageDispatchProcess.cs" />
-    <Compile Include="LookupBasedMessageDispatch.cs" />
-    <Compile Include="ImmediateMessageDispatchProcess.cs" />
+    <Compile Include="MessageDispatch\ILookupEndpointUri.cs" />
+    <Compile Include="MessageDispatch\IMessageDispatcher.cs" />
+    <Compile Include="MessageDispatch\IMessageDispatchProcess.cs" />
+    <Compile Include="MessageDispatch\LookupBasedMessageDispatch.cs" />
+    <Compile Include="MessageDispatch\ImmediateMessageDispatchProcess.cs" />
     <Compile Include="MessageDeduplication\DeleteOldConsumedRecordsConsumer.cs" />
     <Compile Include="MessageDeduplication\IConsumedRepository.cs" />
     <Compile Include="EnsureMessageDispatch\IDispatchedRepository.cs" />
@@ -63,11 +63,11 @@
     <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
     <Compile Include="MessageDeduplication\OutgoingMessage.cs" />
     <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
-    <Compile Include="OutgoingMessageForDispatch.cs" />
-    <Compile Include="OutgoingMessageConceptType.cs" />
-    <Compile Include="OutOfThreadMessageDispatchProcess.cs" />
+    <Compile Include="MessageDispatch\OutgoingMessageForDispatch.cs" />
+    <Compile Include="MessageDispatch\OutgoingMessageConceptType.cs" />
+    <Compile Include="MessageDispatch\OutOfThreadMessageDispatchProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransactionalMessagePublisher.cs" />
+    <Compile Include="TransactionContext\TransactionalMessagePublisher.cs" />
     <Compile Include="TransactionContext\TransactionContextFilter.cs" />
     <Compile Include="TransactionContext\TransactionContextSpecification.cs" />
   </ItemGroup>
@@ -101,6 +101,7 @@
       <Name>Miles</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

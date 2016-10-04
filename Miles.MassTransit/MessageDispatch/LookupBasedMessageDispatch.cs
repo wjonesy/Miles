@@ -16,7 +16,7 @@
 using MassTransit;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
     /// Dispatches messages to a specific endpoint by looking up the endpoint uri

@@ -17,6 +17,8 @@ using MassTransit;
 using Microsoft.Practices.Unity;
 using Miles.MassTransit.EnsureMessageDispatch;
 using Miles.MassTransit.MessageDeduplication;
+using Miles.MassTransit.MessageDispatch;
+using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
 
 namespace Miles.MassTransit.Unity

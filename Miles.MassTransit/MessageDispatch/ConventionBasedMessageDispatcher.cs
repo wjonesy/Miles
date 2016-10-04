@@ -16,7 +16,7 @@
 using MassTransit;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
     /// Dispatches messages based on the contract type to the message queue.

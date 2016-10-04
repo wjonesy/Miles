@@ -16,7 +16,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
     /// Default implementation of <see cref="IMessageDispatchProcess"/> that immediately dispatches the messages.

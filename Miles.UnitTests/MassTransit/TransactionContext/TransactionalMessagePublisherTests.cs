@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 using FakeItEasy;
-using Miles.MassTransit;
 using Miles.MassTransit.MessageDeduplication;
+using Miles.MassTransit.MessageDispatch;
+using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
 using Miles.Persistence;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Miles.UnitTests.MassTransit
+namespace Miles.UnitTests.MassTransit.TransactionContext
 {
     [TestFixture]
     public class TransactionalMessagePublisherTests

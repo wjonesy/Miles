@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Miles.MassTransit
+using System;
+using System.Threading.Tasks;
+
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
-    /// Indicates whether a message represents a Command or an Event
+    /// Looks up the endpoint Uri based on the specified type.
     /// </summary>
-    public enum OutgoingMessageConceptType
+    public interface ILookupEndpointUri
     {
-#pragma warning disable 1591
-        Command = 1,
-        Event = 2
-#pragma warning restore 1591
+        /// <summary>
+        /// Looks up the endpoint Uri based on the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        Task<Uri> LookupAsync(Type type);
     }
 }

@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
-    /// Looks up the endpoint Uri based on the specified type.
+    /// Implementations have the responsibility of initiating the dispatch of messages to the message queue.
     /// </summary>
-    public interface ILookupEndpointUri
+    public interface IMessageDispatchProcess
     {
         /// <summary>
-        /// Looks up the endpoint Uri based on the specified type.
+        /// Initiates the dispatch of messages to the message queue
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name="messages">The messages.</param>
         /// <returns></returns>
-        Task<Uri> LookupAsync(Type type);
+        Task ExecuteAsync(IEnumerable<OutgoingMessageForDispatch> messages);
     }
 }

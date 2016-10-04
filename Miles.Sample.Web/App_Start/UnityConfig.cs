@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.Practices.Unity;
 using Miles.MassTransit;
+using Miles.MassTransit.MessageDispatch;
 using Miles.MassTransit.Unity;
 using Miles.Persistence;
 using Miles.Sample.Infrastructure.Unity;

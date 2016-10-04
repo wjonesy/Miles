@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Miles.MassTransit.MessageDispatch;
 using System;
 
 namespace Miles.MassTransit.MessageDeduplication

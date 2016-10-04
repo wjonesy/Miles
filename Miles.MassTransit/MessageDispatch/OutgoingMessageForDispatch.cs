@@ -15,7 +15,7 @@
  */
 using System;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
     /// Represents a message in memory awaiting dispatch.

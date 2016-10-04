@@ -15,7 +15,7 @@
  */
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit
+namespace Miles.MassTransit.MessageDispatch
 {
     /// <summary>
     /// Dispatches a message to the message queue.
