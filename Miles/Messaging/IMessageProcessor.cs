@@ -18,10 +18,16 @@ using System.Threading.Tasks;
 namespace Miles.Messaging
 {
     /// <summary>
+    /// Indicates the type will implement <see cref="IMessageProcessor{TMessage}"/> 
+    /// </summary>
+    public interface IMessageProcessor
+    { }
+
+    /// <summary>
     /// Processes incoming messages of the specified type.
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
-    public interface IMessageProcessor<in TMessage>
+    public interface IMessageProcessor<in TMessage> : IMessageProcessor
     {
         /// <summary>
         /// Processes the message.

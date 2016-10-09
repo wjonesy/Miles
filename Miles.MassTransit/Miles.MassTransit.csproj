@@ -36,7 +36,9 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
+    <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
+    <Compile Include="Configuration\MessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\MilesProcessorExtensions.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
     <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />

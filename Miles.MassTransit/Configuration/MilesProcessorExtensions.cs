@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using MassTransit;
-using MassTransit.ConsumeConfigurators;
+using MassTransit.Pipeline.ConsumerFactories;
 using Miles.Messaging;
 using Miles.Reflection;
 using System;
@@ -31,85 +31,76 @@ namespace Miles.MassTransit.Configuration
         /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
         /// </summary>
         /// <typeparam name="TProcessor">The type of the processor.</typeparam>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="consumerFactory">The consumer factory.</param>
         /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
         /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         /// <returns></returns>
-        public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
+        public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
             this IReceiveEndpointConfigurator configurator,
-            IConsumerFactory<IConsumer<TMessage>> consumerFactory,
-            Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,
+            IConsumerFactory<TProcessor> consumerFactory,
+            Action<IMessageProcessorConfigurator<TProcessor>> configure = null,
             bool ignoreAttributes = false)
-            where TProcessor : class, IMessageProcessor<TMessage>
-            where TMessage : class
+            where TProcessor : class, IMessageProcessor
         {
-            configurator.Consumer(consumerFactory, c => ConfigureConsumer<TProcessor, TMessage>(c, configure));
-            return configurator;
-        }
+            var processorConfigurator = new MessageProcessorConfigurator<TProcessor>(consumerFactory);
 
-        /// <summary>
-        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
-        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
-        /// </summary>
-        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="configurator">The receive endpoint configurator.</param>
-        /// <param name="consumerFactory">The consumer factory method.</param>
-        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
-        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
-        /// <returns></returns>
-        public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
-            this IReceiveEndpointConfigurator configurator,
-            Func<IConsumer<TMessage>> consumerFactory,
-            Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,
-            bool ignoreAttributes = false)
-            where TProcessor : class, IMessageProcessor<TMessage>
-            where TMessage : class
-        {
-            configurator.Consumer(consumerFactory, c => ConfigureConsumer<TProcessor, TMessage>(c, configure));
-            return configurator;
-        }
-
-        /// <summary>
-        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
-        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
-        /// </summary>
-        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="configurator">The receive endpoint configurator.</param>
-        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
-        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
-        public static IReceiveEndpointConfigurator MessageProcessor<TProcessor, TMessage>(
-            this IReceiveEndpointConfigurator configurator,
-            Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null,
-            bool ignoreAttributes = false)
-            where TProcessor : class, IMessageProcessor<TMessage>, new()
-            where TMessage : class
-        {
-            configurator.MessageProcessor<TProcessor, TMessage>(() => new ConsumerAdapter<TMessage>(new TProcessor()), configure, ignoreAttributes);
-            return configurator;
-        }
-
-        private static void ConfigureConsumer<TProcessor, TMessage>(IConsumerConfigurator<IConsumer<TMessage>> configurator, Action<IConsumerConfigurator<IConsumer<TMessage>>> configure = null, bool ignoreAttributes = false)
-            where TProcessor : class, IMessageProcessor<TMessage>
-            where TMessage : class
-        {
             // ignore attributes or not
             if (!ignoreAttributes)
             {
                 // first apply the transaction if desired to wrap the message deduplication handling
                 // In case someone applied the attrib at a method level start as ProcessAsync and work backwards
-                var transactionContextAttribute = typeof(TProcessor).GetMethod("ProcessAsync").GetTransactionConfig();
+                //var transactionContextAttribute = typeof(TProcessor).GetMethod("ProcessAsync").GetTransactionConfig();
+                var transactionContextAttribute = typeof(TProcessor).GetTransactionConfig();
                 if (transactionContextAttribute.Enabled)
-                    configurator.UseTransactionContext(c => c.HintIsolationLevel(transactionContextAttribute.HintIsolationLevel));
+                    processorConfigurator.UseTransactionContext(c => c.HintIsolationLevel(transactionContextAttribute.HintIsolationLevel));
 
                 if (typeof(TProcessor).IsMessageDeduplicationEnabled())
-                    configurator.UseMessageDeduplication();
+                    processorConfigurator.UseMessageDeduplication();
             }
 
-            configure?.Invoke(configurator);
+            configure?.Invoke(processorConfigurator);
+
+            configurator.AddEndpointSpecification(processorConfigurator);
+
+            return configurator;
+        }
+
+        /// <summary>
+        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
+        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
+        /// </summary>
+        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
+        /// <param name="configurator">The receive endpoint configurator.</param>
+        /// <param name="consumerFactory">The consumer factory method.</param>
+        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
+        /// <returns></returns>
+        public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
+            this IReceiveEndpointConfigurator configurator,
+            Func<TProcessor> consumerFactory,
+            Action<IMessageProcessorConfigurator<TProcessor>> configure = null,
+            bool ignoreAttributes = false)
+            where TProcessor : class, IMessageProcessor
+        {
+            return configurator.MessageProcessor(new DelegateConsumerFactory<TProcessor>(consumerFactory), configure, ignoreAttributes);
+        }
+
+        /// <summary>
+        /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
+        /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
+        /// </summary>
+        /// <typeparam name="TProcessor">The type of the processor.</typeparam>
+        /// <param name="configurator">The receive endpoint configurator.</param>
+        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
+        public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
+            this IReceiveEndpointConfigurator configurator,
+            Action<IMessageProcessorConfigurator<TProcessor>> configure = null,
+            bool ignoreAttributes = false)
+            where TProcessor : class, IMessageProcessor, new()
+        {
+            return configurator.MessageProcessor(new DefaultConstructorConsumerFactory<TProcessor>(), configure, ignoreAttributes);
         }
     }
 }
