@@ -1,11 +1,11 @@
 ﻿using MassTransit;
-using Miles.MassTransit.EnsureMessageDispatch;
+using Miles.MassTransit.RecordMessageDispatch;
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.EnsureMessageDispatch
+namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch
 {
     public class DispatchedRepository : IDispatchedRepository
     {

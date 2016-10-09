@@ -20,7 +20,7 @@ using MassTransit.PipeConfigurators;
 using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
 
-namespace Miles.MassTransit.EnsureMessageDispatch
+namespace Miles.MassTransit.RecordMessageDispatch
 {
 #pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>

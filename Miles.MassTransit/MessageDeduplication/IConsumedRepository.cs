@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using MassTransit;
-using Miles.MassTransit.EnsureMessageDispatch;
+using Miles.MassTransit.RecordMessageDispatch;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDeduplication

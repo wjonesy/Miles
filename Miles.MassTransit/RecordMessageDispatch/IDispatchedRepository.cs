@@ -16,7 +16,7 @@
 using MassTransit;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.EnsureMessageDispatch
+namespace Miles.MassTransit.RecordMessageDispatch
 {
     /// <summary>
     /// Use to record dispatch of messages.

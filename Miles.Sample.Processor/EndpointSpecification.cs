@@ -5,7 +5,7 @@ using Miles.MassTransit.Configuration;
 using Miles.MassTransit.Unity;
 using Miles.Reflection;
 using Miles.Sample.Infrastructure.Unity;
-using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.EnsureMessageDispatch;
+using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch;
 using System;
 
 namespace Miles.Sample.Processor
@@ -42,7 +42,7 @@ namespace Miles.Sample.Processor
                 .ConfigureSample(t => new HierarchicalLifetimeManager())
                 .RegisterMessageProcessors(AllClasses.FromLoadedAssemblies().GetMessageProcessors());
 
-            configurator.UseEnsureMessageDispatch(c => c.UseDispatchedRepository(new DispatchedRepository()));
+            configurator.UseRecordMessageDispatch(c => c.UseDispatchedRepository(new DispatchedRepository()));
             configurator.MilesConsumers(container, AllClasses.FromLoadedAssemblies().GetProcessedMessageTypes());
         }
     }

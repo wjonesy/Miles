@@ -17,7 +17,7 @@ using MassTransit;
 using Miles.MassTransit.MessageDeduplication;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.EnsureMessageDispatch
+namespace Miles.MassTransit.RecordMessageDispatch
 {
     /// <summary>
     /// Built in consumer to perform regular clean up of old messages.

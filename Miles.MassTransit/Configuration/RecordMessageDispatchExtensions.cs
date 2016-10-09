@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using MassTransit;
-using Miles.MassTransit.EnsureMessageDispatch;
+using Miles.MassTransit.RecordMessageDispatch;
 using System;
 
 namespace Miles.MassTransit.Configuration
@@ -38,6 +38,17 @@ namespace Miles.MassTransit.Configuration
             configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
             configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
 
+            return configurator;
+        }
+
+        public static TConfigurator UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+            where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
+        {
+            var spec = new RecordMessageDispatchSpecification<SendContext>();
+            configure.Invoke(spec);
+
+            configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
+            configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
             return configurator;
         }
 

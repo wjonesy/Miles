@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.MassTransit.EnsureMessageDispatch;
+using Miles.MassTransit.RecordMessageDispatch;
 
 namespace Miles.MassTransit.Configuration
 {
