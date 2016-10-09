@@ -22,16 +22,16 @@ using System.Linq;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-    class MessageDeduplicationSpecification<TConsumer> : IPipeSpecification<ConsumerConsumeContext<TConsumer>> where TConsumer : class, IConsumer
+    class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
     {
         public IEnumerable<ValidationResult> Validate()
         {
             return Enumerable.Empty<ValidationResult>();
         }
 
-        public void Apply(IPipeBuilder<ConsumerConsumeContext<TConsumer>> builder)
+        public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new MessageDeduplicationFilter<TConsumer>());
+            builder.AddFilter(new MessageDeduplicationFilter<TContext>());
         }
     }
 }

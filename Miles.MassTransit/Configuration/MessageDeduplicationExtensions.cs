@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 using MassTransit;
-using MassTransit.ConsumeConfigurators;
 using Microsoft.Practices.ServiceLocation;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.Persistence;
@@ -39,10 +38,18 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <returns></returns>
-        public static IConsumerConfigurator<TConsumer> UseMessageDeduplication<TConsumer>(this IConsumerConfigurator<TConsumer> configurator)
-            where TConsumer : class, IConsumer
+        public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator)
+            where TConsumer : class
         {
-            var spec = new MessageDeduplicationSpecification<TConsumer>();
+            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer>>();
+            configurator.AddPipeSpecification(spec);
+            return configurator;
+        }
+
+        public static IPipeConfigurator<ConsumeContext<TMessage>> UseMessageDeduplication<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator)
+            where TMessage : class
+        {
+            var spec = new MessageDeduplicationSpecification<ConsumeContext<TMessage>>();
             configurator.AddPipeSpecification(spec);
             return configurator;
         }

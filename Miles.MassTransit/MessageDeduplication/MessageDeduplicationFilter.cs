@@ -31,9 +31,9 @@ namespace Miles.MassTransit.MessageDeduplication
     /// This assumes a container will have registered itself as an <see cref="IServiceLocator"/> payload to 
     /// retrieve an <see cref="IConsumedRepository"/> instance that will work with the <see cref="ITransactionContext"/>.
     /// </remarks>
-    /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
-    /// <seealso cref="MassTransit.Pipeline.IFilter{MassTransit.ConsumerConsumeContext{TConsumer}}" />
-    class MessageDeduplicationFilter<TConsumer> : IFilter<ConsumerConsumeContext<TConsumer>> where TConsumer : class, IConsumer
+    /// <typeparam name="TContext">The type of the consumer.</typeparam>
+    /// <seealso cref="MassTransit.Pipeline.IFilter{MassTransit.ConsumerConsumeContext{TContext}}" />
+    class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
 #pragma warning restore CS1658 // Warning is overriding an error
 #pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute
     {
@@ -42,7 +42,7 @@ namespace Miles.MassTransit.MessageDeduplication
             context.CreateFilterScope("message-deduplication");
         }
 
-        public async Task Send(ConsumerConsumeContext<TConsumer> context, IPipe<ConsumerConsumeContext<TConsumer>> next)
+        public async Task Send(TContext context, IPipe<TContext> next)
         {
             var container = context.GetPayload<IServiceLocator>();
             var repository = container.GetInstance<IConsumedRepository>();
