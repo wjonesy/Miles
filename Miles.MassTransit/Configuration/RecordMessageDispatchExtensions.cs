@@ -30,17 +30,6 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The configuration.</param>
         /// <returns></returns>
-        public static IReceiveEndpointConfigurator UseRecordMessageDispatch(this IReceiveEndpointConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
-        {
-            var spec = new RecordMessageDispatchSpecification<SendContext>();
-            configure.Invoke(spec);
-
-            configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
-            configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
-
-            return configurator;
-        }
-
         public static TConfigurator UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
             where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
         {
