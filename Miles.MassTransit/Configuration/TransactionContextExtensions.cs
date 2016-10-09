@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 using MassTransit;
-using MassTransit.ConsumeConfigurators;
 using Miles.MassTransit.TransactionContext;
 using Miles.Persistence;
 using System;
@@ -33,10 +32,27 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The transaction context configurator.</param>
         /// <returns></returns>
-        public static IConsumerConfigurator<TConsumer> UseTransactionContext<TConsumer>(this IConsumerConfigurator<TConsumer> configurator, Action<ITransactionContextConfigurator> configure = null)
-            where TConsumer : class, IConsumer
+        public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseTransactionContext<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<ITransactionContextConfigurator> configure = null)
+            where TConsumer : class
         {
-            var spec = new TransactionContextSpecification<TConsumer>();
+            var spec = new TransactionContextSpecification<ConsumerConsumeContext<TConsumer>>();
+            configure?.Invoke(spec);
+
+            configurator.AddPipeSpecification(spec);
+            return configurator;
+        }
+
+        /// <summary>
+        /// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the consumer.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="configure">The transaction context configurator.</param>
+        /// <returns></returns>
+        public static IPipeConfigurator<ConsumeContext<TMessage>> UseTransactionContext<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator, Action<ITransactionContextConfigurator> configure = null)
+            where TMessage : class
+        {
+            var spec = new TransactionContextSpecification<ConsumeContext<TMessage>>();
             configure?.Invoke(spec);
 
             configurator.AddPipeSpecification(spec);

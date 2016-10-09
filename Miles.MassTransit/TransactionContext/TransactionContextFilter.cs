@@ -22,16 +22,12 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.TransactionContext
 {
-#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute
-#pragma warning disable CS1658 // Warning is overriding an error
     /// <summary>
     /// Encapsulates a consumer behaviour in a transaction context.
     /// </summary>
-    /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
-    /// <seealso cref="MassTransit.Pipeline.IFilter{MassTransit.ConsumerConsumeContext{TConsumer}}" />
-    class TransactionContextFilter<TConsumer> : IFilter<ConsumerConsumeContext<TConsumer>> where TConsumer : class, IConsumer
-#pragma warning restore CS1658 // Warning is overriding an error
-#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute
+    /// <typeparam name="TContext">The type of the consumer.</typeparam>
+    /// <seealso cref="MassTransit.Pipeline.IFilter{TContext}" />
+    class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
         private IsolationLevel? _hintIsolationLevel;
 
@@ -46,7 +42,7 @@ namespace Miles.MassTransit.TransactionContext
             scope.Add("HintIsolationLevel", _hintIsolationLevel);
         }
 
-        public async Task Send(ConsumerConsumeContext<TConsumer> context, IPipe<ConsumerConsumeContext<TConsumer>> next)
+        public async Task Send(TContext context, IPipe<TContext> next)
         {
             // Retrive container controlled instance
             var container = context.GetPayload<IServiceLocator>();

@@ -24,8 +24,8 @@ using System.Linq;
 
 namespace Miles.MassTransit.TransactionContext
 {
-    class TransactionContextSpecification<TConsumer> : IPipeSpecification<ConsumerConsumeContext<TConsumer>>, ITransactionContextConfigurator
-        where TConsumer : class, IConsumer
+    class TransactionContextSpecification<TContext> : IPipeSpecification<TContext>, ITransactionContextConfigurator
+        where TContext : class, ConsumeContext
     {
         private IsolationLevel? _hintIsolationLevel;
 
@@ -40,9 +40,9 @@ namespace Miles.MassTransit.TransactionContext
             return Enumerable.Empty<ValidationResult>();
         }
 
-        public void Apply(IPipeBuilder<ConsumerConsumeContext<TConsumer>> builder)
+        public void Apply(IPipeBuilder<TContext> builder)
         {
-            builder.AddFilter(new TransactionContextFilter<TConsumer>(_hintIsolationLevel));
+            builder.AddFilter(new TransactionContextFilter<TContext>(_hintIsolationLevel));
         }
     }
 }
