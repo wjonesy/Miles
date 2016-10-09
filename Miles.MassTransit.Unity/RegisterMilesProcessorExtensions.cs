@@ -36,7 +36,7 @@ namespace Miles.MassTransit.Unity
             foreach (var iProcessorType in iProcessorTypes)
                 container.RegisterType(iProcessorType, processorType);
 
-            return container.RegisterType(processorType, lifetimeManager, injectionMembers);
+            return container.RegisterType(processorType, lifetimeManager, injectionMembers ?? new InjectionMember[] { });
         }
 
         public static IUnityContainer RegisterMessageProcessor<TProcessor, TMessage>(this IUnityContainer container, params InjectionMember[] injectionMembers)

@@ -25,7 +25,7 @@ namespace Miles.MassTransit.Unity
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="MassTransit.IConsumerFactory{TConsumer}" />
-    class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
+    public class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
     {
         readonly IUnityContainer _container;
 

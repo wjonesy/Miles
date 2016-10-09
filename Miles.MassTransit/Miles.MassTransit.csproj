@@ -39,12 +39,16 @@
     <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
     <Compile Include="Configuration\MessageProcessorConfigurator.cs" />
+    <Compile Include="Configuration\MilesConvention.cs" />
     <Compile Include="Configuration\MilesProcessorExtensions.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
     <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
-    <Compile Include="ConsumerAdapter.cs" />
+    <Compile Include="ConsumerConvention\MessageProcessorConnectorFactory.cs" />
+    <Compile Include="ConsumerConvention\MessageProcessorMessageConvention.cs" />
+    <Compile Include="ConsumerConvention\MessageProcessorInterfaceType.cs" />
+    <Compile Include="ConsumerConvention\MessageProcessorMessageFilter.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
     <Compile Include="RecordMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />
