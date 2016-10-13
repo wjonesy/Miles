@@ -15,9 +15,10 @@
  */
 using MassTransit;
 using MassTransit.Pipeline.ConsumerFactories;
+using Miles.MassTransit.ConsumerConvention;
 using Miles.Messaging;
-using Miles.Reflection;
 using System;
+using System.Linq;
 
 namespace Miles.MassTransit.Configuration
 {
@@ -26,6 +27,8 @@ namespace Miles.MassTransit.Configuration
     /// </summary>
     public static class MilesProcessorExtensions
     {
+        #region Individual Processor Registration
+
         /// <summary>
         /// Registers a Miles Message Processor (<see cref="IMessageProcessor{TMessage}"/>) with a
         /// MassTransit <see cref="IReceiveEndpointConfigurator"/>.
@@ -43,25 +46,11 @@ namespace Miles.MassTransit.Configuration
             bool ignoreAttributes = false)
             where TProcessor : class, IMessageProcessor
         {
-            var processorConfigurator = new MessageProcessorConfigurator<TProcessor>(consumerFactory);
-
-            // ignore attributes or not
-            if (!ignoreAttributes)
-            {
-                // first apply the transaction if desired to wrap the message deduplication handling
-                // In case someone applied the attrib at a method level start as ProcessAsync and work backwards
-                //var transactionContextAttribute = typeof(TProcessor).GetMethod("ProcessAsync").GetTransactionConfig();
-                var transactionContextAttribute = typeof(TProcessor).GetTransactionConfig();
-                if (transactionContextAttribute.Enabled)
-                    processorConfigurator.UseTransactionContext(c => c.HintIsolationLevel(transactionContextAttribute.HintIsolationLevel));
-
-                if (typeof(TProcessor).IsMessageDeduplicationEnabled())
-                    processorConfigurator.UseMessageDeduplication();
-            }
-
+            var processorConfigurator = new MessageProcessorConfigurator<TProcessor>();
             configure?.Invoke(processorConfigurator);
 
-            configurator.AddEndpointSpecification(processorConfigurator);
+            var specification = new MessageProcessorSpecification<TProcessor>(consumerFactory, processorConfigurator.GetSpecifications().ToArray());
+            configurator.AddEndpointSpecification(specification);
 
             return configurator;
         }
@@ -102,5 +91,7 @@ namespace Miles.MassTransit.Configuration
         {
             return configurator.MessageProcessor(new DefaultConstructorConsumerFactory<TProcessor>(), configure, ignoreAttributes);
         }
+
+        #endregion
     }
 }

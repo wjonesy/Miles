@@ -35,10 +35,10 @@ namespace Miles.MassTransit.Configuration
         public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseTransactionContext<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TConsumer : class
         {
-            var spec = new TransactionContextSpecification<ConsumerConsumeContext<TConsumer>>();
-            configure?.Invoke(spec);
+            var config = new TransactionContextConfigurator();
+            configure?.Invoke(config);
 
-            configurator.AddPipeSpecification(spec);
+            configurator.AddPipeSpecification(config.CreateSpecification<ConsumerConsumeContext<TConsumer>>());
             return configurator;
         }
 
@@ -52,10 +52,10 @@ namespace Miles.MassTransit.Configuration
         public static IPipeConfigurator<ConsumeContext<TMessage>> UseTransactionContext<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TMessage : class
         {
-            var spec = new TransactionContextSpecification<ConsumeContext<TMessage>>();
-            configure?.Invoke(spec);
+            var config = new TransactionContextConfigurator();
+            configure?.Invoke(config);
 
-            configurator.AddPipeSpecification(spec);
+            configurator.AddPipeSpecification(config.CreateSpecification<ConsumeContext<TMessage>>());
             return configurator;
         }
     }

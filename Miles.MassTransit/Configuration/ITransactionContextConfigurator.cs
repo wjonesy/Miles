@@ -22,6 +22,8 @@ namespace Miles.MassTransit.Configuration
     /// </summary>
     public interface ITransactionContextConfigurator
     {
+        ITransactionContextConfigurator Enable(bool enable);
+
         /// <summary>
         /// Sets a hint for what level of isolation the transaction context should use.
         /// This is only a hint since implementations might not have a concept of isolation levels or 

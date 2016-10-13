@@ -26,38 +26,52 @@ namespace Miles.Reflection
     {
         /// <summary>
         /// Gets the transaction context configuration for the method.
-        /// Looks at the method first, then the class type and finally the assembly type
-        /// before falling back to defaults.
         /// </summary>
         /// <param name="methodInfo">The method information.</param>
+        /// <param name="fallback">if set to <c>true</c> then falls back to class level attribute.</param>
         /// <returns></returns>
-        public static TransactionContextAttribute GetTransactionConfig(this MethodInfo methodInfo)
+        public static TransactionContextAttribute GetTransactionConfig(this MethodInfo methodInfo, bool fallback = true)
         {
             var methodAttrib = methodInfo.GetCustomAttribute<TransactionContextAttribute>();
             if (methodAttrib != null)
                 return methodAttrib;
 
-            return methodInfo.DeclaringType.GetTransactionConfig();
+            if (fallback)
+                return methodInfo.DeclaringType.GetTransactionConfig();
+
+            return null;
         }
 
         /// <summary>
         /// Gets the transaction context configuration for the class.
-        /// Looks at the class type and finally the assembly type
-        /// before falling back to defaults.
         /// </summary>
         /// <param name="type">The type.</param>
+        /// <param name="fallback">if set to <c>true</c> then falls back to assembly level attribute.</param>
         /// <returns></returns>
-        public static TransactionContextAttribute GetTransactionConfig(this Type type)
+        public static TransactionContextAttribute GetTransactionConfig(this Type type, bool fallback = true)
         {
             var typeAttrib = type.GetCustomAttribute<TransactionContextAttribute>();
             if (typeAttrib != null)
                 return typeAttrib;
 
-            var assemblyAttrib = type.Assembly.GetCustomAttribute<TransactionContextAttribute>();
+            if (fallback)
+                return type.Assembly.GetTransactionConfig();
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the transaction context configuration for the assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <returns></returns>
+        public static TransactionContextAttribute GetTransactionConfig(this Assembly assembly)
+        {
+            var assemblyAttrib = assembly.GetCustomAttribute<TransactionContextAttribute>();
             if (assemblyAttrib != null)
                 return assemblyAttrib;
 
-            return new TransactionContextAttribute { Enabled = true };
+            return null;
         }
     }
 }

@@ -7,24 +7,20 @@ using Miles.Messaging;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Miles.MassTransit.Configuration
+namespace Miles.MassTransit.ConsumerConvention
 {
-    class MessageProcessorConfigurator<TProcessor> : IMessageProcessorConfigurator<TProcessor>, IReceiveEndpointSpecification
+    class MessageProcessorSpecification<TProcessor> : IReceiveEndpointSpecification
         where TProcessor : class, IMessageProcessor
     {
-        private readonly List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> specifications = new List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>>();
-
         private readonly IConsumerFactory<TProcessor> consumerFactory;
+        private readonly IPipeSpecification<ConsumerConsumeContext<TProcessor>>[] specifications;
 
-        public MessageProcessorConfigurator(IConsumerFactory<TProcessor> consumerFactory)
+        public MessageProcessorSpecification(IConsumerFactory<TProcessor> consumerFactory, IPipeSpecification<ConsumerConsumeContext<TProcessor>>[] specifications)
         {
             this.consumerFactory = consumerFactory;
+            this.specifications = specifications;
         }
 
-        public void AddPipeSpecification(IPipeSpecification<ConsumerConsumeContext<TProcessor>> specification)
-        {
-            specifications.Add(specification);
-        }
 
         public IEnumerable<ValidationResult> Validate()
         {

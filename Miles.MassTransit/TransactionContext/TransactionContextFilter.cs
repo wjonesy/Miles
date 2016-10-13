@@ -29,17 +29,17 @@ namespace Miles.MassTransit.TransactionContext
     /// <seealso cref="MassTransit.Pipeline.IFilter{TContext}" />
     class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
-        private IsolationLevel? _hintIsolationLevel;
+        private readonly IsolationLevel? hintIsolationLevel;
 
         public TransactionContextFilter(IsolationLevel? hintIsolationLevel)
         {
-            this._hintIsolationLevel = hintIsolationLevel;
+            this.hintIsolationLevel = hintIsolationLevel;
         }
 
         public void Probe(ProbeContext context)
         {
             var scope = context.CreateFilterScope("transaction-context");
-            scope.Add("HintIsolationLevel", _hintIsolationLevel);
+            scope.Add("HintIsolationLevel", hintIsolationLevel);
         }
 
         public async Task Send(TContext context, IPipe<TContext> next)
@@ -48,7 +48,7 @@ namespace Miles.MassTransit.TransactionContext
             var container = context.GetPayload<IServiceLocator>();
             var transactionContext = container.GetInstance<ITransactionContext>();
 
-            var transaction = await transactionContext.BeginAsync(_hintIsolationLevel).ConfigureAwait(false);
+            var transaction = await transactionContext.BeginAsync(hintIsolationLevel).ConfigureAwait(false);
             try
             {
                 await next.Send(context).ConfigureAwait(false);
