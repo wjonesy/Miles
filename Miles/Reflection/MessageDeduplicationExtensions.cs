@@ -24,23 +24,37 @@ namespace Miles.Reflection
     /// </summary>
     public static class MessageDeduplicationExtensions
     {
-        /// <summary>
-        /// Determines whether the message processor is interested in message deduplication.
-        /// Looks at the class type first and works up to the assembly type.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        public static bool IsMessageDeduplicationEnabled(this Type type)
+        public static MessageDeduplicationAttribute GetMessageDeduplicationConfig(this MethodInfo methodInfo, bool fallback = true)
+        {
+            var methodAttrib = methodInfo.GetCustomAttribute<MessageDeduplicationAttribute>();
+            if (methodAttrib != null)
+                return methodAttrib;
+
+            if (fallback)
+                return methodInfo.DeclaringType.GetMessageDeduplicationConfig();
+
+            return null;
+        }
+
+        public static MessageDeduplicationAttribute GetMessageDeduplicationConfig(this Type type, bool fallback = true)
         {
             var typeAttrib = type.GetCustomAttribute<MessageDeduplicationAttribute>();
             if (typeAttrib != null)
-                return typeAttrib.Enabled;
+                return typeAttrib;
 
-            var assemblyAttrib = type.Assembly.GetCustomAttribute<MessageDeduplicationAttribute>();
+            if (fallback)
+                return type.Assembly.GetMessageDeduplicationConfig();
+
+            return null;
+        }
+
+        public static MessageDeduplicationAttribute GetMessageDeduplicationConfig(this Assembly assembly)
+        {
+            var assemblyAttrib = assembly.GetCustomAttribute<MessageDeduplicationAttribute>();
             if (assemblyAttrib != null)
-                return assemblyAttrib.Enabled;
+                return assemblyAttrib;
 
-            return true;
+            return null;
         }
     }
 }

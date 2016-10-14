@@ -17,6 +17,7 @@ using MassTransit;
 using Microsoft.Practices.ServiceLocation;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.Persistence;
+using System;
 
 namespace Miles.MassTransit.Configuration
 {
@@ -38,18 +39,22 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <returns></returns>
-        public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator)
+        public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<IMessageDeduplicationConfigurator> configure = null)
             where TConsumer : class
         {
-            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer>>();
+            var config = new MessageDeduplicationConfigurator();
+            configure?.Invoke(config);
+            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer>>(config);
             configurator.AddPipeSpecification(spec);
             return configurator;
         }
 
-        public static IPipeConfigurator<ConsumeContext<TMessage>> UseMessageDeduplication<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator)
+        public static IPipeConfigurator<ConsumeContext<TMessage>> UseMessageDeduplication<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator, Action<IMessageDeduplicationConfigurator> configure = null)
             where TMessage : class
         {
-            var spec = new MessageDeduplicationSpecification<ConsumeContext<TMessage>>();
+            var config = new MessageDeduplicationConfigurator();
+            configure?.Invoke(config);
+            var spec = new MessageDeduplicationSpecification<ConsumeContext<TMessage>>(config);
             configurator.AddPipeSpecification(spec);
             return configurator;
         }

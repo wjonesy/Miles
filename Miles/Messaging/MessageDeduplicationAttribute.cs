@@ -25,6 +25,8 @@ namespace Miles.Messaging
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple = false)]
     public class MessageDeduplicationAttribute : Attribute
     {
+        public static MessageDeduplicationAttribute Default { get; private set; } = new MessageDeduplicationAttribute();
+
         /// <summary>
         /// Gets or sets a value indicating whether the annotated class or assembly should be prevented from handling an event or command multiple times.
         /// </summary>

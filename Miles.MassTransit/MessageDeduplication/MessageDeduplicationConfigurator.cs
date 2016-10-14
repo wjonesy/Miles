@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 using MassTransit;
-using MassTransit.Configurators;
-using MassTransit.PipeBuilders;
-using MassTransit.PipeConfigurators;
-using System.Collections.Generic;
-using System.Linq;
+using Miles.MassTransit.Configuration;
+using Miles.Messaging;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-    class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
+    class MessageDeduplicationConfigurator : IMessageDeduplicationConfigurator
     {
-        private MessageDeduplicationConfigurator config;
-
-        public MessageDeduplicationSpecification(MessageDeduplicationConfigurator config)
+        public MessageDeduplicationConfigurator(MessageDeduplicationAttribute attrib = null)
         {
-            this.config = config;
+            if (attrib != null)
+                Enabled = attrib.Enabled;
         }
 
-        public IEnumerable<ValidationResult> Validate()
+        public bool Enabled { get; private set; } = true;
+
+        IMessageDeduplicationConfigurator IMessageDeduplicationConfigurator.Enable(bool enable)
         {
-            return Enumerable.Empty<ValidationResult>();
+            this.Enabled = enable;
+            return this;
         }
 
-        public void Apply(IPipeBuilder<TContext> builder)
+        public MessageDeduplicationSpecification<TContext> CreateSpecification<TContext>()
+            where TContext : class, ConsumeContext
         {
-            if (config.Enabled)
-                builder.AddFilter(new MessageDeduplicationFilter<TContext>());
+            return new MessageDeduplicationSpecification<TContext>(this);
         }
     }
 }

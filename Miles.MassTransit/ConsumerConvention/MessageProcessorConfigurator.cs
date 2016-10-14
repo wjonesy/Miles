@@ -1,6 +1,7 @@
 ﻿using MassTransit;
 using MassTransit.PipeConfigurators;
 using Miles.MassTransit.Configuration;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
 using Miles.Reflection;
@@ -15,6 +16,7 @@ namespace Miles.MassTransit.ConsumerConvention
     {
         private readonly List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> specifications = new List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>>();
         private TransactionContextConfigurator transactionContextConfig;
+        private MessageDeduplicationConfigurator messageDeduplicationConfig;
         private readonly Dictionary<Type, IMessageProcessorMessageConfigurator> messageSpecifications = new Dictionary<Type, IMessageProcessorMessageConfigurator>();
 
         public void AddPipeSpecification(IPipeSpecification<ConsumerConsumeContext<TProcessor>> specification)
@@ -26,6 +28,14 @@ namespace Miles.MassTransit.ConsumerConvention
         {
             transactionContextConfig = new TransactionContextConfigurator();
             configure?.Invoke(transactionContextConfig);
+            return this;
+        }
+
+
+        public IMessageProcessorConfigurator<TProcessor> UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null)
+        {
+            messageDeduplicationConfig = new MessageDeduplicationConfigurator();
+            configure?.Invoke(messageDeduplicationConfig);
             return this;
         }
 
@@ -54,7 +64,7 @@ namespace Miles.MassTransit.ConsumerConvention
             {
                 var messageConfiguratorType = typeof(MessageProcessorMessageConfigurator<>).MakeGenericType(messageType);
                 var messageConfiguratorInstance = (IMessageProcessorMessageConfigurator)Activator.CreateInstance(messageConfiguratorType);
-                foreach (var messageSpec in messageConfiguratorInstance.GetSpecifications<TProcessor>(transactionContextConfig))
+                foreach (var messageSpec in messageConfiguratorInstance.GetSpecifications<TProcessor>(transactionContextConfig, messageDeduplicationConfig))
                     yield return messageSpec;
             }
         }

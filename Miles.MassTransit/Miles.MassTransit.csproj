@@ -36,6 +36,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
+    <Compile Include="Configuration\IMessageDeduplicationConfigurator.cs" />
     <Compile Include="Configuration\IMessageProcessorMessageConfigurator.cs" />
     <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="ConsumerConvention\MessageProcessorInterfaceType.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorMessageFilter.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorSpecification.cs" />
+    <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
     <Compile Include="RecordMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />

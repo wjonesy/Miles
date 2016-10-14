@@ -5,6 +5,7 @@ using MassTransit.PipeBuilders;
 using MassTransit.PipeConfigurators;
 using MassTransit.Util;
 using Miles.MassTransit.Configuration;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
 using Miles.Reflection;
@@ -21,17 +22,21 @@ namespace Miles.MassTransit.ConsumerConvention
         private readonly List<IPipeSpecification<ConsumeContext<TMessage>>> specifications = new List<IPipeSpecification<ConsumeContext<TMessage>>>();
 
         private bool transactionConfigurationOverriden = false;
+        private bool messageDeduplicationOverride = false;
 
         public void AddPipeSpecification(IPipeSpecification<ConsumeContext<TMessage>> specification)
         {
             if ((specification as TransactionContextConfigurator) != null)
                 transactionConfigurationOverriden = true;
+            else if ((specification as MessageDeduplicationConfigurator) != null)
+                messageDeduplicationOverride = true;
 
             specifications.Add(specification);
         }
 
         public IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> GetSpecifications<TProcessor>(
-            TransactionContextConfigurator transactionContextDefaults = null)
+            TransactionContextConfigurator transactionContextDefaults = null,
+            MessageDeduplicationConfigurator messageDeduplicationDefaults = null)
             where TProcessor : class, IMessageProcessor
         {
             var processMethod = typeof(TProcessor).GetInterfaceMap(typeof(IMessageProcessor<TMessage>)).TargetMethods.Single();
@@ -44,6 +49,19 @@ namespace Miles.MassTransit.ConsumerConvention
                     transactionContextDefaults,
                     typeof(TProcessor).GetTransactionConfig(),
                     TransactionContextAttribute.Default);
+
+                if (config != null)
+                    yield return config.CreateSpecification<ConsumerConsumeContext<TProcessor>>();
+            }
+
+            if (!messageDeduplicationOverride)
+            {
+                var config = GetConfig(
+                    a => new MessageDeduplicationConfigurator(a),
+                    processMethod.GetMessageDeduplicationConfig(false),
+                    messageDeduplicationDefaults,
+                    typeof(TProcessor).GetMessageDeduplicationConfig(),
+                    MessageDeduplicationAttribute.Default);
 
                 if (config != null)
                     yield return config.CreateSpecification<ConsumerConsumeContext<TProcessor>>();

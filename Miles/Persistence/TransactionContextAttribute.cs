@@ -26,7 +26,7 @@ namespace Miles.Messaging
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
     public class TransactionContextAttribute : Attribute
     {
-        public static TransactionContextAttribute Default { get; private set; } = new TransactionContextAttribute { Enabled = true };
+        public static TransactionContextAttribute Default { get; private set; } = new TransactionContextAttribute();
 
         /// <summary>
         /// Gets or sets a value indicating whether the method/class/assembly classes should be wrapped in
