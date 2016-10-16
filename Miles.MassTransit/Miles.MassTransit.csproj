@@ -36,10 +36,14 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
+    <Compile Include="Configuration\IConsumerFactoryFactory.cs" />
     <Compile Include="Configuration\IMessageDeduplicationConfigurator.cs" />
     <Compile Include="Configuration\IMessageProcessorMessageConfigurator.cs" />
     <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
+    <Compile Include="Configuration\IMessageProcessorsConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
+    <Compile Include="ConsumerConvention\IMessageProcessorConfigurator.cs" />
+    <Compile Include="ConsumerConvention\IMessageProcessorMessageConfigurator.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\MilesConvention.cs" />
     <Compile Include="Configuration\MilesProcessorExtensions.cs" />
@@ -52,6 +56,8 @@
     <Compile Include="ConsumerConvention\MessageProcessorMessageConvention.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorInterfaceType.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorMessageFilter.cs" />
+    <Compile Include="ConsumerConvention\MessageProcessorOptions.cs" />
+    <Compile Include="ConsumerConvention\MessageProcessorsConfigurator.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorSpecification.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />

@@ -11,13 +11,12 @@ using System.Linq;
 
 namespace Miles.MassTransit.ConsumerConvention
 {
-    class MessageProcessorConfigurator<TProcessor> : IMessageProcessorConfigurator<TProcessor>
+    class MessageProcessorConfigurator<TProcessor> : IMessageProcessorConfigurator<TProcessor>, IMessageProcessorConfigurator
         where TProcessor : class, IMessageProcessor
     {
         private readonly List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> specifications = new List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>>();
-        private TransactionContextConfigurator transactionContextConfig;
-        private MessageDeduplicationConfigurator messageDeduplicationConfig;
-        private readonly Dictionary<Type, IMessageProcessorMessageConfigurator> messageSpecifications = new Dictionary<Type, IMessageProcessorMessageConfigurator>();
+        private readonly MessageProcessorOptions options = new MessageProcessorOptions();
+        private readonly Dictionary<Type, IMessageProcessorMessageConfigurator> messageConfigurators = new Dictionary<Type, IMessageProcessorMessageConfigurator>();
 
         public void AddPipeSpecification(IPipeSpecification<ConsumerConsumeContext<TProcessor>> specification)
         {
@@ -26,16 +25,16 @@ namespace Miles.MassTransit.ConsumerConvention
 
         public IMessageProcessorConfigurator<TProcessor> UseTransactionContext(Action<ITransactionContextConfigurator> configure = null)
         {
-            transactionContextConfig = new TransactionContextConfigurator();
-            configure?.Invoke(transactionContextConfig);
+            options.TransactionContext = new TransactionContextConfigurator();
+            configure?.Invoke(options.TransactionContext);
             return this;
         }
 
 
         public IMessageProcessorConfigurator<TProcessor> UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null)
         {
-            messageDeduplicationConfig = new MessageDeduplicationConfigurator();
-            configure?.Invoke(messageDeduplicationConfig);
+            options.MessageDeduplication = new MessageDeduplicationConfigurator();
+            configure?.Invoke(options.MessageDeduplication);
             return this;
         }
 
@@ -43,28 +42,41 @@ namespace Miles.MassTransit.ConsumerConvention
         {
             var messageConfigurator = new MessageProcessorMessageConfigurator<TMessage>();
             configure.Invoke(messageConfigurator);
-            messageSpecifications[typeof(TMessage)] = messageConfigurator;
+            messageConfigurators[typeof(TMessage)] = messageConfigurator;
             return this;
         }
 
-        public IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> GetSpecifications()
+        public IReceiveEndpointSpecification CreateSpecification(IConsumerFactoryFactory factory, MessageProcessorOptions defaults)
         {
+            return CreateSpecification(factory.CreateConsumerFactory<TProcessor>(), defaults);
+        }
+
+        public IReceiveEndpointSpecification CreateSpecification(IConsumerFactory<TProcessor> factory, MessageProcessorOptions defaults)
+        {
+            return new MessageProcessorSpecification<TProcessor>(factory, CreateInternalSpecifications(defaults).ToArray());
+        }
+
+        private IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> CreateInternalSpecifications(MessageProcessorOptions defaults)
+        {
+            var newDefaults = options.Merge(defaults);
+
             foreach (var spec in specifications)
                 yield return spec;
 
-            foreach (var messageSpec in messageSpecifications.Values.SelectMany(x => x.GetSpecifications<TProcessor>()))
+            foreach (var messageSpec in messageConfigurators.Values.SelectMany(x => x.CreateSpecifications<TProcessor>(newDefaults)))
                 yield return messageSpec;
 
             var messageTypesLackingConfig = typeof(TProcessor).GetInterfaces()
                 .Where(x => x.IsMessageProcessor())
                 .Select(x => x.GetGenericArguments().First())
-                .Except(messageSpecifications.Keys);
+                .Except(messageConfigurators.Keys);
 
             foreach (var messageType in messageTypesLackingConfig)
             {
                 var messageConfiguratorType = typeof(MessageProcessorMessageConfigurator<>).MakeGenericType(messageType);
                 var messageConfiguratorInstance = (IMessageProcessorMessageConfigurator)Activator.CreateInstance(messageConfiguratorType);
-                foreach (var messageSpec in messageConfiguratorInstance.GetSpecifications<TProcessor>(transactionContextConfig, messageDeduplicationConfig))
+
+                foreach (var messageSpec in messageConfiguratorInstance.CreateSpecifications<TProcessor>(newDefaults))
                     yield return messageSpec;
             }
         }

@@ -34,9 +34,7 @@ namespace Miles.MassTransit.ConsumerConvention
             specifications.Add(specification);
         }
 
-        public IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> GetSpecifications<TProcessor>(
-            TransactionContextConfigurator transactionContextDefaults = null,
-            MessageDeduplicationConfigurator messageDeduplicationDefaults = null)
+        public IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> CreateSpecifications<TProcessor>(MessageProcessorOptions defaults)
             where TProcessor : class, IMessageProcessor
         {
             var processMethod = typeof(TProcessor).GetInterfaceMap(typeof(IMessageProcessor<TMessage>)).TargetMethods.Single();
@@ -46,7 +44,7 @@ namespace Miles.MassTransit.ConsumerConvention
                 var config = GetConfig(
                     a => new TransactionContextConfigurator(a),
                     processMethod.GetTransactionConfig(false),
-                    transactionContextDefaults,
+                    defaults.TransactionContext,
                     typeof(TProcessor).GetTransactionConfig(),
                     TransactionContextAttribute.Default);
 
@@ -59,7 +57,7 @@ namespace Miles.MassTransit.ConsumerConvention
                 var config = GetConfig(
                     a => new MessageDeduplicationConfigurator(a),
                     processMethod.GetMessageDeduplicationConfig(false),
-                    messageDeduplicationDefaults,
+                    defaults.MessageDeduplication,
                     typeof(TProcessor).GetMessageDeduplicationConfig(),
                     MessageDeduplicationAttribute.Default);
 

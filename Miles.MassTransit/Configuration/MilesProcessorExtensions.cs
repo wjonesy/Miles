@@ -18,6 +18,7 @@ using MassTransit.Pipeline.ConsumerFactories;
 using Miles.MassTransit.ConsumerConvention;
 using Miles.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Miles.MassTransit.Configuration
@@ -49,7 +50,7 @@ namespace Miles.MassTransit.Configuration
             var processorConfigurator = new MessageProcessorConfigurator<TProcessor>();
             configure?.Invoke(processorConfigurator);
 
-            var specification = new MessageProcessorSpecification<TProcessor>(consumerFactory, processorConfigurator.GetSpecifications().ToArray());
+            var specification = processorConfigurator.CreateSpecification(consumerFactory, new MessageProcessorOptions());
             configurator.AddEndpointSpecification(specification);
 
             return configurator;
@@ -93,5 +94,20 @@ namespace Miles.MassTransit.Configuration
         }
 
         #endregion
+
+        public static IReceiveEndpointConfigurator MessageProcessors(
+            this IReceiveEndpointConfigurator configurator,
+            IConsumerFactoryFactory consumerFactoryFactory,
+            IEnumerable<Type> processorTypes,
+            Action<IMessageProcessorsConfigurator> configure = null)
+        {
+            var configuration = new MessageProcessorsConfigurator();
+            configure?.Invoke(configuration);
+
+            foreach (var spec in processorTypes.Select(c => configuration.CreateEndpointSpecification(c, consumerFactoryFactory)))
+                configurator.AddEndpointSpecification(spec);
+
+            return configurator;
+        }
     }
 }
