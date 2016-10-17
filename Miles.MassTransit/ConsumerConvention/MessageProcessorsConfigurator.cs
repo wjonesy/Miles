@@ -9,21 +9,21 @@ namespace Miles.MassTransit.ConsumerConvention
 {
     class MessageProcessorsConfigurator : IMessageProcessorsConfigurator
     {
-        private readonly MessageProcessorOptions defaults = new MessageProcessorOptions();
+        private readonly MessageProcessorOptions options = new MessageProcessorOptions();
         private readonly Dictionary<Type, IMessageProcessorConfigurator> processorConfigurators = new Dictionary<Type, IMessageProcessorConfigurator>();
 
         IMessageProcessorsConfigurator IMessageProcessorsConfigurator.UseTransactionContext(Action<ITransactionContextConfigurator> configure = null)
         {
-            defaults.TransactionContext = new TransactionContextConfigurator();
-            configure?.Invoke(defaults.TransactionContext);
+            options.TransactionContext = new TransactionContextConfigurator();
+            configure?.Invoke(options.TransactionContext);
             return this;
         }
 
 
         IMessageProcessorsConfigurator IMessageProcessorsConfigurator.UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null)
         {
-            defaults.MessageDeduplication = new MessageDeduplicationConfigurator();
-            configure?.Invoke(defaults.MessageDeduplication);
+            options.MessageDeduplication = new MessageDeduplicationConfigurator();
+            configure?.Invoke(options.MessageDeduplication);
             return this;
         }
 
@@ -40,7 +40,7 @@ namespace Miles.MassTransit.ConsumerConvention
             IMessageProcessorConfigurator configurator;
             if (!processorConfigurators.TryGetValue(processorType, out configurator))
                 configurator = (IMessageProcessorConfigurator)Activator.CreateInstance(typeof(MessageProcessorConfigurator<>).MakeGenericType(processorType));
-            return configurator.CreateSpecification(factory, defaults);
+            return configurator.CreateSpecification(factory, options);
         }
     }
 }

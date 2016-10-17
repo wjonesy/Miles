@@ -37,10 +37,11 @@
     </Compile>
     <Compile Include="CommandDispatcherTypes.cs" />
     <Compile Include="MessageDispatchProcesses.cs" />
+    <Compile Include="MilesProcessorExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReceiveEndpointConfiguratorExtensions.cs" />
     <Compile Include="RegisterMilesProcessorExtensions.cs" />
     <Compile Include="UnityConsumerFactory.cs" />
+    <Compile Include="UnityConsumerFactoryFactory.cs" />
     <Compile Include="UnityContainerExtensions.cs" />
     <Compile Include="UnityRegistrationConfiguration.cs" />
   </ItemGroup>

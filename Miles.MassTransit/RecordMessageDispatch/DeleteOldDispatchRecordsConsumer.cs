@@ -29,11 +29,20 @@ namespace Miles.MassTransit.RecordMessageDispatch
     {
         private readonly IOutgoingMessageRepository outgoingMessageRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteOldDispatchRecordsConsumer"/> class.
+        /// </summary>
+        /// <param name="outgoingMessageRepository">The outgoing message repository.</param>
         public DeleteOldDispatchRecordsConsumer(IOutgoingMessageRepository outgoingMessageRepository)
         {
             this.outgoingMessageRepository = outgoingMessageRepository;
         }
 
+        /// <summary>
+        /// Consumes the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
         public Task Consume(ConsumeContext<IDeleteOldDispatchRecordsCommand> context)
         {
             return outgoingMessageRepository.DeleteOldRecordsAsync();

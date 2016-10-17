@@ -28,11 +28,20 @@ namespace Miles.MassTransit.MessageDeduplication
     {
         private readonly IConsumedRepository consumedRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteOldConsumedRecordsConsumer"/> class.
+        /// </summary>
+        /// <param name="consumedRepository">The consumed repository.</param>
         public DeleteOldConsumedRecordsConsumer(IConsumedRepository consumedRepository)
         {
             this.consumedRepository = consumedRepository;
         }
 
+        /// <summary>
+        /// Consumes the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
         public Task Consume(ConsumeContext<IDeleteOldConsumedRecordsCommand> context)
         {
             return consumedRepository.DeleteOldRecordsAsync();

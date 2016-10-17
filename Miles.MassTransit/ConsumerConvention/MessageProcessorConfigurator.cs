@@ -58,6 +58,7 @@ namespace Miles.MassTransit.ConsumerConvention
 
         private IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> CreateInternalSpecifications(MessageProcessorOptions defaults)
         {
+            // create new defaults based on configuration and supplied defaults
             var newDefaults = options.Merge(defaults);
 
             foreach (var spec in specifications)
@@ -66,6 +67,7 @@ namespace Miles.MassTransit.ConsumerConvention
             foreach (var messageSpec in messageConfigurators.Values.SelectMany(x => x.CreateSpecifications<TProcessor>(newDefaults)))
                 yield return messageSpec;
 
+            // Create remaining message types based on defaults
             var messageTypesLackingConfig = typeof(TProcessor).GetInterfaces()
                 .Where(x => x.IsMessageProcessor())
                 .Select(x => x.GetGenericArguments().First())

@@ -19,13 +19,15 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Unity
 {
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Lifted straight from MassTransit.Unity.UnityConsumerFactory{TConsumer} but with some additional type registration to 
     /// meet some injection requirements (specifically the ConsumeContext).
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="MassTransit.IConsumerFactory{TConsumer}" />
-    public class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
+    class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
         readonly IUnityContainer _container;
 
@@ -49,7 +51,7 @@ namespace Miles.MassTransit.Unity
                 var consumer = childContainer.Resolve<TConsumer>();
                 if (consumer == null)
                 {
-                    throw new ConsumerException(string.Format("Unable to resolve consumer type '{0}'.", TypeMetadataCache<TConsumer>.ShortName));
+                    throw new ConsumerException($"Unable to resolve consumer type '{TypeMetadataCache<TConsumer>.ShortName}'.");
                 }
 
                 await next.Send(context.PushConsumer(consumer)).ConfigureAwait(false);

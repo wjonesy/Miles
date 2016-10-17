@@ -37,7 +37,7 @@ namespace Miles.MassTransit.RecordMessageDispatch
 
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("record-message-dispatch");
+            context.CreateFilterScope("miles-record-message-dispatch");
         }
 
         public async Task Send(TContext context, IPipe<TContext> next)

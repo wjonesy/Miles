@@ -18,13 +18,15 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDispatch
 {
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Dispatches messages to a specific endpoint by looking up the endpoint uri
     /// based on the message type to the message queue.
     /// </summary>
     /// <remarks>Uses MassTransit's Send method.</remarks>
-    /// <seealso cref="Miles.MassTransit.IMessageDispatcher" />
+    /// <seealso cref="MassTransit.IMessageDispatcher" />
     public class LookupBasedMessageDispatch : IMessageDispatcher
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
         private readonly ISendEndpointProvider sendEndpointProvider;
         private readonly ILookupEndpointUri endpointUriLookup;

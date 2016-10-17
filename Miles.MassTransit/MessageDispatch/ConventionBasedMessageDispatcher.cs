@@ -18,12 +18,14 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDispatch
 {
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Dispatches messages based on the contract type to the message queue.
     /// </summary>
     /// <remarks>Uses MassTransit's Publish method.</remarks>
-    /// <seealso cref="Miles.MassTransit.IMessageDispatcher" />
+    /// <seealso cref="MassTransit.IMessageDispatcher" />
     public class ConventionBasedMessageDispatcher : IMessageDispatcher
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
         private readonly IPublishEndpoint publishEndpoint;
 

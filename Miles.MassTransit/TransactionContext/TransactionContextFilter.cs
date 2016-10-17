@@ -38,7 +38,7 @@ namespace Miles.MassTransit.TransactionContext
 
         public void Probe(ProbeContext context)
         {
-            var scope = context.CreateFilterScope("transaction-context");
+            var scope = context.CreateFilterScope("miles-transaction-context");
             scope.Add("HintIsolationLevel", hintIsolationLevel);
         }
 

@@ -39,7 +39,7 @@ namespace Miles.MassTransit.MessageDeduplication
     {
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("message-deduplication");
+            context.CreateFilterScope("miles-message-deduplication");
         }
 
         public async Task Send(TContext context, IPipe<TContext> next)

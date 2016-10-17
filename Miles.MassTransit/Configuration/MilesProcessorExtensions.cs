@@ -95,6 +95,15 @@ namespace Miles.MassTransit.Configuration
 
         #endregion
 
+        /// <summary>
+        /// Registers a Many Miles Message Processor (<see cref="IMessageProcessor{TMessage}" />) with a
+        /// MassTransit <see cref="IReceiveEndpointConfigurator" />.
+        /// </summary>
+        /// <param name="configurator">The receive endpoint configurator.</param>
+        /// <param name="consumerFactoryFactory">The consumer factory factory.</param>
+        /// <param name="processorTypes">The processor types.</param>
+        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessors(
             this IReceiveEndpointConfigurator configurator,
             IConsumerFactoryFactory consumerFactoryFactory,

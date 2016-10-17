@@ -22,12 +22,36 @@ namespace Miles.MassTransit.Unity
 {
     public class UnityRegistrationConfiguration
     {
+        /// <summary>
+        /// Callback that creates the lifetime manager used for child container isolation.
+        /// </summary>
+        /// <value>
+        /// The child container lifetime manager factory.
+        /// </value>
         public Func<Type, LifetimeManager> ChildContainerLifetimeManagerFactory { get; set; } = t => new HierarchicalLifetimeManager();
 
+        /// <summary>
+        /// Gets or sets the dispatcher to use for commands.
+        /// </summary>
+        /// <value>
+        /// The command dispatcher.
+        /// </value>
         public CommandDispatcherTypes CommandDispatcher { get; set; } = CommandDispatcherTypes.Publish;
 
+        /// <summary>
+        /// Gets or sets the message dispatch process.
+        /// </summary>
+        /// <value>
+        /// The message dispatch process.
+        /// </value>
         public MessageDispatchProcesses MessageDispatchProcess { get; set; } = MessageDispatchProcesses.Immediate;
 
+        /// <summary>
+        /// Gets or sets the processor types.
+        /// </summary>
+        /// <value>
+        /// The processor types.
+        /// </value>
         public IEnumerable<Type> ProcessorTypes { get; set; } = Enumerable.Empty<Type>();
     }
 }

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Miles.Persistence;
 using System.Data;
 
 namespace Miles.MassTransit.Configuration
@@ -22,6 +23,11 @@ namespace Miles.MassTransit.Configuration
     /// </summary>
     public interface ITransactionContextConfigurator
     {
+        /// <summary>
+        /// Enables or disables <see cref="ITransactionContext"/>.
+        /// </summary>
+        /// <param name="enable">if set to <c>true</c> [enable].</param>
+        /// <returns></returns>
         ITransactionContextConfigurator Enable(bool enable);
 
         /// <summary>
