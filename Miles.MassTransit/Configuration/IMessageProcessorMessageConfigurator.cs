@@ -1,21 +1,30 @@
-﻿using MassTransit;
+﻿/*
+ *     Copyright 2016 Adam Burton (adz21c@gmail.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+using MassTransit;
 using MassTransit.ConsumeConfigurators;
 
 namespace Miles.MassTransit.Configuration
 {
-#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute
-#pragma warning disable CS1658 // Warning is overriding an error
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
-    /// <seealso cref="MassTransit.IPipeConfigurator{MassTransit.ConsumeContext{TMessage}}" />
-    /// <seealso cref="MassTransit.ConsumeConfigurators.IConsumeConfigurator" />
+    /// <seealso cref="global::MassTransit.IPipeConfigurator{global::MassTransit.ConsumeContext{TMessage}}" />
+    /// <seealso cref="global::MassTransit.ConsumeConfigurators.IConsumeConfigurator" />
     public interface IMessageProcessorMessageConfigurator<TMessage> : IPipeConfigurator<ConsumeContext<TMessage>>, IConsumeConfigurator
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
-#pragma warning restore CS1658 // Warning is overriding an error
-#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute
         where TMessage : class
     { }
 }

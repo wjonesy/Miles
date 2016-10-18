@@ -1,9 +1,5 @@
 ﻿using MassTransit;
-using MassTransit.Configurators;
-using MassTransit.Internals.Extensions;
-using MassTransit.PipeBuilders;
 using MassTransit.PipeConfigurators;
-using MassTransit.Util;
 using Miles.MassTransit.Configuration;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.TransactionContext;
@@ -72,7 +68,7 @@ namespace Miles.MassTransit.ConsumerConvention
             }
 
             foreach (var specification in specifications)
-                yield return new SpecificationProxy<TProcessor>(specification);
+                yield return new SpecificationProxy<TProcessor, TMessage>(specification);
         }
 
         private TConfig GetConfig<TConfig, TAttrib>(
@@ -90,35 +86,7 @@ namespace Miles.MassTransit.ConsumerConvention
                 return typeOverride ?? createConfig(typeOrAssemblyAttrib ?? attribDefaults);
         }
 
-        class SpecificationProxy<TProcessor> : IPipeSpecification<ConsumerConsumeContext<TProcessor>>
-            where TProcessor : class, IMessageProcessor
-        {
-            private readonly IPipeSpecification<ConsumeContext<TMessage>> _specification;
 
-            public SpecificationProxy(IPipeSpecification<ConsumeContext<TMessage>> specification)
-            {
-                _specification = specification;
-            }
-
-            public void Apply(IPipeBuilder<ConsumerConsumeContext<TProcessor>> builder)
-            {
-                var messageBuilder = builder as IPipeBuilder<ConsumeContext<TMessage>>;
-
-                if (messageBuilder != null)
-                    _specification.Apply(messageBuilder);
-            }
-
-            public IEnumerable<ValidationResult> Validate()
-            {
-                if (!typeof(TProcessor).HasInterface<IMessageProcessor<TMessage>>())
-                    yield return this.Failure("MessageType", $"is not consumed by {TypeMetadataCache<TProcessor>.ShortName}");
-
-                foreach (var validationResult in _specification.Validate())
-                {
-                    yield return validationResult;
-                }
-            }
-        }
 
         #endregion
     }
