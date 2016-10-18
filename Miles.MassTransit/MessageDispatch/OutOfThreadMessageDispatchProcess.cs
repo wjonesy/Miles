@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDispatch
 {
+    /// <summary>
+    /// Dispatches messages in a separate thread to allow processing code to complete earlier.
+    /// </summary>
+    /// <seealso cref="IMessageDispatchProcess" />
     public class OutOfThreadMessageDispatchProcess : IMessageDispatchProcess
     {
         private static readonly Task AlreadyCompleted = Task.FromResult(0);
@@ -13,8 +17,18 @@ namespace Miles.MassTransit.MessageDispatch
         private readonly ConventionBasedMessageDispatcher eventDispatcher;
         private readonly IMessageDispatcher commandDispatcher;
 
-        public OutOfThreadMessageDispatchProcess()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OutOfThreadMessageDispatchProcess"/> class.
+        /// </summary>
+        /// <param name="eventDispatcher">The event dispatcher.</param>
+        /// <param name="commandDispatcher">The command dispatcher.</param>
+        public OutOfThreadMessageDispatchProcess(
+            ConventionBasedMessageDispatcher eventDispatcher,
+            IMessageDispatcher commandDispatcher)
         {
+            this.eventDispatcher = eventDispatcher;
+            this.commandDispatcher = commandDispatcher;
+
             var t = Task.Run(async () =>
             {
                 var message = queue.Take();
@@ -28,6 +42,11 @@ namespace Miles.MassTransit.MessageDispatch
             });
         }
 
+        /// <summary>
+        /// Initiates the dispatch of messages to the message queue
+        /// </summary>
+        /// <param name="messages">The messages.</param>
+        /// <returns></returns>
         public Task ExecuteAsync(IEnumerable<OutgoingMessageForDispatch> messages)
         {
             foreach (var message in messages)

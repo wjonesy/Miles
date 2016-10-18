@@ -22,6 +22,8 @@ namespace Miles.MassTransit.TransactionContext
 {
     class TransactionContextConfigurator : ITransactionContextConfigurator
     {
+        #region Configurator
+
         public TransactionContextConfigurator(TransactionContextAttribute attrib = null)
         {
             if (attrib != null)
@@ -46,6 +48,8 @@ namespace Miles.MassTransit.TransactionContext
             HintIsolationLevel = isolationLevel;
             return this;
         }
+
+        #endregion
 
         public TransactionContextSpecification<TContext> CreateSpecification<TContext>()
             where TContext : class, ConsumeContext

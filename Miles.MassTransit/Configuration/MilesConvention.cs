@@ -3,13 +3,11 @@ using Miles.MassTransit.ConsumerConvention;
 
 namespace Miles.MassTransit.Configuration
 {
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="MassTransit.IConsumerConvention" />
+    /// <seealso cref="global::MassTransit.IConsumerConvention" />
     public class MilesConvention : IConsumerConvention
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
         /// <summary>
         /// Returns the message convention for the type of T

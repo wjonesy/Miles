@@ -26,6 +26,12 @@ namespace Miles.Messaging
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
     public class TransactionContextAttribute : Attribute
     {
+        /// <summary>
+        /// Gets an instance of the attribute with default values.
+        /// </summary>
+        /// <value>
+        /// The default.
+        /// </value>
         public static TransactionContextAttribute Default { get; private set; } = new TransactionContextAttribute();
 
         /// <summary>

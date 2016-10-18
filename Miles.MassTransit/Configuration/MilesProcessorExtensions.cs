@@ -37,7 +37,7 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TProcessor">The type of the processor.</typeparam>
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="consumerFactory">The consumer factory.</param>
-        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
@@ -63,7 +63,7 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TProcessor">The type of the processor.</typeparam>
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="consumerFactory">The consumer factory method.</param>
-        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
@@ -82,7 +82,7 @@ namespace Miles.MassTransit.Configuration
         /// </summary>
         /// <typeparam name="TProcessor">The type of the processor.</typeparam>
         /// <param name="configurator">The receive endpoint configurator.</param>
-        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
             this IReceiveEndpointConfigurator configurator,
@@ -102,7 +102,7 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="consumerFactoryFactory">The consumer factory factory.</param>
         /// <param name="processorTypes">The processor types.</param>
-        /// <param name="configure">The consumer configurator applied after Miles configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessors(
             this IReceiveEndpointConfigurator configurator,

@@ -22,15 +22,13 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.RecordMessageDispatch
 {
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Configures the <see cref="RecordMessageDispatchFilter{TContext}"/> .
     /// </summary>
     /// <typeparam name="TContext">The type of the context.</typeparam>
-    /// <seealso cref="MassTransit.PipeConfigurators.IPipeSpecification{TContext}" />
-    /// <seealso cref="Miles.MassTransit.Configuration.IRecordMessageDispatchConfigurator" />
+    /// <seealso cref="global::MassTransit.PipeConfigurators.IPipeSpecification{TContext}" />
+    /// <seealso cref="IRecordMessageDispatchConfigurator" />
     class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>, IRecordMessageDispatchConfigurator
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
         where TContext : class, SendContext
     {
         public IDispatchedRepository DispatchedRepository { get; private set; }

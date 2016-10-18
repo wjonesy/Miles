@@ -15,11 +15,12 @@
  */
 using Microsoft.Practices.Unity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Miles.MassTransit.Unity
 {
+    /// <summary>
+    /// Configuration options for Unity Miles registration
+    /// </summary>
     public class UnityRegistrationConfiguration
     {
         /// <summary>
@@ -45,13 +46,5 @@ namespace Miles.MassTransit.Unity
         /// The message dispatch process.
         /// </value>
         public MessageDispatchProcesses MessageDispatchProcess { get; set; } = MessageDispatchProcesses.Immediate;
-
-        /// <summary>
-        /// Gets or sets the processor types.
-        /// </summary>
-        /// <value>
-        /// The processor types.
-        /// </value>
-        public IEnumerable<Type> ProcessorTypes { get; set; } = Enumerable.Empty<Type>();
     }
 }

@@ -9,10 +9,12 @@ namespace Miles.MassTransit.ConsumerConvention
 {
     class MessageProcessorsConfigurator : IMessageProcessorsConfigurator
     {
+        #region Configurator
+
         private readonly MessageProcessorOptions options = new MessageProcessorOptions();
         private readonly Dictionary<Type, IMessageProcessorConfigurator> processorConfigurators = new Dictionary<Type, IMessageProcessorConfigurator>();
 
-        IMessageProcessorsConfigurator IMessageProcessorsConfigurator.UseTransactionContext(Action<ITransactionContextConfigurator> configure = null)
+        IMessageProcessorsConfigurator IMessageProcessorsConfigurator.UseTransactionContext(Action<ITransactionContextConfigurator> configure)
         {
             options.TransactionContext = new TransactionContextConfigurator();
             configure?.Invoke(options.TransactionContext);
@@ -20,7 +22,7 @@ namespace Miles.MassTransit.ConsumerConvention
         }
 
 
-        IMessageProcessorsConfigurator IMessageProcessorsConfigurator.UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null)
+        IMessageProcessorsConfigurator IMessageProcessorsConfigurator.UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure)
         {
             options.MessageDeduplication = new MessageDeduplicationConfigurator();
             configure?.Invoke(options.MessageDeduplication);
@@ -34,6 +36,8 @@ namespace Miles.MassTransit.ConsumerConvention
             processorConfigurators[typeof(TProcessor)] = configurator;
             return this;
         }
+
+        #endregion
 
         public IReceiveEndpointSpecification CreateEndpointSpecification(Type processorType, IConsumerFactoryFactory factory)
         {

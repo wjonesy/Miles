@@ -29,16 +29,17 @@ namespace Miles.MassTransit.Configuration
         /// <summary>
         /// The message is recorded to ensure it is processed only once.
         /// On identifying a message as already processed the message is removed from the queue without doing any work.
-        /// This should be wrapped in an <see cref="ITransactionContext"/> to ensure the processing and recording
+        /// This should be wrapped in an <see cref="ITransactionContext" /> to ensure the processing and recording
         /// of the message are a single unit of work.
         /// </summary>
-        /// <remarks>
-        /// This assumes a container will have registered itself as an <see cref="IServiceLocator"/> payload to 
-        /// retrieve an <see cref="IConsumedRepository"/> instance that will work with the <see cref="ITransactionContext"/>.
-        /// </remarks>
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
+        /// <remarks>
+        /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
+        /// retrieve an <see cref="IConsumedRepository" /> instance that will work with the <see cref="ITransactionContext" />.
+        /// </remarks>
         public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseMessageDeduplication<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<IMessageDeduplicationConfigurator> configure = null)
             where TConsumer : class
         {
@@ -52,16 +53,17 @@ namespace Miles.MassTransit.Configuration
         /// <summary>
         /// The message is recorded to ensure it is processed only once.
         /// On identifying a message as already processed the message is removed from the queue without doing any work.
-        /// This should be wrapped in an <see cref="ITransactionContext"/> to ensure the processing and recording
+        /// This should be wrapped in an <see cref="ITransactionContext" /> to ensure the processing and recording
         /// of the message are a single unit of work.
         /// </summary>
-        /// <remarks>
-        /// This assumes a container will have registered itself as an <see cref="IServiceLocator"/> payload to 
-        /// retrieve an <see cref="IConsumedRepository"/> instance that will work with the <see cref="ITransactionContext"/>.
-        /// </remarks>
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="configurator">The configurator.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
+        /// <remarks>
+        /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
+        /// retrieve an <see cref="IConsumedRepository" /> instance that will work with the <see cref="ITransactionContext" />.
+        /// </remarks>
         public static IPipeConfigurator<ConsumeContext<TMessage>> UseMessageDeduplication<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator, Action<IMessageDeduplicationConfigurator> configure = null)
             where TMessage : class
         {

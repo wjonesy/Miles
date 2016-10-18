@@ -8,19 +8,13 @@ using System;
 
 namespace Miles.MassTransit.Configuration
 {
-#pragma warning disable CS1658 // Warning is overriding an error
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
-#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute
     /// <summary>
     /// Configures an <see cref="IMessageProcessor"/> 
     /// </summary>
     /// <typeparam name="TProcessor">The type of the processor.</typeparam>
-    /// <seealso cref="MassTransit.IPipeConfigurator{MassTransit.ConsumerConsumeContext{TProcessor}}" />
-    /// <seealso cref="MassTransit.ConsumeConfigurators.IConsumeConfigurator" />
+    /// <seealso cref="global::MassTransit.IPipeConfigurator{global::MassTransit.ConsumerConsumeContext{TProcessor}}" />
+    /// <seealso cref="global::MassTransit.ConsumeConfigurators.IConsumeConfigurator" />
     public interface IMessageProcessorConfigurator<TProcessor> : IPipeConfigurator<ConsumerConsumeContext<TProcessor>>, IConsumeConfigurator
-#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
-#pragma warning restore CS1658 // Warning is overriding an error
         where TProcessor : class, IMessageProcessor
     {
         /// <summary>

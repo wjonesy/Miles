@@ -26,7 +26,7 @@ namespace Miles.MassTransit.TransactionContext
     /// Encapsulates a consumer behaviour in a transaction context.
     /// </summary>
     /// <typeparam name="TContext">The type of the consumer.</typeparam>
-    /// <seealso cref="MassTransit.Pipeline.IFilter{TContext}" />
+    /// <seealso cref="global::MassTransit.Pipeline.IFilter{TContext}" />
     class TransactionContextFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
         private readonly IsolationLevel? hintIsolationLevel;

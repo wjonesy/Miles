@@ -14,6 +14,8 @@ namespace Miles.MassTransit.ConsumerConvention
     class MessageProcessorConfigurator<TProcessor> : IMessageProcessorConfigurator<TProcessor>, IMessageProcessorConfigurator
         where TProcessor : class, IMessageProcessor
     {
+        #region Configurator
+
         private readonly List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> specifications = new List<IPipeSpecification<ConsumerConsumeContext<TProcessor>>>();
         private readonly MessageProcessorOptions options = new MessageProcessorOptions();
         private readonly Dictionary<Type, IMessageProcessorMessageConfigurator> messageConfigurators = new Dictionary<Type, IMessageProcessorMessageConfigurator>();
@@ -45,6 +47,10 @@ namespace Miles.MassTransit.ConsumerConvention
             messageConfigurators[typeof(TMessage)] = messageConfigurator;
             return this;
         }
+
+        #endregion
+
+        #region Create specifications
 
         public IReceiveEndpointSpecification CreateSpecification(IConsumerFactoryFactory factory, MessageProcessorOptions defaults)
         {
@@ -82,5 +88,7 @@ namespace Miles.MassTransit.ConsumerConvention
                     yield return messageSpec;
             }
         }
+
+        #endregion
     }
 }

@@ -23,6 +23,5 @@ namespace Miles.MassTransit.MessageDispatch
 #pragma warning disable 1591
         Command = 1,
         Event = 2
-#pragma warning restore 1591
     }
 }

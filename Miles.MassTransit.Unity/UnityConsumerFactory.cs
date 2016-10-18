@@ -19,26 +19,24 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Unity
 {
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
-    /// Lifted straight from MassTransit.Unity.UnityConsumerFactory{TConsumer} but with some additional type registration to 
+    /// Lifted straight from MassTransit but with some additional type registration to 
     /// meet some injection requirements (specifically the ConsumeContext).
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
-    /// <seealso cref="MassTransit.IConsumerFactory{TConsumer}" />
+    /// <seealso cref="global::MassTransit.IConsumerFactory{TConsumer}" />
     class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
-        readonly IUnityContainer _container;
+        readonly IUnityContainer container;
 
         public UnityConsumerFactory(IUnityContainer container)
         {
-            _container = container;
+            this.container = container;
         }
 
         public async Task Send<T>(ConsumeContext<T> context, IPipe<ConsumerConsumeContext<TConsumer, T>> next) where T : class
         {
-            using (IUnityContainer childContainer = _container.CreateChildContainer())
+            using (IUnityContainer childContainer = container.CreateChildContainer())
             {
                 context.GetOrAddPayload<IServiceLocator>(() => new UnityServiceLocator(childContainer));
 

@@ -26,6 +26,12 @@ namespace Miles.MassTransit.Unity
     /// <exclude />
     public static class UnityContainerExtensions
     {
+        /// <summary>
+        /// Sets up common Miles types.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
         public static IUnityContainer RegisterMilesMassTransit(this IUnityContainer container, UnityRegistrationConfiguration configuration = null)
         {
             configuration = configuration ?? new UnityRegistrationConfiguration();
@@ -51,7 +57,8 @@ namespace Miles.MassTransit.Unity
             switch (configuration.MessageDispatchProcess)
             {
                 case MessageDispatchProcesses.OutOfThread:
-                    container.RegisterInstance<IMessageDispatchProcess>(new OutOfThreadMessageDispatchProcess(), new ContainerControlledLifetimeManager());
+                    // TODO: Build properly
+                    container.RegisterInstance<IMessageDispatchProcess>(new OutOfThreadMessageDispatchProcess(null, null), new ContainerControlledLifetimeManager());
                     break;
                 default:
                     container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(configuration.ChildContainerLifetimeManagerFactory(typeof(ImmediateMessageDispatchProcess)));
@@ -60,8 +67,6 @@ namespace Miles.MassTransit.Unity
 
             container.RegisterType<IConsumer<IDeleteOldConsumedRecordsCommand>, DeleteOldConsumedRecordsConsumer>(configuration.ChildContainerLifetimeManagerFactory(typeof(DeleteOldConsumedRecordsConsumer)));
             container.RegisterType<IConsumer<IDeleteOldDispatchRecordsCommand>, DeleteOldDispatchRecordsConsumer>(configuration.ChildContainerLifetimeManagerFactory(typeof(DeleteOldDispatchRecordsConsumer)));
-
-            container.RegisterMessageProcessors(configuration.ProcessorTypes, configuration.ChildContainerLifetimeManagerFactory);
 
             return container;
         }

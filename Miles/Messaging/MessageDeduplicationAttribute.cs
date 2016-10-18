@@ -25,6 +25,12 @@ namespace Miles.Messaging
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple = false)]
     public class MessageDeduplicationAttribute : Attribute
     {
+        /// <summary>
+        /// Gets an instance of the attribute with default values.
+        /// </summary>
+        /// <value>
+        /// The default.
+        /// </value>
         public static MessageDeduplicationAttribute Default { get; private set; } = new MessageDeduplicationAttribute();
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace Miles.MassTransit.Configuration
         /// </summary>
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The transaction context configurator.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
         public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseTransactionContext<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TConsumer : class
@@ -47,7 +47,7 @@ namespace Miles.MassTransit.Configuration
         /// </summary>
         /// <typeparam name="TMessage">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The transaction context configurator.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
         public static IPipeConfigurator<ConsumeContext<TMessage>> UseTransactionContext<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TMessage : class

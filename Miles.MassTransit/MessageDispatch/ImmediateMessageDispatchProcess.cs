@@ -18,13 +18,11 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDispatch
 {
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
     /// <summary>
     /// Default implementation of <see cref="IMessageDispatchProcess"/> that immediately dispatches the messages.
     /// </summary>
-    /// <seealso cref="MassTransit.IMessageDispatchProcess" />
+    /// <seealso cref="IMessageDispatchProcess" />
     public class ImmediateMessageDispatchProcess : IMessageDispatchProcess
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     {
         private readonly IMessageDispatcher commandDispatcher;
         private readonly ConventionBasedMessageDispatcher eventDispatcher;

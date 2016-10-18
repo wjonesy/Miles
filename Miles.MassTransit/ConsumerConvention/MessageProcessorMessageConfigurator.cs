@@ -19,6 +19,8 @@ namespace Miles.MassTransit.ConsumerConvention
     class MessageProcessorMessageConfigurator<TMessage> : IMessageProcessorMessageConfigurator<TMessage>, IMessageProcessorMessageConfigurator
         where TMessage : class
     {
+        #region Configurator
+
         private readonly List<IPipeSpecification<ConsumeContext<TMessage>>> specifications = new List<IPipeSpecification<ConsumeContext<TMessage>>>();
 
         private bool transactionConfigurationOverriden = false;
@@ -33,6 +35,10 @@ namespace Miles.MassTransit.ConsumerConvention
 
             specifications.Add(specification);
         }
+
+        #endregion
+
+        #region Create specifications
 
         public IEnumerable<IPipeSpecification<ConsumerConsumeContext<TProcessor>>> CreateSpecifications<TProcessor>(MessageProcessorOptions defaults)
             where TProcessor : class, IMessageProcessor
@@ -113,5 +119,7 @@ namespace Miles.MassTransit.ConsumerConvention
                 }
             }
         }
+
+        #endregion
     }
 }

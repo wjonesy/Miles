@@ -21,8 +21,6 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-#pragma warning disable CS1584 // XML comment has syntactically incorrect cref attribute
-#pragma warning disable CS1658 // Warning is overriding an error
     /// <summary>
     /// Wraps message in a <see cref="ITransactionContext"/> in which the message is recorded to ensure it is processed only once.
     /// On identifying a message as already processed the message is removed from the queue without doing any work.
@@ -32,10 +30,8 @@ namespace Miles.MassTransit.MessageDeduplication
     /// retrieve an <see cref="IConsumedRepository"/> instance that will work with the <see cref="ITransactionContext"/>.
     /// </remarks>
     /// <typeparam name="TContext">The type of the consumer.</typeparam>
-    /// <seealso cref="MassTransit.Pipeline.IFilter{MassTransit.ConsumerConsumeContext{TContext}}" />
+    /// <seealso cref="global::MassTransit.Pipeline.IFilter{global::MassTransit.ConsumerConsumeContext{TContext}}" />
     class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
-#pragma warning restore CS1658 // Warning is overriding an error
-#pragma warning restore CS1584 // XML comment has syntactically incorrect cref attribute
     {
         public void Probe(ProbeContext context)
         {

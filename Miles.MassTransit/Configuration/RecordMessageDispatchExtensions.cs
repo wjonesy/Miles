@@ -28,7 +28,7 @@ namespace Miles.MassTransit.Configuration
         /// Registers a filter on send pipes to attempt to record the dispatch of any message.
         /// </summary>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
         public static TConfigurator UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
             where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
@@ -45,7 +45,7 @@ namespace Miles.MassTransit.Configuration
         /// Registers a filter on send pipes to attempt to record the dispatch of any message.
         /// </summary>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
         public static ISendPipeConfigurator UseRecordMessageDispatch(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
         {
@@ -60,7 +60,7 @@ namespace Miles.MassTransit.Configuration
         /// Registers a filter on send pipes to attempt to record the dispatch of <typeparam name="TMessage" /> messages.
         /// </summary>
         /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The configuration.</param>
+        /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
         public static ISendPipeConfigurator UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
             where TMessage : class
