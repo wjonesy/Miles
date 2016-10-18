@@ -1,8 +1,7 @@
-using MassTransit;
-using MassTransit.Hosting;
-
 namespace Miles.Sample.Processor
 {
+    using MassTransit;
+    using MassTransit.Hosting;
 
     /// <summary>
     /// Configures the bus settings for the service and all endpoints in the same assembly.
