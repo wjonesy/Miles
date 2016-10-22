@@ -38,13 +38,11 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="consumerFactory">The consumer factory.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
             this IReceiveEndpointConfigurator configurator,
             IConsumerFactory<TProcessor> consumerFactory,
-            Action<IMessageProcessorConfigurator<TProcessor>> configure = null,
-            bool ignoreAttributes = false)
+            Action<IMessageProcessorConfigurator<TProcessor>> configure = null)
             where TProcessor : class, IMessageProcessor
         {
             var processorConfigurator = new MessageProcessorConfigurator<TProcessor>();
@@ -64,16 +62,14 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="consumerFactory">The consumer factory method.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         /// <returns></returns>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
             this IReceiveEndpointConfigurator configurator,
             Func<TProcessor> consumerFactory,
-            Action<IMessageProcessorConfigurator<TProcessor>> configure = null,
-            bool ignoreAttributes = false)
+            Action<IMessageProcessorConfigurator<TProcessor>> configure = null)
             where TProcessor : class, IMessageProcessor
         {
-            return configurator.MessageProcessor(new DelegateConsumerFactory<TProcessor>(consumerFactory), configure, ignoreAttributes);
+            return configurator.MessageProcessor(new DelegateConsumerFactory<TProcessor>(consumerFactory), configure);
         }
 
         /// <summary>
@@ -83,14 +79,12 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TProcessor">The type of the processor.</typeparam>
         /// <param name="configurator">The receive endpoint configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <param name="ignoreAttributes">if set to <c>true</c> ignores attributes and applies Miles configuration.</param>
         public static IReceiveEndpointConfigurator MessageProcessor<TProcessor>(
             this IReceiveEndpointConfigurator configurator,
-            Action<IMessageProcessorConfigurator<TProcessor>> configure = null,
-            bool ignoreAttributes = false)
+            Action<IMessageProcessorConfigurator<TProcessor>> configure = null)
             where TProcessor : class, IMessageProcessor, new()
         {
-            return configurator.MessageProcessor(new DefaultConstructorConsumerFactory<TProcessor>(), configure, ignoreAttributes);
+            return configurator.MessageProcessor(new DefaultConstructorConsumerFactory<TProcessor>(), configure);
         }
 
         #endregion
