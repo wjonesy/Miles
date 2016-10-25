@@ -27,7 +27,7 @@ namespace Miles.MassTransit.Configuration
     /// Configures an <see cref="IMessageProcessor"/> 
     /// </summary>
     /// <typeparam name="TProcessor">The type of the processor.</typeparam>
-    /// <seealso cref="global::MassTransit.IPipeConfigurator{global::MassTransit.ConsumerConsumeContext{TProcessor}}" />
+    /// <seealso cref="global::MassTransit.IPipeConfigurator{TContext}" />
     /// <seealso cref="global::MassTransit.ConsumeConfigurators.IConsumeConfigurator" />
     public interface IMessageProcessorConfigurator<TProcessor> : IPipeConfigurator<ConsumerConsumeContext<TProcessor>>, IConsumeConfigurator
         where TProcessor : class, IMessageProcessor

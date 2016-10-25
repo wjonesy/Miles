@@ -30,7 +30,7 @@ namespace Miles.MassTransit.MessageDeduplication
     /// retrieve an <see cref="IConsumedRepository"/> instance that will work with the <see cref="ITransactionContext"/>.
     /// </remarks>
     /// <typeparam name="TContext">The type of the consumer.</typeparam>
-    /// <seealso cref="global::MassTransit.Pipeline.IFilter{global::MassTransit.ConsumerConsumeContext{TContext}}" />
+    /// <seealso cref="global::MassTransit.Pipeline.IFilter{T}" />
     class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
         public void Probe(ProbeContext context)

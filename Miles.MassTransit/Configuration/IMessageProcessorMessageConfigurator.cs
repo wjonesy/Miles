@@ -22,7 +22,7 @@ namespace Miles.MassTransit.Configuration
     /// 
     /// </summary>
     /// <typeparam name="TMessage">The type of the message.</typeparam>
-    /// <seealso cref="global::MassTransit.IPipeConfigurator{global::MassTransit.ConsumeContext{TMessage}}" />
+    /// <seealso cref="global::MassTransit.IPipeConfigurator{TMessage}" />
     /// <seealso cref="global::MassTransit.ConsumeConfigurators.IConsumeConfigurator" />
     public interface IMessageProcessorMessageConfigurator<TMessage> : IPipeConfigurator<ConsumeContext<TMessage>>, IConsumeConfigurator
         where TMessage : class
