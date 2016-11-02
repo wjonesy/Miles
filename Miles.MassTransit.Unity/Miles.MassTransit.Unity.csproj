@@ -37,7 +37,7 @@
     </Compile>
     <Compile Include="CommandDispatcherTypes.cs" />
     <Compile Include="MessageDispatchProcesses.cs" />
-    <Compile Include="MilesProcessorExtensions.cs" />
+    <Compile Include="MilesExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterMilesProcessorExtensions.cs" />
     <Compile Include="UnityConsumerFactory.cs" />

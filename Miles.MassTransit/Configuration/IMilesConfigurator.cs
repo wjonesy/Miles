@@ -24,7 +24,7 @@ namespace Miles.MassTransit.Configuration
     /// <summary>
     /// 
     /// </summary>
-    public interface IMessageProcessorsConfigurator
+    public interface IMilesConfigurator
     {
         /// <summary>
         /// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
@@ -33,7 +33,7 @@ namespace Miles.MassTransit.Configuration
         /// </summary>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        IMessageProcessorsConfigurator UseTransactionContext(Action<ITransactionContextConfigurator> configure = null);
+        IMilesConfigurator UseTransactionContext(Action<ITransactionContextConfigurator> configure = null);
 
         /// <summary>
         /// The message is recorded to ensure it is processed only once.
@@ -49,7 +49,7 @@ namespace Miles.MassTransit.Configuration
         /// </remarks>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        IMessageProcessorsConfigurator UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null);
+        IMilesConfigurator UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null);
 
         /// <summary>
         /// Configure a message processor, such as adding middleware to the pipeline for the message processor type.
@@ -57,6 +57,6 @@ namespace Miles.MassTransit.Configuration
         /// <typeparam name="TProcessor">The message processor type</typeparam>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        IMessageProcessorsConfigurator ConfigureProcessor<TProcessor>(Action<IMessageProcessorConfigurator<TProcessor>> configure) where TProcessor : class, IMessageProcessor;
+        IMilesConfigurator ConfigureProcessor<TProcessor>(Action<IMessageProcessorConfigurator<TProcessor>> configure) where TProcessor : class, IMessageProcessor;
     }
 }

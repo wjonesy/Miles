@@ -40,13 +40,13 @@
     <Compile Include="Configuration\IMessageDeduplicationConfigurator.cs" />
     <Compile Include="Configuration\IMessageProcessorMessageConfigurator.cs" />
     <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
-    <Compile Include="Configuration\IMessageProcessorsConfigurator.cs" />
+    <Compile Include="Configuration\IMilesConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
+    <Compile Include="Configuration\MilesExtensions.cs" />
     <Compile Include="ConsumerConvention\IMessageProcessorConfigurator.cs" />
     <Compile Include="ConsumerConvention\IMessageProcessorMessageConfigurator.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\MilesConvention.cs" />
-    <Compile Include="Configuration\MilesProcessorExtensions.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
     <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
@@ -57,7 +57,7 @@
     <Compile Include="ConsumerConvention\MessageProcessorInterfaceType.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorMessageFilter.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorOptions.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorsConfigurator.cs" />
+    <Compile Include="ConsumerConvention\MilesConfigurator.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorSpecification.cs" />
     <Compile Include="ConsumerConvention\SpecificationProxy.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
