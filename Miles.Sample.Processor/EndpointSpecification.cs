@@ -40,11 +40,11 @@ namespace Miles.Sample.Processor
         {
             var container = new UnityContainer()
                 .ConfigureSample(t => new HierarchicalLifetimeManager())
-                .RegisterMessageProcessors(AllClasses.FromLoadedAssemblies().GetMessageProcessors());
+                .RegisterMessageProcessors(AllClasses.FromAssembliesInBasePath().GetMessageProcessors());
 
             global::MassTransit.ConsumerConvention.Register<MilesConvention>();
             configurator.UseRecordMessageDispatch(c => c.UseDispatchedRepository(new DispatchedRepository()));
-            configurator.UseMiles(container, AllClasses.FromLoadedAssemblies().GetMessageProcessors());
+            configurator.UseMiles(container, AllClasses.FromAssembliesInBasePath().GetMessageProcessors());
         }
     }
 }
