@@ -42,7 +42,6 @@
     <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\IMilesConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
-    <Compile Include="Configuration\MilesExtensions.cs" />
     <Compile Include="ConsumerConvention\IMessageProcessorConfigurator.cs" />
     <Compile Include="ConsumerConvention\IMessageProcessorMessageConfigurator.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorConfigurator.cs" />

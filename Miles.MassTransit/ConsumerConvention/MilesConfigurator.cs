@@ -22,7 +22,7 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.ConsumerConvention
 {
-    class MilesConfigurator : IMilesConfigurator
+    public class MilesConfigurator : IMilesConfigurator
     {
         #region Configurator
 

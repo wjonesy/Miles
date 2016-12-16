@@ -19,7 +19,7 @@ using Miles.MassTransit.Configuration;
 
 namespace Miles.MassTransit.Unity
 {
-    class UnityConsumerFactoryFactory : IConsumerFactoryFactory
+    public class UnityConsumerFactoryFactory : IConsumerFactoryFactory
     {
         private readonly IUnityContainer container;
 
