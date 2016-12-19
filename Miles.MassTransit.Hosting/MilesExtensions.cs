@@ -1,6 +1,7 @@
 ﻿using MassTransit.Hosting;
 using Miles.MassTransit.Configuration;
 using Miles.MassTransit.ConsumerConvention;
+using Miles.Reflection;
 using System;
 using System.Collections.Generic;
 
@@ -33,7 +34,8 @@ namespace Miles.MassTransit.Hosting
             foreach (var processor in processorTypes)
             {
                 var spec = configuration.CreateEndpointSpecification(processor, consumerFactoryFactory);
-                configurator.ReceiveEndpoint(queueNamePrefix + "_" + processor.Name, defaultConcurrencyCount, c => c.AddEndpointSpecification(spec));
+                var queueName = processor.GetQueueNameConfig().QueueName;
+                configurator.ReceiveEndpoint(queueNamePrefix + "_" + queueName, defaultConcurrencyCount, c => c.AddEndpointSpecification(spec));
             }
 
             return configurator;

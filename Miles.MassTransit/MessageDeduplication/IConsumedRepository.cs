@@ -30,7 +30,7 @@ namespace Miles.MassTransit.MessageDeduplication
         /// </summary>
         /// <param name="messageContext">The message context info.</param>
         /// <returns><c>true</c> if the message has already been processed.</returns>
-        Task<bool> RecordAsync(MessageContext messageContext);
+        Task<bool> RecordAsync(MessageContext messageContext, string queueName);
 
         /// <summary>
         /// Deletes the old incoming messages.

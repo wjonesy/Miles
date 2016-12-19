@@ -7,7 +7,8 @@ namespace Miles.Sample.Persistence.EF.Configurations.Miles.MassTransit.MessageDe
     {
         public IncomingMessageConfiguration()
         {
-            HasKey(x => x.MessageId);
+            HasKey(x => new { x.MessageId, x.QueueName });
+            Property(x => x.QueueName).HasMaxLength(128).IsRequired();
         }
     }
 }

@@ -83,6 +83,10 @@
     <Compile Include="Migrations\201609252230413_MessageRecordingChanges.Designer.cs">
       <DependentUpon>201609252230413_MessageRecordingChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201612190142036_IncomingMessageQueueName.cs" />
+    <Compile Include="Migrations\201612190142036_IncomingMessageQueueName.Designer.cs">
+      <DependentUpon>201612190142036_IncomingMessageQueueName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Access\Miles.MassTransit\MessageDeduplication\ConsumedRepository.cs" />
     <Compile Include="Access\Miles.MassTransit\MessageDeduplication\OutgoingMessageRepository.cs" />
@@ -115,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201609252230413_MessageRecordingChanges.resx">
       <DependentUpon>201609252230413_MessageRecordingChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612190142036_IncomingMessageQueueName.resx">
+      <DependentUpon>201612190142036_IncomingMessageQueueName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

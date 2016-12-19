@@ -16,9 +16,9 @@ namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.MessageDeduplicat
             this.dbContext = dbContext;
         }
 
-        public async Task<bool> RecordAsync(MessageContext context)
+        public async Task<bool> RecordAsync(MessageContext context, string queueName)
         {
-            dbContext.IncomingMessages.Add(new IncomingMessage(context.MessageId.Value, DateTime.Now));
+            dbContext.IncomingMessages.Add(new IncomingMessage(context.MessageId.Value, queueName, DateTime.Now));
 
             try
             {

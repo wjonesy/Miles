@@ -57,7 +57,7 @@ namespace Miles.MassTransit.ConsumerConvention
             if (!messageDeduplicationOverride)
             {
                 var config = GetConfig(
-                    a => new MessageDeduplicationConfigurator(a),
+                    a => new MessageDeduplicationConfigurator(typeof(TProcessor).GetQueueNameConfig(), a),
                     processMethod.GetMessageDeduplicationConfig(false),
                     defaults.MessageDeduplication,
                     typeof(TProcessor).GetMessageDeduplicationConfig(),

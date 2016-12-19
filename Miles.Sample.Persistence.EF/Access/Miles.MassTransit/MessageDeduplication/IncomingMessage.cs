@@ -18,9 +18,10 @@ namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.MessageDeduplicat
         /// </summary>
         /// <param name="messageId">The message identifier.</param>
         /// <param name="when">When the message was processed.</param>
-        public IncomingMessage(Guid messageId, DateTime when)
+        public IncomingMessage(Guid messageId, string queueName, DateTime when)
         {
             this.MessageId = messageId;
+            this.QueueName = queueName;
             this.When = when;
         }
 
@@ -31,6 +32,8 @@ namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.MessageDeduplicat
         /// The message identifier.
         /// </value>
         public Guid MessageId { get; private set; }
+
+        public string QueueName { get; private set; }
 
         /// <summary>
         /// Gets when the message was processed.

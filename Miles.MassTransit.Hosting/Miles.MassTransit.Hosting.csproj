@@ -88,6 +88,10 @@
       <Project>{BC322498-9FAA-4258-B728-ED4DE372BFE8}</Project>
       <Name>Miles.MassTransit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miles\Miles.csproj">
+      <Project>{63B7FA97-8619-4EA0-B594-71FBB10481E5}</Project>
+      <Name>Miles</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

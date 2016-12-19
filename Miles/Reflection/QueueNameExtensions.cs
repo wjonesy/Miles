@@ -13,21 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using Miles.Messaging;
+using System;
+using System.Reflection;
 
-namespace Miles.MassTransit.Configuration
+namespace Miles.Reflection
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IMessageDeduplicationConfigurator
+    public static class QueueNameExtensions
     {
         /// <summary>
-        /// Enable or disable message deduplication.
+        /// Gets the transaction context configuration for the class.
         /// </summary>
-        /// <param name="enable">if set to <c>true</c> enable.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="fallback">if set to <c>true</c> then falls back to assembly level attribute.</param>
         /// <returns></returns>
-        IMessageDeduplicationConfigurator Enable(bool enable);
+        public static QueueNameAttribute GetQueueNameConfig(this Type type, bool fallback = true)
+        {
+            var typeAttrib = type.GetCustomAttribute<QueueNameAttribute>();
+            if (typeAttrib != null)
+                return typeAttrib;
 
-        IMessageDeduplicationConfigurator QueueName(string queueName);
+            if (fallback)
+                return new QueueNameAttribute(type.Name);
+
+            return null;
+        }
     }
 }

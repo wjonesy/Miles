@@ -50,7 +50,7 @@ namespace Miles.MassTransit.ConsumerConvention
 
         public IMessageProcessorConfigurator<TProcessor> UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure = null)
         {
-            options.MessageDeduplication = new MessageDeduplicationConfigurator();
+            options.MessageDeduplication = new MessageDeduplicationConfigurator(typeof(TProcessor).GetQueueNameConfig());
             configure?.Invoke(options.MessageDeduplication);
             return this;
         }

@@ -22,10 +22,13 @@ namespace Miles.MassTransit.MessageDeduplication
 {
     class MessageDeduplicationConfigurator : IMessageDeduplicationConfigurator
     {
-        public MessageDeduplicationConfigurator(MessageDeduplicationAttribute attrib = null)
+        public MessageDeduplicationConfigurator(QueueNameAttribute queueAttrib = null, MessageDeduplicationAttribute attrib = null)
         {
             if (attrib != null)
                 Enabled = attrib.Enabled;
+
+            if (queueAttrib != null)
+                QueueName = queueAttrib.QueueName;
         }
 
         public bool Enabled { get; private set; } = true;
@@ -33,6 +36,14 @@ namespace Miles.MassTransit.MessageDeduplication
         IMessageDeduplicationConfigurator IMessageDeduplicationConfigurator.Enable(bool enable)
         {
             this.Enabled = enable;
+            return this;
+        }
+
+        public string QueueName { get; private set; }
+
+        IMessageDeduplicationConfigurator IMessageDeduplicationConfigurator.QueueName(string queueName)
+        {
+            this.QueueName = queueName;
             return this;
         }
 

@@ -33,9 +33,17 @@ namespace Miles.MassTransit.MessageDeduplication
     /// <seealso cref="global::MassTransit.Pipeline.IFilter{T}" />
     class MessageDeduplicationFilter<TContext> : IFilter<TContext> where TContext : class, ConsumeContext
     {
+        private readonly string queueName;
+
+        public MessageDeduplicationFilter(string queueName)
+        {
+            this.queueName = queueName;
+        }
+
         public void Probe(ProbeContext context)
         {
-            context.CreateFilterScope("miles-message-deduplication");
+            var filter = context.CreateFilterScope("miles-message-deduplication");
+            filter.Add("queue-name", queueName);
         }
 
         public async Task Send(TContext context, IPipe<TContext> next)
@@ -43,7 +51,7 @@ namespace Miles.MassTransit.MessageDeduplication
             var container = context.GetPayload<IServiceLocator>();
             var repository = container.GetInstance<IConsumedRepository>();
 
-            var alreadyProcessed = await repository.RecordAsync(context).ConfigureAwait(false);
+            var alreadyProcessed = await repository.RecordAsync(context, queueName).ConfigureAwait(false);
             if (!alreadyProcessed)
                 await next.Send(context).ConfigureAwait(false);
         }
