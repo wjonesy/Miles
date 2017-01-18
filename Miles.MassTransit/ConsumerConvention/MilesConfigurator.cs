@@ -13,53 +13,48 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using MassTransit;
 using Miles.MassTransit.Configuration;
-using Miles.MassTransit.MessageDeduplication;
-using Miles.MassTransit.TransactionContext;
-using System;
-using System.Collections.Generic;
 
 namespace Miles.MassTransit.ConsumerConvention
 {
     public class MilesConfigurator : IMilesConfigurator
     {
-        #region Configurator
+        //#region Configurator
 
-        private readonly MessageProcessorOptions options = new MessageProcessorOptions();
-        private readonly Dictionary<Type, IMessageProcessorConfigurator> processorConfigurators = new Dictionary<Type, IMessageProcessorConfigurator>();
+        //private readonly MessageProcessorOptions options = new MessageProcessorOptions();
+        //private readonly Dictionary<Type, IMessageProcessorConfigurator> processorConfigurators = new Dictionary<Type, IMessageProcessorConfigurator>();
 
-        IMilesConfigurator IMilesConfigurator.UseTransactionContext(Action<ITransactionContextConfigurator> configure)
-        {
-            options.TransactionContext = new TransactionContextConfigurator();
-            configure?.Invoke(options.TransactionContext);
-            return this;
-        }
+        //IMilesConfigurator IMilesConfigurator.UseTransactionContext(Action<ITransactionContextConfigurator> configure)
+        //{
+        //    options.TransactionContext = new TransactionContextConfigurator();
+        //    configure?.Invoke(options.TransactionContext);
+        //    return this;
+        //}
 
 
-        IMilesConfigurator IMilesConfigurator.UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure)
-        {
-            options.MessageDeduplication = new MessageDeduplicationConfigurator();
-            configure?.Invoke(options.MessageDeduplication);
-            return this;
-        }
+        //IMilesConfigurator IMilesConfigurator.UseMessageDeduplication(Action<IMessageDeduplicationConfigurator> configure)
+        //{
+        //    options.MessageDeduplication = new MessageDeduplicationConfigurator();
+        //    configure?.Invoke(options.MessageDeduplication);
+        //    return this;
+        //}
 
-        IMilesConfigurator IMilesConfigurator.ConfigureProcessor<TProcessor>(Action<IMessageProcessorConfigurator<TProcessor>> configure)
-        {
-            var configurator = new MessageProcessorConfigurator<TProcessor>();
-            configure.Invoke(configurator);
-            processorConfigurators[typeof(TProcessor)] = configurator;
-            return this;
-        }
+        //IMilesConfigurator IMilesConfigurator.ConfigureProcessor<TProcessor>(Action<IMessageProcessorConfigurator<TProcessor>> configure)
+        //{
+        //    var configurator = new MessageProcessorConfigurator<TProcessor>();
+        //    configure.Invoke(configurator);
+        //    processorConfigurators[typeof(TProcessor)] = configurator;
+        //    return this;
+        //}
 
-        #endregion
+        //#endregion
 
-        public IReceiveEndpointSpecification CreateEndpointSpecification(Type processorType, IConsumerFactoryFactory factory)
-        {
-            IMessageProcessorConfigurator configurator;
-            if (!processorConfigurators.TryGetValue(processorType, out configurator))
-                configurator = (IMessageProcessorConfigurator)Activator.CreateInstance(typeof(MessageProcessorConfigurator<>).MakeGenericType(processorType));
-            return configurator.CreateSpecification(factory, options);
-        }
+        //public IReceiveEndpointSpecification CreateEndpointSpecification(Type processorType, IConsumerFactoryFactory factory)
+        //{
+        //    IMessageProcessorConfigurator configurator;
+        //    if (!processorConfigurators.TryGetValue(processorType, out configurator))
+        //        configurator = (IMessageProcessorConfigurator)Activator.CreateInstance(typeof(MessageProcessorConfigurator<>).MakeGenericType(processorType));
+        //    return configurator.CreateSpecification(factory, options);
+        //}
     }
 }

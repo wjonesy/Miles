@@ -12,6 +12,7 @@
 // specific language governing permissions and limitations under the License.
 using MassTransit.ConsumeConnectors;
 using Miles.Messaging;
+using System;
 
 namespace Miles.MassTransit.ConsumerConvention
 {
@@ -21,14 +22,22 @@ namespace Miles.MassTransit.ConsumerConvention
     {
         private readonly MessageProcessorMessageFilter<TProcessor, TMessage> filter = new MessageProcessorMessageFilter<TProcessor, TMessage>();
 
-        public IConsumerMessageConnector CreateConsumerConnector()
+        public IConsumerMessageConnector<T> CreateConsumerConnector<T>() where T : class
         {
-            return new ConsumerMessageConnector<TProcessor, TMessage>(filter);
+            var result = new ConsumerMessageConnector<TProcessor, TMessage>(filter) as IConsumerMessageConnector<T>;
+            if (result == null)
+                throw new ArgumentException("The consumer type did not match the connector type");
+
+            return result;
         }
 
-        public IInstanceMessageConnector CreateInstanceConnector()
+        public IInstanceMessageConnector<T> CreateInstanceConnector<T>() where T : class
         {
-            return new InstanceMessageConnector<TProcessor, TMessage>(filter);
+            var result = new InstanceMessageConnector<TProcessor, TMessage>(filter) as IInstanceMessageConnector<T>;
+            if (result == null)
+                throw new ArgumentException("The consumer type did not match the connector type");
+
+            return result;
         }
     }
 }

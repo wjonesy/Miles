@@ -38,12 +38,10 @@
     <Compile Include="ActivityContext.cs" />
     <Compile Include="Configuration\IConsumerFactoryFactory.cs" />
     <Compile Include="Configuration\IMessageDeduplicationConfigurator.cs" />
-    <Compile Include="Configuration\IMessageProcessorMessageConfigurator.cs" />
-    <Compile Include="Configuration\IMessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\IMilesConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
-    <Compile Include="ConsumerConvention\IMessageProcessorConfigurator.cs" />
-    <Compile Include="ConsumerConvention\IMessageProcessorMessageConfigurator.cs" />
+    <Compile Include="Configuration\MessageProcessorExtensions.cs" />
+    <Compile Include="Configuration\MilesExtensions.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorConfigurator.cs" />
     <Compile Include="Configuration\MilesConvention.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
@@ -51,14 +49,10 @@
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorConnectorFactory.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorMessageConfigurator.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorMessageConvention.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorInterfaceType.cs" />
     <Compile Include="ConsumerConvention\MessageProcessorMessageFilter.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorOptions.cs" />
     <Compile Include="ConsumerConvention\MilesConfigurator.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorSpecification.cs" />
-    <Compile Include="ConsumerConvention\SpecificationProxy.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
@@ -89,16 +83,20 @@
     <Compile Include="TransactionContext\TransactionContextSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MassTransit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
-      <HintPath>..\packages\MassTransit.3.4.1\lib\net452\MassTransit.dll</HintPath>
+    <Reference Include="GreenPipes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">
+      <HintPath>..\packages\GreenPipes.1.0.9\lib\net452\GreenPipes.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MassTransit, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\MassTransit.3.5.4\lib\net452\MassTransit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NewId, Version=2.1.3.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
-      <HintPath>..\packages\NewId.2.1.3\lib\net45\NewId.dll</HintPath>
+    <Reference Include="NewId, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\NewId.3.0.0\lib\net452\NewId.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

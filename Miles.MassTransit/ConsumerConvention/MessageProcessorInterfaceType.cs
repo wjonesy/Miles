@@ -25,14 +25,14 @@ namespace Miles.MassTransit.ConsumerConvention
 
         public Type MessageType => typeof(TMessage);
 
-        public IConsumerMessageConnector GetConsumerConnector()
+        public IConsumerMessageConnector<T> GetConsumerConnector<T>() where T : class
         {
-            return consumeConnectorFactory.Value.CreateConsumerConnector();
+            return consumeConnectorFactory.Value.CreateConsumerConnector<T>();
         }
 
-        public IInstanceMessageConnector GetInstanceConnector()
+        public IInstanceMessageConnector<T> GetInstanceConnector<T>() where T : class
         {
-            return consumeConnectorFactory.Value.CreateInstanceConnector();
+            return consumeConnectorFactory.Value.CreateInstanceConnector<T>();
         }
     }
 }
