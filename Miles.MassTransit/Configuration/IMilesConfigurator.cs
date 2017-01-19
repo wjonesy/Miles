@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 namespace Miles.MassTransit.Configuration
 {
     /// <summary>

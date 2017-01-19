@@ -41,6 +41,7 @@
     <Compile Include="Messaging\IEventPublisher.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="Messaging\ICommandPublisher.cs" />
+    <Compile Include="Messaging\IgnoreProcessorAttribute.cs" />
     <Compile Include="Messaging\IMessageProcessor.cs" />
     <Compile Include="IHook.cs" />
     <Compile Include="ITime.cs" />
