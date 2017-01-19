@@ -19,6 +19,8 @@ namespace Miles.MassTransit.ConsumerConvention
 {
     public class MilesConfigurator : IMilesConfigurator
     {
+        public string QueueNamePrefix { get; set; }
+
         //#region Configurator
 
         //private readonly MessageProcessorOptions options = new MessageProcessorOptions();

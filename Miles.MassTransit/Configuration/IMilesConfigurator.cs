@@ -22,6 +22,8 @@ namespace Miles.MassTransit.Configuration
     /// </summary>
     public interface IMilesConfigurator
     {
+        string QueueNamePrefix { set; }
+
         ///// <summary>
         ///// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
         ///// 
