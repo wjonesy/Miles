@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
+using GreenPipes;
 using MassTransit;
 using Miles.MassTransit.Configuration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-    class MessageDeduplicationConfigurator : IMessageDeduplicationConfigurator
+    class MessageDeduplicationConfigurator<TContext> : IMessageDeduplicationConfigurator, IPipeSpecification<TContext> where TContext : class, ConsumeContext
     {
         public string QueueName { get; set; }
 
-        public MessageDeduplicationSpecification<TContext> CreateSpecification<TContext>()
-            where TContext : class, ConsumeContext
+        IEnumerable<ValidationResult> ISpecification.Validate()
         {
-            return new MessageDeduplicationSpecification<TContext>(this);
+            return Enumerable.Empty<ValidationResult>();
+        }
+
+        void IPipeSpecification<TContext>.Apply(IPipeBuilder<TContext> builder)
+        {
+            builder.AddFilter(new MessageDeduplicationFilter<TContext>(QueueName));
         }
     }
 }

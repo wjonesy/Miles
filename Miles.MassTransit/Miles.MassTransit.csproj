@@ -59,7 +59,6 @@
     <Compile Include="RecordMessageDispatch\IDispatchedRepository.cs" />
     <Compile Include="MessageDeduplication\IDeleteOldConsumedRecordsCommand.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationFilter.cs" />
-    <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
     <Compile Include="MessageDeduplication\OutgoingMessage.cs" />
     <Compile Include="MessageDeduplication\IOutgoingMessageRepository.cs" />
     <Compile Include="MessageDispatch\OutgoingMessageForDispatch.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="TransactionContext\TransactionalMessagePublisher.cs" />
     <Compile Include="TransactionContext\TransactionContextFilter.cs" />
     <Compile Include="TransactionContext\TransactionContextConfigurator.cs" />
-    <Compile Include="TransactionContext\TransactionContextSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GreenPipes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">

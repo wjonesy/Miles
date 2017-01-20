@@ -37,10 +37,10 @@ namespace Miles.MassTransit.Configuration
             where TConsumer : class
             where TMessage : class
         {
-            var config = new TransactionContextConfigurator();
-            configure?.Invoke(config);
+            var spec = new TransactionContextConfigurator<ConsumerConsumeContext<TConsumer, TMessage>>();
+            configure?.Invoke(spec);
 
-            configurator.AddPipeSpecification(config.CreateSpecification<ConsumerConsumeContext<TConsumer, TMessage>>());
+            configurator.AddPipeSpecification(spec);
         }
     }
 }

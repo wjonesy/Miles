@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using GreenPipes;
 using MassTransit;
 using Miles.MassTransit.Configuration;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Miles.MassTransit.TransactionContext
 {
-    class TransactionContextConfigurator : ITransactionContextConfigurator
+    class TransactionContextConfigurator<TContext> : ITransactionContextConfigurator, IPipeSpecification<TContext> where TContext : class, ConsumeContext
     {
-        #region Configurator
-
         public IsolationLevel? HintIsolationLevel { get; set; }
 
-        #endregion
-
-        public TransactionContextSpecification<TContext> CreateSpecification<TContext>()
-            where TContext : class, ConsumeContext
+        public IEnumerable<ValidationResult> Validate()
         {
-            return new TransactionContextSpecification<TContext>(this);
+            return Enumerable.Empty<ValidationResult>();
+        }
+
+        public void Apply(IPipeBuilder<TContext> builder)
+        {
+            builder.AddFilter(new TransactionContextFilter<TContext>(HintIsolationLevel));
         }
     }
 }

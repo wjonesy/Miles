@@ -45,9 +45,8 @@ namespace Miles.MassTransit.Configuration
             where TConsumer : class
             where TMessage : class
         {
-            var config = new MessageDeduplicationConfigurator();
-            configure?.Invoke(config);
-            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer, TMessage>>(config);
+            var spec = new MessageDeduplicationConfigurator<ConsumerConsumeContext<TConsumer, TMessage>>();
+            configure?.Invoke(spec);
             configurator.AddPipeSpecification(spec);
         }
     }
