@@ -36,23 +36,12 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
-    <Compile Include="Configuration\IConsumerFactoryFactory.cs" />
     <Compile Include="Configuration\IMessageDeduplicationConfigurator.cs" />
-    <Compile Include="Configuration\IMilesConfigurator.cs" />
     <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
-    <Compile Include="Configuration\MessageProcessorExtensions.cs" />
-    <Compile Include="Configuration\MilesExtensions.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorConfigurator.cs" />
-    <Compile Include="Configuration\MilesConvention.cs" />
     <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
     <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorConnectorFactory.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorMessageConvention.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorInterfaceType.cs" />
-    <Compile Include="ConsumerConvention\MessageProcessorMessageFilter.cs" />
-    <Compile Include="ConsumerConvention\MilesConfigurator.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />

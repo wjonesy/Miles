@@ -134,44 +134,44 @@ namespace Miles.UnitTests.MassTransit.TransactionContext
             A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustNotHaveHappened();
         }
 
-        [Test]
-        public async Task Register_ProcessorsExecutedPriorToDatabaseCommit_WhenTransactionAreCommitted()
-        {
-            // Arrange
-            var eventType = new EventType();
-            var commandType = new CommandType();
+        //[Test]
+        //public async Task Register_ProcessorsExecutedPriorToDatabaseCommit_WhenTransactionAreCommitted()
+        //{
+        //    // Arrange
+        //    var eventType = new EventType();
+        //    var commandType = new CommandType();
 
-            var fakeTransactionContext = CreateTransactionContext();
-            var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
-            var fakeActivityContext = CreateActivityContext();
-            var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
+        //    var fakeTransactionContext = CreateTransactionContext();
+        //    var fakeOutgoingRepo = A.Fake<IOutgoingMessageRepository>();
+        //    var fakeActivityContext = CreateActivityContext();
+        //    var fakeMessageDispatchProcess = A.Fake<IMessageDispatchProcess>();
 
-            var fakeEventProcessor = A.Fake<IMessageProcessor<EventType>>();
-            var fakeCommandProcessor = A.Fake<IMessageProcessor<CommandType>>();
+        //    var fakeEventProcessor = A.Fake<IMessageProcessor<EventType>>();
+        //    var fakeCommandProcessor = A.Fake<IMessageProcessor<CommandType>>();
 
-            var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
+        //    var publisher = new TransactionalMessagePublisher(fakeTransactionContext, fakeOutgoingRepo, new Time(), fakeActivityContext, fakeMessageDispatchProcess);
 
-            // Act
-            using (var transaction = await fakeTransactionContext.BeginAsync(new IsolationLevel?()))
-            {
-                ((IEventPublisher)publisher).Register(fakeEventProcessor);
-                ((ICommandPublisher)publisher).Register(fakeCommandProcessor);
+        //    // Act
+        //    using (var transaction = await fakeTransactionContext.BeginAsync(new IsolationLevel?()))
+        //    {
+        //        ((IEventPublisher)publisher).Register(fakeEventProcessor);
+        //        ((ICommandPublisher)publisher).Register(fakeCommandProcessor);
 
-                ((IEventPublisher)publisher).Publish(eventType);
-                ((ICommandPublisher)publisher).Publish(commandType);
+        //        ((IEventPublisher)publisher).Publish(eventType);
+        //        ((ICommandPublisher)publisher).Publish(commandType);
 
-                await transaction.CommitAsync();
-            }
+        //        await transaction.CommitAsync();
+        //    }
 
-            // Assert
-            A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened().Then(
-                A.CallTo(() => fakeEventProcessor.ProcessAsync(A<EventType>.Ignored)).MustHaveHappened()).Then(
-                A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
+        //    // Assert
+        //    A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened().Then(
+        //        A.CallTo(() => fakeEventProcessor.ProcessAsync(A<EventType>.Ignored)).MustHaveHappened()).Then(
+        //        A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
 
-            A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened().Then(
-                A.CallTo(() => fakeCommandProcessor.ProcessAsync(A<CommandType>.Ignored)).MustHaveHappened()).Then(
-                A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
-        }
+        //    A.CallTo(() => fakeOutgoingRepo.SaveAsync(A<IEnumerable<OutgoingMessage>>.Ignored)).MustHaveHappened().Then(
+        //        A.CallTo(() => fakeCommandProcessor.ProcessAsync(A<CommandType>.Ignored)).MustHaveHappened()).Then(
+        //        A.CallTo(() => fakeMessageDispatchProcess.ExecuteAsync(A<IEnumerable<OutgoingMessageForDispatch>>.Ignored)).MustHaveHappened());
+        //}
 
         private ITransactionContext CreateTransactionContext(bool failCommit = false)
         {

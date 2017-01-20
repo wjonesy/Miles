@@ -37,8 +37,7 @@ namespace Miles.MassTransit.TransactionContext
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            if (configuration.Enabled)
-                builder.AddFilter(new TransactionContextFilter<TContext>(configuration.HintIsolationLevel));
+            builder.AddFilter(new TransactionContextFilter<TContext>(configuration.HintIsolationLevel));
         }
     }
 }

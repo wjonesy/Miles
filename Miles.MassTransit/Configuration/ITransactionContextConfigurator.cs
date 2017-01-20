@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.Persistence;
 using System.Data;
 
 namespace Miles.MassTransit.Configuration
@@ -24,19 +23,11 @@ namespace Miles.MassTransit.Configuration
     public interface ITransactionContextConfigurator
     {
         /// <summary>
-        /// Enables or disables <see cref="ITransactionContext"/>.
-        /// </summary>
-        /// <param name="enable">if set to <c>true</c> [enable].</param>
-        /// <returns></returns>
-        ITransactionContextConfigurator Enable(bool enable);
-
-        /// <summary>
         /// Sets a hint for what level of isolation the transaction context should use.
         /// This is only a hint since implementations might not have a concept of isolation levels or 
         /// only the first transaction in the context governs the isolation level so the rest follow.
         /// </summary>
-        /// <param name="isolationLevel">The isolation level.</param>
         /// <returns></returns>
-        ITransactionContextConfigurator HintIsolationLevel(IsolationLevel? isolationLevel);
+        IsolationLevel? HintIsolationLevel { set; }
     }
 }

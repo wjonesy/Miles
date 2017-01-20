@@ -29,13 +29,7 @@ namespace Miles.MassTransit.RecordMessageDispatch
     class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>, IRecordMessageDispatchConfigurator
         where TContext : class, SendContext
     {
-        public IDispatchedRepository DispatchedRepository { get; private set; }
-
-        public IRecordMessageDispatchConfigurator UseDispatchedRepository(IDispatchedRepository repository)
-        {
-            this.DispatchedRepository = repository;
-            return this;
-        }
+        public IDispatchedRepository DispatchedRepository { get; set; }
 
         public IEnumerable<ValidationResult> Validate()
         {

@@ -19,7 +19,6 @@ using Miles.MassTransit.MessageDispatch;
 using Miles.Messaging;
 using Miles.Persistence;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,10 +76,10 @@ namespace Miles.MassTransit.TransactionContext
 
         #region IEventPublisher
 
-        void IEventPublisher.Register<TEvent>(IMessageProcessor<TEvent> evt)
-        {
-            publisherStack.Peek().Register(evt);
-        }
+        //void IEventPublisher.Register<TEvent>(IMessageProcessor<TEvent> evt)
+        //{
+        //    publisherStack.Peek().Register(evt);
+        //}
 
         void IEventPublisher.Publish<TEvent>(TEvent evt)
         {
@@ -91,10 +90,10 @@ namespace Miles.MassTransit.TransactionContext
 
         #region ICommandPublisher
 
-        void ICommandPublisher.Register<TCommand>(IMessageProcessor<TCommand> cmd)
-        {
-            publisherStack.Peek().Register(cmd);
-        }
+        //void ICommandPublisher.Register<TCommand>(IMessageProcessor<TCommand> cmd)
+        //{
+        //    publisherStack.Peek().Register(cmd);
+        //}
 
         void ICommandPublisher.Publish<TCommand>(TCommand cmd)
         {
@@ -113,26 +112,26 @@ namespace Miles.MassTransit.TransactionContext
         {
             private readonly TransactionalMessagePublisher publicPublisher;
             private List<OutgoingMessageForDispatch> pendingSaveMessages = new List<OutgoingMessageForDispatch>();
-            private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageProcessors = new Dictionary<Type, List<IObjectMessageProcessor>>();
+            //private readonly Dictionary<Type, List<IObjectMessageProcessor>> immediateMessageProcessors = new Dictionary<Type, List<IObjectMessageProcessor>>();
 
             public PublisherStackInstance(TransactionalMessagePublisher publisher)
             {
                 this.publicPublisher = publisher;
             }
 
-            public void Register<TMessage>(IMessageProcessor<TMessage> messageHandler) where TMessage : class
-            {
-                var messageType = typeof(TMessage);
+            //public void Register<TMessage>(IMessageProcessor<TMessage> messageHandler) where TMessage : class
+            //{
+            //    var messageType = typeof(TMessage);
 
-                List<IObjectMessageProcessor> processors;
-                if (!immediateMessageProcessors.TryGetValue(messageType, out processors))
-                {
-                    processors = new List<IObjectMessageProcessor>();
-                    immediateMessageProcessors.Add(messageType, processors);
-                }
+            //    List<IObjectMessageProcessor> processors;
+            //    if (!immediateMessageProcessors.TryGetValue(messageType, out processors))
+            //    {
+            //        processors = new List<IObjectMessageProcessor>();
+            //        immediateMessageProcessors.Add(messageType, processors);
+            //    }
 
-                processors.Add(new ObjectToGenericMessageProcessor<TMessage>(messageHandler));
-            }
+            //    processors.Add(new ObjectToGenericMessageProcessor<TMessage>(messageHandler));
+            //}
 
             public void Publish<TMessage>(OutgoingMessageConceptType type, TMessage msg)
             {
@@ -159,49 +158,49 @@ namespace Miles.MassTransit.TransactionContext
                 publicPublisher.pendingDispatchMessages.AddRange(processingMessages);
 
                 // Execute any immediate message processors so they are within the transaction
-                foreach (var message in processingMessages)
-                {
-                    List<IObjectMessageProcessor> processors;
-                    if (immediateMessageProcessors.TryGetValue(message.MessageType, out processors))
-                    {
-                        foreach (var processor in processors)
-                        {
-                            // lets get recursive
-                            publicPublisher.publisherStack.Push(new PublisherStackInstance(publicPublisher));
-                            try
-                            {
-                                await processor.Process(message.MessageObject).ConfigureAwait(false);
-                            }
-                            finally
-                            {
-                                // and recurse out
-                                publicPublisher.publisherStack.Pop();
-                            }
-                        }
-                    }
-                }
+                //foreach (var message in processingMessages)
+                //{
+                //    List<IObjectMessageProcessor> processors;
+                //    if (immediateMessageProcessors.TryGetValue(message.MessageType, out processors))
+                //    {
+                //        foreach (var processor in processors)
+                //        {
+                //            // lets get recursive
+                //            publicPublisher.publisherStack.Push(new PublisherStackInstance(publicPublisher));
+                //            try
+                //            {
+                //                await processor.Process(message.MessageObject).ConfigureAwait(false);
+                //            }
+                //            finally
+                //            {
+                //                // and recurse out
+                //                publicPublisher.publisherStack.Pop();
+                //            }
+                //        }
+                //    }
+                //}
             }
 
-            private interface IObjectMessageProcessor
-            {
-                Task Process(object message);
-            }
+            //private interface IObjectMessageProcessor
+            //{
+            //    Task Process(object message);
+            //}
 
-            // Allows us to return the message reference to the real type reference ready for calling the processor
-            private class ObjectToGenericMessageProcessor<TMessage> : IObjectMessageProcessor
-            {
-                private readonly IMessageProcessor<TMessage> processor;
+            //// Allows us to return the message reference to the real type reference ready for calling the processor
+            //private class ObjectToGenericMessageProcessor<TMessage> : IObjectMessageProcessor
+            //{
+            //    private readonly IMessageProcessor<TMessage> processor;
 
-                public ObjectToGenericMessageProcessor(IMessageProcessor<TMessage> processor)
-                {
-                    this.processor = processor;
-                }
+            //    public ObjectToGenericMessageProcessor(IMessageProcessor<TMessage> processor)
+            //    {
+            //        this.processor = processor;
+            //    }
 
-                public Task Process(object message)
-                {
-                    return processor.ProcessAsync((TMessage)message);
-                }
-            }
+            //    public Task Process(object message)
+            //    {
+            //        return processor.ProcessAsync((TMessage)message);
+            //    }
+            //}
         }
 
         #endregion

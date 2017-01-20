@@ -28,7 +28,7 @@ namespace Miles.Messaging
         /// </summary>
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="processor">The message processor.</param>
-        void Register<TEvent>(IMessageProcessor<TEvent> processor) where TEvent : class;
+        //void Register<TEvent>(IMessageProcessor<TEvent> processor) where TEvent : class;
 
         /// <summary>
         /// Publishes the specified event.
@@ -49,9 +49,9 @@ namespace Miles.Messaging
         /// <typeparam name="TEvent">The type of the event.</typeparam>
         /// <param name="eventPublisher">The event publisher.</param>
         /// <param name="handler">The event handler.</param>
-        public static void Register<TEvent>(this IEventPublisher eventPublisher, Func<TEvent, Task> handler) where TEvent : class
-        {
-            eventPublisher.Register(new CallbackMessageProcessor<TEvent>(handler));
-        }
+        //public static void Register<TEvent>(this IEventPublisher eventPublisher, Func<TEvent, Task> handler) where TEvent : class
+        //{
+        //    eventPublisher.Register(new CallbackMessageProcessor<TEvent>(handler));
+        //}
     }
 }

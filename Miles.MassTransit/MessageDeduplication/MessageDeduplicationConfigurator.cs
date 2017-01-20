@@ -16,36 +16,12 @@
 
 using MassTransit;
 using Miles.MassTransit.Configuration;
-using Miles.Messaging;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
     class MessageDeduplicationConfigurator : IMessageDeduplicationConfigurator
     {
-        public MessageDeduplicationConfigurator(QueueNameAttribute queueAttrib = null, MessageDeduplicationAttribute attrib = null)
-        {
-            if (attrib != null)
-                Enabled = attrib.Enabled;
-
-            if (queueAttrib != null)
-                QueueName = queueAttrib.QueueName;
-        }
-
-        public bool Enabled { get; private set; } = true;
-
-        IMessageDeduplicationConfigurator IMessageDeduplicationConfigurator.Enable(bool enable)
-        {
-            this.Enabled = enable;
-            return this;
-        }
-
-        public string QueueName { get; private set; }
-
-        IMessageDeduplicationConfigurator IMessageDeduplicationConfigurator.QueueName(string queueName)
-        {
-            this.QueueName = queueName;
-            return this;
-        }
+        public string QueueName { get; set; }
 
         public MessageDeduplicationSpecification<TContext> CreateSpecification<TContext>()
             where TContext : class, ConsumeContext

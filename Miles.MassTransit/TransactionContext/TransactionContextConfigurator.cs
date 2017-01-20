@@ -15,7 +15,6 @@
  */
 using MassTransit;
 using Miles.MassTransit.Configuration;
-using Miles.Messaging;
 using System.Data;
 
 namespace Miles.MassTransit.TransactionContext
@@ -24,30 +23,7 @@ namespace Miles.MassTransit.TransactionContext
     {
         #region Configurator
 
-        public TransactionContextConfigurator(TransactionContextAttribute attrib = null)
-        {
-            if (attrib != null)
-            {
-                Enabled = attrib.Enabled;
-                HintIsolationLevel = attrib.HintIsolationLevel;
-            }
-        }
-
-        public bool Enabled { get; private set; } = true;
-
-        public IsolationLevel? HintIsolationLevel { get; private set; }
-
-        ITransactionContextConfigurator ITransactionContextConfigurator.Enable(bool enable)
-        {
-            Enabled = enable;
-            return this;
-        }
-
-        ITransactionContextConfigurator ITransactionContextConfigurator.HintIsolationLevel(IsolationLevel? isolationLevel)
-        {
-            HintIsolationLevel = isolationLevel;
-            return this;
-        }
+        public IsolationLevel? HintIsolationLevel { get; set; }
 
         #endregion
 

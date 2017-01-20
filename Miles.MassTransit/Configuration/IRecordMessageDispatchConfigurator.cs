@@ -25,8 +25,7 @@ namespace Miles.MassTransit.Configuration
         /// <summary>
         /// Provide the <see cref="IDispatchedRepository"/> instance for recording message dispatch. 
         /// </summary>
-        /// <param name="repository">The repository.</param>
         /// <returns></returns>
-        IRecordMessageDispatchConfigurator UseDispatchedRepository(IDispatchedRepository repository);
+        IDispatchedRepository DispatchedRepository { set; }
     }
 }

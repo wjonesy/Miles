@@ -41,21 +41,13 @@
     <Compile Include="Messaging\IEventPublisher.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="Messaging\ICommandPublisher.cs" />
-    <Compile Include="Messaging\IgnoreProcessorAttribute.cs" />
-    <Compile Include="Messaging\IMessageProcessor.cs" />
     <Compile Include="IHook.cs" />
     <Compile Include="ITime.cs" />
-    <Compile Include="Messaging\MessageDeduplicationAttribute.cs" />
-    <Compile Include="Messaging\QueueNameAttribute.cs" />
     <Compile Include="Persistence\TransactionContextAttribute.cs" />
     <Compile Include="Persistence\ITransaction.cs" />
     <Compile Include="Persistence\ITransactionContext.cs" />
     <Compile Include="Persistence\SimulateNestedTransactionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\QueueNameExtensions.cs" />
-    <Compile Include="Reflection\TransactionContextExtensions.cs" />
-    <Compile Include="Reflection\MessageDeduplicationExtensions.cs" />
-    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>
   <ItemGroup>

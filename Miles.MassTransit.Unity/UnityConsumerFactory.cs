@@ -12,7 +12,6 @@
 // specific language governing permissions and limitations under the License.
 using GreenPipes;
 using MassTransit;
-using MassTransit.Pipeline;
 using MassTransit.Util;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
@@ -26,7 +25,7 @@ namespace Miles.MassTransit.Unity
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="global::MassTransit.IConsumerFactory{TConsumer}" />
-    class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
+    public class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
     {
         readonly IUnityContainer container;
 

@@ -30,7 +30,7 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static TConfigurator UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+        public static void UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
             where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
         {
             var spec = new RecordMessageDispatchSpecification<SendContext>();
@@ -38,7 +38,6 @@ namespace Miles.MassTransit.Configuration
 
             configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
             configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
-            return configurator;
         }
 
         /// <summary>
@@ -47,13 +46,12 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static ISendPipeConfigurator UseRecordMessageDispatch(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+        public static void UseRecordMessageDispatch(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
         {
             var spec = new RecordMessageDispatchSpecification<SendContext>();
             configure.Invoke(spec);
 
             configurator.AddPipeSpecification(spec);
-            return configurator;
         }
 
         /// <summary>
@@ -62,14 +60,13 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static ISendPipeConfigurator UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+        public static void UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
             where TMessage : class
         {
             var spec = new RecordMessageDispatchSpecification<SendContext<TMessage>>();
             configure.Invoke(spec);
 
             configurator.AddPipeSpecification(spec);
-            return configurator;
         }
     }
 }

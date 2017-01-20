@@ -36,8 +36,7 @@ namespace Miles.MassTransit.MessageDeduplication
 
         public void Apply(IPipeBuilder<TContext> builder)
         {
-            if (config.Enabled)
-                builder.AddFilter(new MessageDeduplicationFilter<TContext>(config.QueueName));
+            builder.AddFilter(new MessageDeduplicationFilter<TContext>(config.QueueName));
         }
     }
 }

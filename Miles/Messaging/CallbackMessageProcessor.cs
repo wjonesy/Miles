@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
-using System.Threading.Tasks;
 
 namespace Miles.Messaging
 {
-    class CallbackMessageProcessor<TEvent> : IMessageProcessor<TEvent> where TEvent : class
-    {
-        private readonly Func<TEvent, Task> callback;
+    //class CallbackMessageProcessor<TEvent> : IMessageProcessor<TEvent> where TEvent : class
+    //{
+    //    private readonly Func<TEvent, Task> callback;
 
-        public CallbackMessageProcessor(Func<TEvent, Task> callback)
-        {
-            this.callback = callback;
-        }
+    //    public CallbackMessageProcessor(Func<TEvent, Task> callback)
+    //    {
+    //        this.callback = callback;
+    //    }
 
-        public Task ProcessAsync(TEvent message)
-        {
-            return callback(message);
-        }
-    }
+    //    public Task ProcessAsync(TEvent message)
+    //    {
+    //        return callback(message);
+    //    }
+    //}
 }

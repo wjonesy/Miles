@@ -33,31 +33,14 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static IPipeConfigurator<ConsumerConsumeContext<TConsumer>> UseTransactionContext<TConsumer>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer>> configurator, Action<ITransactionContextConfigurator> configure = null)
+        public static void UseTransactionContext<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TConsumer : class
-        {
-            var config = new TransactionContextConfigurator();
-            configure?.Invoke(config);
-
-            configurator.AddPipeSpecification(config.CreateSpecification<ConsumerConsumeContext<TConsumer>>());
-            return configurator;
-        }
-
-        /// <summary>
-        /// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
-        /// </summary>
-        /// <typeparam name="TMessage">The type of the consumer.</typeparam>
-        /// <param name="configurator">The configurator.</param>
-        /// <param name="configure">The callback to configure the message pipeline</param>
-        /// <returns></returns>
-        public static IPipeConfigurator<ConsumeContext<TMessage>> UseTransactionContext<TMessage>(this IPipeConfigurator<ConsumeContext<TMessage>> configurator, Action<ITransactionContextConfigurator> configure = null)
             where TMessage : class
         {
             var config = new TransactionContextConfigurator();
             configure?.Invoke(config);
 
-            configurator.AddPipeSpecification(config.CreateSpecification<ConsumeContext<TMessage>>());
-            return configurator;
+            configurator.AddPipeSpecification(config.CreateSpecification<ConsumerConsumeContext<TConsumer, TMessage>>());
         }
     }
 }
