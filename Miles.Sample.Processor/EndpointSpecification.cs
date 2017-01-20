@@ -1,14 +1,20 @@
 namespace Miles.Sample.Processor
 {
+    using Application;
+    using Domain.Command.Fixtures;
+    using global::MassTransit;
+    using global::MassTransit.Hosting;
+    using Infrastructure.Unity;
+    using MassTransit.Configuration;
+    using MassTransit.Unity;
+    using Microsoft.Practices.Unity;
+    using Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch;
     using System;
-    using MassTransit;
-    using MassTransit.Hosting;
 
     /// <summary>
     /// Configures an endpoint for the assembly
     /// </summary>
-    public class EndpointSpecification :
-        IEndpointSpecification
+    public class EndpointSpecification : IEndpointSpecification
     {
         /// <summary>
         /// The default queue name for the endpoint, which can be overridden in the .config 
@@ -16,7 +22,7 @@ namespace Miles.Sample.Processor
         /// </summary>
         public string QueueName
         {
-            get { return "endpoint-queue-name"; }
+            get { return "Miles.Sample"; }
         }
 
         /// <summary>
@@ -34,6 +40,17 @@ namespace Miles.Sample.Processor
         public void Configure(IReceiveEndpointConfigurator configurator)
         {
             // message consumers, middleware, etc. are configured here
+            var container = new UnityContainer().ConfigureSample(t => new HierarchicalLifetimeManager());
+
+            configurator.UseRecordMessageDispatch(c => c.DispatchedRepository = new DispatchedRepository());
+            configurator.Consumer<FixtureFinishedProcessor>(new UnityConsumerFactory<FixtureFinishedProcessor>(container), c =>
+            {
+                c.ConsumerMessage<FixtureFinished>(m =>
+                {
+                    m.UseTransactionContext();
+                    m.UseMessageDeduplication(d => d.QueueName = "Miles.Sample");
+                });
+            });
         }
     }
 }

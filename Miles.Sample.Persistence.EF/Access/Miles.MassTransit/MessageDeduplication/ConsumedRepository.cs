@@ -25,7 +25,7 @@ namespace Miles.Sample.Persistence.EF.Access.Miles.MassTransit.MessageDeduplicat
                 await dbContext.SaveChangesAsync();
                 return false;
             }
-            catch
+            catch(Exception ex)
             {
                 return true;
             }

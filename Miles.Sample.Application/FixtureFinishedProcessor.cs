@@ -1,4 +1,4 @@
-﻿using Miles.Messaging;
+﻿using MassTransit;
 using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Leagues;
 using Miles.Sample.Domain.Command.Teams;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Miles.Sample.Application
 {
-    public class FixtureFinishedProcessor : IMessageProcessor<FixtureFinished>
+    public class FixtureFinishedProcessor : IConsumer<FixtureFinished>
     {
         private readonly ILeagueRepository leagueRepository;
 
@@ -17,15 +17,15 @@ namespace Miles.Sample.Application
             this.leagueRepository = leagueRepository;
         }
 
-        public async Task ProcessAsync(FixtureFinished message)
+        async Task IConsumer<FixtureFinished>.Consume(ConsumeContext<FixtureFinished> context)
         {
-            var teamA = TeamAbbreviation.Parse(message.TeamA.Abbreviation);
-            var teamB = TeamAbbreviation.Parse(message.TeamB.Abbreviation);
-            var leagueAbbr = LeagueAbbreviation.Parse(message.League);
+            var teamA = TeamAbbreviation.Parse(context.Message.TeamA.Abbreviation);
+            var teamB = TeamAbbreviation.Parse(context.Message.TeamB.Abbreviation);
+            var leagueAbbr = LeagueAbbreviation.Parse(context.Message.League);
             var league = await leagueRepository.GetByAbbreviationAsync(leagueAbbr);
-            var result = (FixtureResults)Enum.ToObject(typeof(FixtureResults), message.Result);
+            var result = (FixtureResults)Enum.ToObject(typeof(FixtureResults), context.Message.Result);
 
-            league.RecordResult(result, teamA, message.TeamA.Points, teamB, message.TeamB.Points);
+            league.RecordResult(result, teamA, context.Message.TeamA.Points, teamB, context.Message.TeamB.Points);
             await leagueRepository.SaveAsync(league);
         }
     }

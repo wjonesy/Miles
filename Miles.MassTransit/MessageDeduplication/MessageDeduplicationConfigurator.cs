@@ -18,7 +18,6 @@ using GreenPipes;
 using MassTransit;
 using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
@@ -28,7 +27,8 @@ namespace Miles.MassTransit.MessageDeduplication
 
         IEnumerable<ValidationResult> ISpecification.Validate()
         {
-            return Enumerable.Empty<ValidationResult>();
+            if (string.IsNullOrWhiteSpace(QueueName))
+                yield return new ConfigurationValidationResult(ValidationResultDisposition.Failure, "QueueName", "Cannot be null or whitespace", QueueName);
         }
 
         void IPipeSpecification<TContext>.Apply(IPipeBuilder<TContext> builder)
