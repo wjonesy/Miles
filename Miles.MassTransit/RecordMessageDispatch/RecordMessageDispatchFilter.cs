@@ -15,6 +15,7 @@
  */
 using GreenPipes;
 using MassTransit;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.RecordMessageDispatch
@@ -38,6 +39,7 @@ namespace Miles.MassTransit.RecordMessageDispatch
             context.CreateFilterScope("miles-record-message-dispatch");
         }
 
+        [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             await next.Send(context).ConfigureAwait(false);

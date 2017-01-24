@@ -17,6 +17,7 @@ using GreenPipes;
 using MassTransit;
 using Microsoft.Practices.ServiceLocation;
 using Miles.Persistence;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDeduplication
@@ -46,6 +47,7 @@ namespace Miles.MassTransit.MessageDeduplication
             filter.Add("queue-name", queueName);
         }
 
+        [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             var container = context.GetPayload<IServiceLocator>();

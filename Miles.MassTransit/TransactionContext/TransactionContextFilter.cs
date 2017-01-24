@@ -18,6 +18,7 @@ using MassTransit;
 using Microsoft.Practices.ServiceLocation;
 using Miles.Persistence;
 using System.Data;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.TransactionContext
@@ -42,6 +43,7 @@ namespace Miles.MassTransit.TransactionContext
             scope.Add("HintIsolationLevel", hintIsolationLevel);
         }
 
+        [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             // Retrive container controlled instance
