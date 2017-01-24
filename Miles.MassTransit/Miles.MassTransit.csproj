@@ -42,9 +42,13 @@
     <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
+    <Compile Include="Courier\CourierHostConfiguratorExtensions.cs" />
+    <Compile Include="Courier\QueueNameGenerateExtensions.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
+    <Compile Include="QueueAffixesAttribute.cs" />
+    <Compile Include="QueueNameAttribute.cs" />
     <Compile Include="RecordMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />
     <Compile Include="RecordMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchFilter.cs" />
