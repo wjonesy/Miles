@@ -20,19 +20,49 @@ namespace Miles.MassTransit.Hosting
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TLog).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, c => c.CompensateActivityHost<TActivity, TLog>())));
+                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(ac))));
+        }
+
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TActivity> controllerFactory, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>, new()
+            where TLog : class
+        {
+            configure = configure ?? (r => r.Activity());
+            configurator.ReceiveEndpoint(
+                typeof(TLog).GenerateExecutionQueueName(),
+                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
+        }
+
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TLog, TActivity> controllerFactory, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>, new()
+            where TLog : class
+        {
+            configure = configure ?? (r => r.Activity());
+            configurator.ReceiveEndpoint(
+                typeof(TLog).GenerateExecutionQueueName(),
+                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
+        }
+
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, CompensateActivityFactory<TActivity, TLog> factory, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>, new()
+            where TLog : class
+        {
+            configure = configure ?? (r => r.Activity());
+            configurator.ReceiveEndpoint(
+                typeof(TLog).GenerateExecutionQueueName(),
+                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(factory, ac))));
         }
 
         class ReceiveCompensationActivityHostConfigurator<TActivity, TLog> : IReceiveCompensationActivityHostConfigurator<TActivity, TLog>
-            where TActivity : class, CompensateActivity<TLog>, new()  // TODO: Overloads
+            where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             private readonly IReceiveEndpointConfigurator receiveEndpointConfigurator;
-            private readonly Action<IReceiveEndpointConfigurator> activityHost;
+            private readonly Action<IReceiveEndpointConfigurator, Action<ICompensateActivityConfigurator<TActivity, TLog>>> activityHost;
 
             public ReceiveCompensationActivityHostConfigurator(
                 IReceiveEndpointConfigurator receiveEndpointConfigurator,
-                Action<IReceiveEndpointConfigurator> activityHost)
+                Action<IReceiveEndpointConfigurator, Action<ICompensateActivityConfigurator<TActivity, TLog>>> activityHost)
             {
                 this.receiveEndpointConfigurator = receiveEndpointConfigurator;
                 this.activityHost = activityHost;
@@ -40,7 +70,7 @@ namespace Miles.MassTransit.Hosting
 
             public void Activity(Action<ICompensateActivityConfigurator<TActivity, TLog>> configure = null)
             {
-                activityHost(receiveEndpointConfigurator);
+                activityHost(receiveEndpointConfigurator, configure);
             }
 
             #region Adapter
