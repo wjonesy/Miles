@@ -43,8 +43,15 @@
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="Courier\CourierHostConfiguratorExtensions.cs" />
+    <Compile Include="Courier\ExecutableRoutingSlipPlanner.cs" />
+    <Compile Include="Courier\IExecutableRoutingSlipPlanner.cs" />
+    <Compile Include="Courier\IActivityTypeHostUriLookup.cs" />
+    <Compile Include="Courier\IRoutingSlipPlanner.cs" />
+    <Compile Include="Courier\IRoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\ItineraryBuilderExtensions.cs" />
     <Compile Include="Courier\QueueNameGenerateExtensions.cs" />
+    <Compile Include="Courier\RoutingSlipPlanner.cs" />
+    <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="Configuration\ConfigurationValidationResult.cs" />
