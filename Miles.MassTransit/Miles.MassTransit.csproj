@@ -43,6 +43,7 @@
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
     <Compile Include="Courier\CourierHostConfiguratorExtensions.cs" />
+    <Compile Include="Courier\ItineraryBuilderExtensions.cs" />
     <Compile Include="Courier\QueueNameGenerateExtensions.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
