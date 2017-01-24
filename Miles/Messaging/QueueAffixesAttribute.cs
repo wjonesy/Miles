@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Miles.MassTransit
+namespace Miles.Messaging
 {
-    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class QueueAffixesAttribute : Attribute
     {
-        public string Prefix { get; private set; }
+        public string Prefix { get; set; }
 
-        public string Suffix { get; private set; }
+        public string Suffix { get; set; }
     }
 
     public static class QueueAffixReflectionExtensions

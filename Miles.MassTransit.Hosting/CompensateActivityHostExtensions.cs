@@ -13,54 +13,54 @@ namespace Miles.MassTransit.Hosting
 {
     public static class CompensateActivityHostExtensions
     {
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>, new()
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TLog).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(ac))));
+                r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(ac))));
         }
 
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TActivity> controllerFactory, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
-            where TActivity : class, CompensateActivity<TLog>, new()
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TLog).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
+                r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TLog, TActivity> controllerFactory, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
-            where TActivity : class, CompensateActivity<TLog>, new()
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TLog, TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TLog).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
+                r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, CompensateActivityFactory<TActivity, TLog> factory, Action<IReceiveCompensationActivityHostConfigurator<TActivity, TLog>> configure = null)
-            where TActivity : class, CompensateActivity<TLog>, new()
+        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, CompensateActivityFactory<TActivity, TLog> factory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TLog).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveCompensationActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(factory, ac))));
+                r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(factory, ac))));
         }
 
-        class ReceiveCompensationActivityHostConfigurator<TActivity, TLog> : IReceiveCompensationActivityHostConfigurator<TActivity, TLog>
+        class ReceiveCompensateActivityHostConfigurator<TActivity, TLog> : IReceiveCompensateActivityHostConfigurator<TActivity, TLog>
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             private readonly IReceiveEndpointConfigurator receiveEndpointConfigurator;
             private readonly Action<IReceiveEndpointConfigurator, Action<ICompensateActivityConfigurator<TActivity, TLog>>> activityHost;
 
-            public ReceiveCompensationActivityHostConfigurator(
+            public ReceiveCompensateActivityHostConfigurator(
                 IReceiveEndpointConfigurator receiveEndpointConfigurator,
                 Action<IReceiveEndpointConfigurator, Action<ICompensateActivityConfigurator<TActivity, TLog>>> activityHost)
             {

@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace Miles.MassTransit
+namespace Miles.Messaging
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class QueueNameAttribute : Attribute
     {
         public QueueNameAttribute(string name)
@@ -9,6 +10,6 @@ namespace Miles.MassTransit
             this.Name = name;
         }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
     }
 }

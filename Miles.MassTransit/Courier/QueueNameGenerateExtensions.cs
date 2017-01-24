@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Miles.Messaging;
+using System;
 using System.Reflection;
 
 namespace Miles.MassTransit.Courier

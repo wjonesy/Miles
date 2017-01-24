@@ -4,7 +4,7 @@ using System;
 
 namespace Miles.MassTransit.Hosting
 {
-    public interface IReceiveCompensationActivityHostConfigurator<TActivity, TLog> : IReceiveEndpointConfigurator
+    public interface IReceiveCompensateActivityHostConfigurator<TActivity, TLog> : IReceiveEndpointConfigurator
         where TActivity : class, CompensateActivity<TLog>
         where TLog : class
     {

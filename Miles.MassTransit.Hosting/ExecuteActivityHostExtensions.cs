@@ -13,7 +13,7 @@ namespace Miles.MassTransit.Hosting
 {
     public static class ExecuteActivityHostExtensions
     {
-        public static void ExecutionActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>, new()
             where TArguments : class
             where TLog : class
@@ -21,10 +21,10 @@ namespace Miles.MassTransit.Hosting
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>
             where TArguments : class
             where TLog : class
@@ -32,10 +32,10 @@ namespace Miles.MassTransit.Hosting
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, controllerFactory, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>
             where TArguments : class
             where TLog : class
@@ -43,10 +43,10 @@ namespace Miles.MassTransit.Hosting
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, controllerFactory, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>
             where TArguments : class
             where TLog : class
@@ -54,57 +54,57 @@ namespace Miles.MassTransit.Hosting
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, factory, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, factory, ac))));
         }
 
-        public static void ExecutionActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
-            where TActivity : class, ExecuteActivity<TArguments>, new() // TODO: Overloads
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+            where TActivity : class, ExecuteActivity<TArguments>, new()
             where TArguments : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, controllerFactory, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, controllerFactory, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
                 typeof(TArguments).GenerateExecutionQueueName(),
-                r => configure?.Invoke(new ReceiveExecutionActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, factory, ac))));
+                r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, factory, ac))));
         }
 
-        class ReceiveExecutionActivityHostConfigurator<TActivity, TArguments> : IReceiveExecutionActivityHostConfigurator<TActivity, TArguments>
+        class ReceiveExecuteActivityHostConfigurator<TActivity, TArguments> : IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {
             private readonly IReceiveEndpointConfigurator receiveEndpointConfigurator;
             private readonly Action<IReceiveEndpointConfigurator, Action<IExecuteActivityConfigurator<TActivity, TArguments>>> activityHost;
 
-            public ReceiveExecutionActivityHostConfigurator(
+            public ReceiveExecuteActivityHostConfigurator(
                 IReceiveEndpointConfigurator receiveEndpointConfigurator,
                 Action<IReceiveEndpointConfigurator, Action<IExecuteActivityConfigurator<TActivity, TArguments>>> activityHost)
             {
