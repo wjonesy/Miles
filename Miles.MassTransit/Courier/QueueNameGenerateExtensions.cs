@@ -7,7 +7,7 @@ namespace Miles.MassTransit.Courier
     public static class QueueNameGenerateExtensions
     {
         private const string Arguments = "Arguments";
-        private const string Logs = "Logs";
+        private const string Log = "Log";
         private const string Compensate = "Compensate";
 
         public static string GenerateExecutionQueueName(this Type type)
@@ -17,7 +17,7 @@ namespace Miles.MassTransit.Courier
 
         public static string GenerateCompensationQueueName(this Type type)
         {
-            return GenerateQueueName(type, Logs, Compensate);
+            return GenerateQueueName(type, Log, Compensate);
         }
 
         private static string GenerateQueueName(Type type, string remove, string append = "")
