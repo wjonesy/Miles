@@ -51,6 +51,7 @@
     <Compile Include="Courier\ItineraryBuilderExtensions.cs" />
     <Compile Include="Courier\QueueNameGenerateExtensions.cs" />
     <Compile Include="Courier\RoutingSlipPlanner.cs" />
+    <Compile Include="Courier\RoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />

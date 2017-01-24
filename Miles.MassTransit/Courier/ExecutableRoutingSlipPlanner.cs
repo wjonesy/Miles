@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Courier
 {
-    public class ExecutableRoutingSlipPlanner<TBus> : RoutingSlipPlanner where TBus : ISendEndpointProvider, IPublishEndpoint
+    public class ExecutableRoutingSlipPlanner<TBus> : RoutingSlipPlanner, IExecutableRoutingSlipPlanner where TBus : ISendEndpointProvider, IPublishEndpoint
     {
         private readonly TBus bus;
 
