@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Unity
 {
-    class UnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
+    public class UnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
         where TActivity : class, CompensateActivity<TLog>
         where TLog : class
     {
