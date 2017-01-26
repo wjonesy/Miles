@@ -5,7 +5,6 @@ namespace Miles.Sample.Processor
     using global::MassTransit;
     using global::MassTransit.Hosting;
     using Infrastructure.Unity;
-    using MassTransit.Configuration;
     using MassTransit.Unity;
     using Microsoft.Practices.Unity;
     using Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch;

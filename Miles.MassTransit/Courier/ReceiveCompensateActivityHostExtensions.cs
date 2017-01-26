@@ -8,7 +8,7 @@ using MassTransit.Saga.SubscriptionConfigurators;
 using Miles.MassTransit.Courier;
 using System;
 
-namespace Miles.MassTransit.Courier
+namespace MassTransit
 {
     public static class ReceiveCompensateActivityHostExtensions
     {

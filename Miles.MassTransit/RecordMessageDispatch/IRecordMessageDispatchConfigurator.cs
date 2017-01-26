@@ -15,7 +15,7 @@
  */
 using Miles.MassTransit.RecordMessageDispatch;
 
-namespace Miles.MassTransit.Configuration
+namespace MassTransit
 {
     /// <summary>
     /// Allows developer to configure the <see cref="RecordMessageDispatchFilter{TContext}"/> .

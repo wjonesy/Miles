@@ -15,7 +15,6 @@
  */
 using GreenPipes;
 using MassTransit;
-using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
 
 namespace Miles.MassTransit.RecordMessageDispatch
@@ -34,11 +33,7 @@ namespace Miles.MassTransit.RecordMessageDispatch
         public IEnumerable<ValidationResult> Validate()
         {
             if (DispatchedRepository == null)
-                yield return new ConfigurationValidationResult(
-                    ValidationResultDisposition.Failure,
-                    "DispatchedRepository",
-                    "Cannot be null",
-                    DispatchedRepository.ToString());
+                yield return this.Failure("DispatchedRepository", "Cannot be null", DispatchedRepository.ToString());
         }
 
         public void Apply(IPipeBuilder<TContext> builder)

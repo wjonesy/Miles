@@ -1,5 +1,4 @@
 ﻿using MassTransit;
-using Miles.MassTransit.Configuration;
 using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch;
 using Miles.Sample.Web.App_Start;
 using System;

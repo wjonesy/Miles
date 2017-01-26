@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using MassTransit;
 using Miles.MassTransit.RecordMessageDispatch;
 using System;
 
-namespace Miles.MassTransit.Configuration
+namespace MassTransit
 {
     /// <summary>
     /// 

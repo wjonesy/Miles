@@ -15,7 +15,6 @@
  */
 using GreenPipes;
 using MassTransit;
-using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
