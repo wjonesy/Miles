@@ -8,22 +8,22 @@ using Microsoft.Practices.Unity;
 using System;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.Unity
+namespace Miles.MassTransit.Unity.Courier
 {
-    public class UnityExecuteActivityFactory<TActivity, TArguments> : ExecuteActivityFactory<TActivity, TArguments>
-        where TActivity : class, ExecuteActivity<TArguments>
-        where TArguments : class
+    public class MilesUnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
+        where TActivity : class, CompensateActivity<TLog>
+        where TLog : class
     {
-        private static readonly ILog log = Logger.Get<UnityExecuteActivityFactory<TActivity, TArguments>>();
+        private static readonly ILog log = Logger.Get<MilesUnityCompensateActivityFactory<TActivity, TLog>>();
 
         private readonly IUnityContainer container;
 
-        public UnityExecuteActivityFactory(IUnityContainer container)
+        public MilesUnityCompensateActivityFactory(IUnityContainer container)
         {
             this.container = container;
         }
 
-        public async Task<ResultContext<ExecutionResult>> Execute(ExecuteContext<TArguments> context, IRequestPipe<ExecuteActivityContext<TActivity, TArguments>, ExecutionResult> next)
+        public async Task<ResultContext<CompensationResult>> Compensate(CompensateContext<TLog> context, IRequestPipe<CompensateActivityContext<TActivity, TLog>, CompensationResult> next)
         {
             using (var childContainer = container.CreateChildContainer())
             {
@@ -36,9 +36,9 @@ namespace Miles.MassTransit.Unity
                     throw new Exception($"Unable to resolve consumer type '{typeof(TActivity).FullName}'.");    // TODO: Better exception
 
                 if (log.IsDebugEnabled)
-                    log.DebugFormat("ExecuteActivityFactory: Executing: {0}", TypeMetadataCache<TActivity>.ShortName);
+                    log.DebugFormat("CompensateActivityFactory: Executing: {0}", TypeMetadataCache<TActivity>.ShortName);
 
-                var activityContext = new HostExecuteActivityContext<TActivity, TArguments>(activity, context);
+                var activityContext = new HostCompensateActivityContext<TActivity, TLog>(activity, context);
 
                 return await next.Send(activityContext).ConfigureAwait(false);
             }

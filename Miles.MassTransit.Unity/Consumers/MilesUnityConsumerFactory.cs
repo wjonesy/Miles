@@ -25,11 +25,11 @@ namespace Miles.MassTransit.Unity
     /// </summary>
     /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
     /// <seealso cref="global::MassTransit.IConsumerFactory{TConsumer}" />
-    public class UnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
+    public class MilesUnityConsumerFactory<TConsumer> : IConsumerFactory<TConsumer> where TConsumer : class
     {
         readonly IUnityContainer container;
 
-        public UnityConsumerFactory(IUnityContainer container)
+        public MilesUnityConsumerFactory(IUnityContainer container)
         {
             this.container = container;
         }

@@ -42,7 +42,7 @@ namespace Miles.Sample.Processor
             var container = new UnityContainer().ConfigureSample(t => new HierarchicalLifetimeManager());
 
             configurator.UseRecordMessageDispatch(c => c.DispatchedRepository = new DispatchedRepository());
-            configurator.Consumer<FixtureFinishedProcessor>(new UnityConsumerFactory<FixtureFinishedProcessor>(container), c =>
+            configurator.Consumer<FixtureFinishedProcessor>(new MilesUnityConsumerFactory<FixtureFinishedProcessor>(container), c =>
             {
                 c.ConsumerMessage<FixtureFinished>(m =>
                 {
