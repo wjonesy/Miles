@@ -10,7 +10,7 @@ using System;
 
 namespace Miles.MassTransit.Courier
 {
-    public static class CompensateActivityHostExtensions
+    public static class ReceiveCompensateActivityHostExtensions
     {
         public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>, new()
