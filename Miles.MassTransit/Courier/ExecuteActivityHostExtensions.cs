@@ -3,17 +3,16 @@ using MassTransit;
 using MassTransit.Configuration;
 using MassTransit.ConsumeConfigurators;
 using MassTransit.Courier;
-using MassTransit.Hosting;
 using MassTransit.Saga;
 using MassTransit.Saga.SubscriptionConfigurators;
 using Miles.MassTransit.Courier;
 using System;
 
-namespace Miles.MassTransit.Hosting
+namespace Miles.MassTransit.Courier
 {
     public static class ExecuteActivityHostExtensions
     {
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>, new()
             where TArguments : class
             where TLog : class
@@ -24,7 +23,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>
             where TArguments : class
             where TLog : class
@@ -35,7 +34,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>
             where TArguments : class
             where TLog : class
@@ -46,7 +45,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IServiceConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, Activity<TArguments, TLog>
             where TArguments : class
             where TLog : class
@@ -57,7 +56,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments, TLog>(compensateHostAddress, factory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IBusFactoryConfigurator configurator, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>, new()
             where TArguments : class
         {
@@ -67,7 +66,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, Func<TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {
@@ -77,7 +76,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, Func<TArguments, TActivity> controllerFactory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {
@@ -87,7 +86,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveExecuteActivityHostConfigurator<TActivity, TArguments>(r, (c, ac) => c.ExecuteActivityHost<TActivity, TArguments>(compensateHostAddress, controllerFactory, ac))));
         }
 
-        public static void ExecuteActivityHost<TActivity, TArguments>(this IServiceConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
+        public static void ExecuteActivityHost<TActivity, TArguments>(this IBusFactoryConfigurator configurator, Uri compensateHostAddress, ExecuteActivityFactory<TActivity, TArguments> factory, Action<IReceiveExecuteActivityHostConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>
             where TArguments : class
         {

@@ -2,7 +2,7 @@
 using MassTransit.Courier;
 using System;
 
-namespace Miles.MassTransit.Hosting
+namespace Miles.MassTransit.Courier
 {
     public interface IReceiveExecuteActivityHostConfigurator<TActivity, TArguments> : IReceiveEndpointConfigurator
         where TActivity : class, ExecuteActivity<TArguments>

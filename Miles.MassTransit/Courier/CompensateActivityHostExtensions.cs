@@ -3,17 +3,16 @@ using MassTransit;
 using MassTransit.Configuration;
 using MassTransit.ConsumeConfigurators;
 using MassTransit.Courier;
-using MassTransit.Hosting;
 using MassTransit.Saga;
 using MassTransit.Saga.SubscriptionConfigurators;
 using Miles.MassTransit.Courier;
 using System;
 
-namespace Miles.MassTransit.Hosting
+namespace Miles.MassTransit.Courier
 {
     public static class CompensateActivityHostExtensions
     {
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+        public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>, new()
             where TLog : class
         {
@@ -23,7 +22,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(ac))));
         }
 
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+        public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Func<TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
@@ -33,7 +32,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, Func<TLog, TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+        public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Func<TLog, TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
@@ -43,7 +42,7 @@ namespace Miles.MassTransit.Hosting
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
-        public static void CompensateActivityHost<TActivity, TLog>(this IServiceConfigurator configurator, CompensateActivityFactory<TActivity, TLog> factory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+        public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, CompensateActivityFactory<TActivity, TLog> factory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {

@@ -42,10 +42,14 @@
     <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
     <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
     <Compile Include="Configuration\TransactionContextExtensions.cs" />
+    <Compile Include="Courier\CompensateActivityHostExtensions.cs" />
     <Compile Include="Courier\CourierHostConfiguratorExtensions.cs" />
     <Compile Include="Courier\ExecutableRoutingSlipPlanner.cs" />
+    <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\IExecutableRoutingSlipPlanner.cs" />
     <Compile Include="Courier\IActivityTypeHostUriLookup.cs" />
+    <Compile Include="Courier\IReceiveCompensateActivityHostConfigurator.cs" />
+    <Compile Include="Courier\IReceiveExecuteActivityHostConfigurator.cs" />
     <Compile Include="Courier\IRoutingSlipPlanner.cs" />
     <Compile Include="Courier\IRoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\ItineraryBuilderExtensions.cs" />
