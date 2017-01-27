@@ -36,16 +36,18 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
-    <Compile Include="Configuration\IMessageDeduplicationConfigurator.cs" />
-    <Compile Include="Configuration\ITransactionContextConfigurator.cs" />
-    <Compile Include="Configuration\RecordMessageDispatchExtensions.cs" />
-    <Compile Include="Configuration\IRecordMessageDispatchConfigurator.cs" />
-    <Compile Include="Configuration\MessageDeduplicationExtensions.cs" />
-    <Compile Include="Configuration\TransactionContextExtensions.cs" />
-    <Compile Include="Courier\CourierHostConfiguratorExtensions.cs" />
+    <Compile Include="TransactionContext\ITransactionContextConfigurator.cs" />
+    <Compile Include="RecordMessageDispatch\RecordMessageDispatchExtensions.cs" />
+    <Compile Include="MessageDeduplication\MessageDeduplicationExtensions.cs" />
+    <Compile Include="TransactionContext\TransactionContextExtensions.cs" />
+    <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
+    <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\ExecutableRoutingSlipPlanner.cs" />
+    <Compile Include="Courier\ReceiveExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\IExecutableRoutingSlipPlanner.cs" />
     <Compile Include="Courier\IActivityTypeHostUriLookup.cs" />
+    <Compile Include="Courier\IReceiveCompensateActivityHostConfigurator.cs" />
+    <Compile Include="Courier\IReceiveExecuteActivityHostConfigurator.cs" />
     <Compile Include="Courier\IRoutingSlipPlanner.cs" />
     <Compile Include="Courier\IRoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\ItineraryBuilderExtensions.cs" />
@@ -53,9 +55,8 @@
     <Compile Include="Courier\RoutingSlipPlanner.cs" />
     <Compile Include="Courier\RoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
-    <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
+    <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
-    <Compile Include="Configuration\ConfigurationValidationResult.cs" />
     <Compile Include="RecordMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />
     <Compile Include="RecordMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchFilter.cs" />

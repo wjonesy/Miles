@@ -15,7 +15,6 @@
  */
 using GreenPipes;
 using MassTransit;
-using Miles.MassTransit.Configuration;
 using System.Collections.Generic;
 
 namespace Miles.MassTransit.RecordMessageDispatch
@@ -26,19 +25,20 @@ namespace Miles.MassTransit.RecordMessageDispatch
     /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="global::MassTransit.PipeConfigurators.IPipeSpecification{TContext}" />
     /// <seealso cref="IRecordMessageDispatchConfigurator" />
-    class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>, IRecordMessageDispatchConfigurator
+    class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>
         where TContext : class, SendContext
     {
+        public RecordMessageDispatchSpecification(IDispatchedRepository dispatchedRepository)
+        {
+            this.DispatchedRepository = dispatchedRepository;
+        }
+
         public IDispatchedRepository DispatchedRepository { get; set; }
 
         public IEnumerable<ValidationResult> Validate()
         {
             if (DispatchedRepository == null)
-                yield return new ConfigurationValidationResult(
-                    ValidationResultDisposition.Failure,
-                    "DispatchedRepository",
-                    "Cannot be null",
-                    DispatchedRepository.ToString());
+                yield return this.Failure("DispatchedRepository", "Cannot be null", DispatchedRepository.ToString());
         }
 
         public void Apply(IPipeBuilder<TContext> builder)

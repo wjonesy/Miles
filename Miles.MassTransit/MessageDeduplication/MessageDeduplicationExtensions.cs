@@ -14,32 +14,36 @@
  * limitations under the License.
  */
 using GreenPipes;
-using MassTransit;
-using Miles.MassTransit.TransactionContext;
+using Microsoft.Practices.ServiceLocation;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.Persistence;
-using System;
 
-namespace Miles.MassTransit.Configuration
+namespace MassTransit
 {
     /// <summary>
     /// 
     /// </summary>
-    public static class TransactionContextExtensions
+    public static class MessageDeduplicationExtensions
     {
         /// <summary>
-        /// Encapsulates the pipe behavior in a <see cref="ITransactionContext" />.
+        /// The message is recorded to ensure it is processed only once.
+        /// On identifying a message as already processed the message is removed from the queue without doing any work.
+        /// This should be wrapped in an <see cref="ITransactionContext" /> to ensure the processing and recording
+        /// of the message are a single unit of work.
         /// </summary>
         /// <typeparam name="TConsumer">The type of the consumer.</typeparam>
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static void UseTransactionContext<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, Action<ITransactionContextConfigurator> configure = null)
+        /// <remarks>
+        /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
+        /// retrieve an <see cref="IConsumedRepository" /> instance that will work with the <see cref="ITransactionContext" />.
+        /// </remarks>
+        public static void UseMessageDeduplication<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, string queueName)
             where TConsumer : class
             where TMessage : class
         {
-            var spec = new TransactionContextConfigurator<ConsumerConsumeContext<TConsumer, TMessage>>();
-            configure?.Invoke(spec);
-
+            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer, TMessage>>(queueName);
             configurator.AddPipeSpecification(spec);
         }
     }

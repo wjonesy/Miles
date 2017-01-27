@@ -1,10 +1,10 @@
-﻿using MassTransit;
-using MassTransit.Courier;
+﻿using MassTransit.Courier;
+using Miles.MassTransit.Courier;
 using System;
 
-namespace Miles.MassTransit.Courier
+namespace MassTransit
 {
-    public static class CourierHostConfiguratorExtensions
+    public static class ExecuteActivityHostExtensions
     {
         public static void ExecuteActivityHost<TActivity, TArguments, TLog>(this IReceiveEndpointConfigurator configurator, Uri compensateHostAddress, Action<IExecuteActivityConfigurator<TActivity, TArguments>> configure = null)
             where TActivity : class, ExecuteActivity<TArguments>, CompensateActivity<TLog>, new()

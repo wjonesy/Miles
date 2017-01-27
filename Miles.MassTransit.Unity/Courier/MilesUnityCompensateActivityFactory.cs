@@ -8,17 +8,17 @@ using Microsoft.Practices.Unity;
 using System;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.Unity
+namespace Miles.MassTransit.Unity.Courier
 {
-    public class UnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
+    public class MilesUnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
         where TActivity : class, CompensateActivity<TLog>
         where TLog : class
     {
-        private static readonly ILog log = Logger.Get<UnityCompensateActivityFactory<TActivity, TLog>>();
+        private static readonly ILog log = Logger.Get<MilesUnityCompensateActivityFactory<TActivity, TLog>>();
 
         private readonly IUnityContainer container;
 
-        public UnityCompensateActivityFactory(IUnityContainer container)
+        public MilesUnityCompensateActivityFactory(IUnityContainer container)
         {
             this.container = container;
         }

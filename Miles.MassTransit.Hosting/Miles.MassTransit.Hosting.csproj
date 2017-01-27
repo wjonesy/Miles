@@ -81,12 +81,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="CompensateActivityHostExtensions.cs" />
-    <Compile Include="ExecuteActivityHostExtensions.cs" />
-    <Compile Include="IReceiveCompensateActivityHostConfigurator.cs" />
-    <Compile Include="IReceiveExecuteActivityHostConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceConfiguratorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Miles.MassTransit\Miles.MassTransit.csproj">

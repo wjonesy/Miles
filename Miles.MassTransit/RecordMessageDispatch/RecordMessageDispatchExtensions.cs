@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using MassTransit;
 using Miles.MassTransit.RecordMessageDispatch;
-using System;
 
-namespace Miles.MassTransit.Configuration
+namespace MassTransit
 {
     /// <summary>
     /// 
@@ -30,11 +28,10 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static void UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+        public static void UseRecordMessageDispatch<TConfigurator>(this TConfigurator configurator, IDispatchedRepository dispatchedRepository)
             where TConfigurator : IPublishPipelineConfigurator, ISendPipelineConfigurator
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext>();
-            configure.Invoke(spec);
+            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchedRepository);
 
             configurator.ConfigureSend(s => s.AddPipeSpecification(spec));
             configurator.ConfigurePublish(p => p.AddPipeSpecification(spec));
@@ -46,10 +43,9 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static void UseRecordMessageDispatch(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+        public static void UseRecordMessageDispatch(this ISendPipeConfigurator configurator, IDispatchedRepository dispatchedRepository)
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext>();
-            configure.Invoke(spec);
+            var spec = new RecordMessageDispatchSpecification<SendContext>(dispatchedRepository);
 
             configurator.AddPipeSpecification(spec);
         }
@@ -60,11 +56,10 @@ namespace Miles.MassTransit.Configuration
         /// <param name="configurator">The configurator.</param>
         /// <param name="configure">The callback to configure the message pipeline</param>
         /// <returns></returns>
-        public static void UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, Action<IRecordMessageDispatchConfigurator> configure)
+        public static void UseRecordMessageDispatch<TMessage>(this ISendPipeConfigurator configurator, IDispatchedRepository dispatchedRepository)
             where TMessage : class
         {
-            var spec = new RecordMessageDispatchSpecification<SendContext<TMessage>>();
-            configure.Invoke(spec);
+            var spec = new RecordMessageDispatchSpecification<SendContext<TMessage>>(dispatchedRepository);
 
             configurator.AddPipeSpecification(spec);
         }

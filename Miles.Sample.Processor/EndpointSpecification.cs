@@ -5,8 +5,6 @@ namespace Miles.Sample.Processor
     using global::MassTransit;
     using global::MassTransit.Hosting;
     using Infrastructure.Unity;
-    using MassTransit.Configuration;
-    using MassTransit.Unity;
     using Microsoft.Practices.Unity;
     using Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch;
     using System;
@@ -42,13 +40,13 @@ namespace Miles.Sample.Processor
             // message consumers, middleware, etc. are configured here
             var container = new UnityContainer().ConfigureSample(t => new HierarchicalLifetimeManager());
 
-            configurator.UseRecordMessageDispatch(c => c.DispatchedRepository = new DispatchedRepository());
-            configurator.Consumer<FixtureFinishedProcessor>(new UnityConsumerFactory<FixtureFinishedProcessor>(container), c =>
+            configurator.UseRecordMessageDispatch(new DispatchedRepository());
+            configurator.Consumer<FixtureFinishedProcessor>(container, c =>
             {
                 c.ConsumerMessage<FixtureFinished>(m =>
                 {
                     m.UseTransactionContext();
-                    m.UseMessageDeduplication(d => d.QueueName = "Miles.Sample");
+                    m.UseMessageDeduplication("Miles.Sample");
                 });
             });
         }

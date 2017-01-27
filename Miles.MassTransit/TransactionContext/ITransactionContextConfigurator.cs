@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.MassTransit.RecordMessageDispatch;
+using System.Data;
 
-namespace Miles.MassTransit.Configuration
+namespace MassTransit
 {
     /// <summary>
-    /// Allows developer to configure the <see cref="RecordMessageDispatchFilter{TContext}"/> .
+    /// Configures a UseTransactionContext middleware.
     /// </summary>
-    public interface IRecordMessageDispatchConfigurator
+    public interface ITransactionContextConfigurator
     {
         /// <summary>
-        /// Provide the <see cref="IDispatchedRepository"/> instance for recording message dispatch. 
+        /// Sets a hint for what level of isolation the transaction context should use.
+        /// This is only a hint since implementations might not have a concept of isolation levels or 
+        /// only the first transaction in the context governs the isolation level so the rest follow.
         /// </summary>
         /// <returns></returns>
-        IDispatchedRepository DispatchedRepository { set; }
+        IsolationLevel? HintIsolationLevel { set; }
     }
 }
