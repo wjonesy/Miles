@@ -17,7 +17,6 @@ using GreenPipes;
 using Microsoft.Practices.ServiceLocation;
 using Miles.MassTransit.MessageDeduplication;
 using Miles.Persistence;
-using System;
 
 namespace MassTransit
 {
@@ -40,12 +39,11 @@ namespace MassTransit
         /// This assumes a container will have registered itself as an <see cref="IServiceLocator" /> payload to
         /// retrieve an <see cref="IConsumedRepository" /> instance that will work with the <see cref="ITransactionContext" />.
         /// </remarks>
-        public static void UseMessageDeduplication<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, Action<IMessageDeduplicationConfigurator> configure = null)
+        public static void UseMessageDeduplication<TConsumer, TMessage>(this IPipeConfigurator<ConsumerConsumeContext<TConsumer, TMessage>> configurator, string queueName)
             where TConsumer : class
             where TMessage : class
         {
-            var spec = new MessageDeduplicationConfigurator<ConsumerConsumeContext<TConsumer, TMessage>>();
-            configure?.Invoke(spec);
+            var spec = new MessageDeduplicationSpecification<ConsumerConsumeContext<TConsumer, TMessage>>(queueName);
             configurator.AddPipeSpecification(spec);
         }
     }
