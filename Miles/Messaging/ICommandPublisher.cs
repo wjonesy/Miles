@@ -21,11 +21,11 @@ namespace Miles.Messaging
     /// </summary>
     public interface ICommandPublisher
     {
-        /// <summary>
-        /// Registers a handler for immediate execution within a transaction.
-        /// </summary>
-        /// <typeparam name="TCommand">The type of the command.</typeparam>
-        /// <param name="processor">The message processor.</param>
+        ///// <summary>
+        ///// Registers a handler for immediate execution within a transaction.
+        ///// </summary>
+        ///// <typeparam name="TCommand">The type of the command.</typeparam>
+        ///// <param name="processor">The message processor.</param>
         //void Register<TCommand>(IMessageProcessor<TCommand> processor) where TCommand : class;
 
         /// <summary>
