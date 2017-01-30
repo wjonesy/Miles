@@ -32,7 +32,7 @@ namespace MassTransit
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(ac))));
         }
 
@@ -42,7 +42,7 @@ namespace MassTransit
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
@@ -52,7 +52,7 @@ namespace MassTransit
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
@@ -62,7 +62,7 @@ namespace MassTransit
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(factory, ac))));
         }
 
