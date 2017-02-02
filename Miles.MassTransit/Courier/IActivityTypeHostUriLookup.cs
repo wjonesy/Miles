@@ -17,8 +17,16 @@ using System;
 
 namespace Miles.MassTransit.Courier
 {
+    /// <summary>
+    /// Looks up the host address for an activity
+    /// </summary>
     public interface IActivityTypeHostUriLookup
     {
+        /// <summary>
+        /// Looks up the activity .
+        /// </summary>
+        /// <typeparam name="TArguments">The type of the arguments.</typeparam>
+        /// <returns></returns>
         Uri Lookup<TArguments>() where TArguments : class;
     }
 }

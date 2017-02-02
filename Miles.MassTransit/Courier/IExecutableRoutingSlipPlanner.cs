@@ -17,8 +17,16 @@ using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Courier
 {
+    /// <summary>
+    /// Routing slip bound to the bus/context it will be initially executed against.
+    /// </summary>
+    /// <seealso cref="Miles.MassTransit.Courier.IRoutingSlipPlanner" />
     public interface IExecutableRoutingSlipPlanner : IRoutingSlipPlanner
     {
+        /// <summary>
+        /// Executes the routing slip.
+        /// </summary>
+        /// <returns></returns>
         Task Execute();
     }
 }

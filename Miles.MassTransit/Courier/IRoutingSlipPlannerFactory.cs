@@ -19,6 +19,9 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.Courier
 {
+    /// <summary>
+    /// Factory designed to be injected to ease the creation of <see cref="IExecutableRoutingSlipPlanner"/>.
+    /// </summary>
     public interface IRoutingSlipPlannerFactory
     {
         IExecutableRoutingSlipPlanner Create(Guid trackingNumber);

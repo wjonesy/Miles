@@ -21,21 +21,52 @@ namespace MassTransit.Courier
 {
     public static class ItineraryBuilderExtensions
     {
+        /// <summary>
+        /// Adds an activity to the routing slip specifying execution address by convention.
+        /// </summary>
+        /// <typeparam name="TArguments">Arguements DTO</typeparam>
+        /// <param name="builder"></param>
+        /// <param name="name">The activity name.</param>
+        /// <param name="hostAddress">The activity host address.</param>
         public static void AddActivity<TArguments>(this ItineraryBuilder builder, string name, Uri hostAddress)
         {
             builder.AddActivity(name, new Uri(hostAddress, typeof(TArguments).GenerateExecutionQueueName()));
         }
 
+        /// <summary>
+        /// Adds an activity to the routing slip specifying activity arguments and execution address by convention.
+        /// </summary>
+        /// <typeparam name="TArguments">Arguements DTO</typeparam>
+        /// <param name="builder"></param>
+        /// <param name="name">The activity name.</param>
+        /// <param name="hostAddress">The activity host address.</param>
+        /// <param name="arguments">The arguments.</param>
         public static void AddActivity<TArguments>(this ItineraryBuilder builder, string name, Uri hostAddress, object arguments)
         {
             builder.AddActivity(name, new Uri(hostAddress, typeof(TArguments).GenerateExecutionQueueName()), arguments);
         }
 
+        /// <summary>
+        /// Adds an activity to the routing slip specifying activity arguments and execution address by convention.
+        /// </summary>
+        /// <typeparam name="TArguments">Arguements DTO</typeparam>
+        /// <param name="builder"></param>
+        /// <param name="name">The activity name.</param>
+        /// <param name="hostAddress">The activity host address.</param>
+        /// <param name="arguments">The arguments.</param>
         public static void AddActivity<TArguments>(this ItineraryBuilder builder, string name, Uri hostAddress, IDictionary<string, object> arguments)
         {
             builder.AddActivity(name, new Uri(hostAddress, typeof(TArguments).GenerateExecutionQueueName()), arguments);
         }
 
+        /// <summary>
+        /// Adds an activity to the routing slip specifying activity arguments and execution address by convention.
+        /// </summary>
+        /// <typeparam name="TArguments">Arguements DTO</typeparam>
+        /// <param name="builder"></param>
+        /// <param name="name">The activity name.</param>
+        /// <param name="hostAddress">The activity host address.</param>
+        /// <param name="arguments">The arguments.</param>
         public static void AddActivity<TArguments>(this ItineraryBuilder builder, string name, Uri hostAddress, TArguments arguments)
         {
             builder.AddActivity(name, new Uri(hostAddress, typeof(TArguments).GenerateExecutionQueueName()), arguments);
