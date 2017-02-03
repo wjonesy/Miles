@@ -22,6 +22,10 @@ namespace MassTransit
         where TActivity : class, CompensateActivity<TLog>
         where TLog : class
     {
+        /// <summary>
+        /// Configure the compensate activity.
+        /// </summary>
+        /// <param name="configure"></param>
         void Activity(Action<ICompensateActivityConfigurator<TActivity, TLog>> configure = null);
     }
 }

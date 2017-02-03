@@ -22,6 +22,10 @@ namespace MassTransit
         where TActivity : class, ExecuteActivity<TArguments>
         where TArguments : class
     {
+        /// <summary>
+        /// Configure the execution activity.
+        /// </summary>
+        /// <param name="configure"></param>
         void Activity(Action<IExecuteActivityConfigurator<TActivity, TArguments>> configure = null);
     }
 }
