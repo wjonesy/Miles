@@ -36,6 +36,11 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
+    <Compile Include="ContainerScope\ContainerScopeExtensions.cs" />
+    <Compile Include="ContainerScope\ContainerScopeFilter.cs" />
+    <Compile Include="ContainerScope\ContainerScopeSpecification.cs" />
+    <Compile Include="ContainerScope\IContainerStack.cs" />
+    <Compile Include="ContainerScope\IContainerStackFactory.cs" />
     <Compile Include="TransactionContext\ITransactionContextConfigurator.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchExtensions.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationExtensions.cs" />

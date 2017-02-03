@@ -37,6 +37,9 @@
     </Compile>
     <Compile Include="CommandDispatcherTypes.cs" />
     <Compile Include="Consumers\ConsumerExtensions.cs" />
+    <Compile Include="ContainerScope\ContainerScopeExtensions.cs" />
+    <Compile Include="ContainerScope\UnityContainerStack.cs" />
+    <Compile Include="ContainerScope\UnityContainerStackFactory.cs" />
     <Compile Include="Courier\ExecuteActivityHostExtensions.cs" />
     <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
     <Compile Include="Courier\ReceiveExecuteActivityHostExtensions.cs" />
