@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
-using System.Threading.Tasks;
 
 namespace Miles.Messaging
 {
@@ -23,11 +21,11 @@ namespace Miles.Messaging
     /// </summary>
     public interface IEventPublisher
     {
-        /// <summary>
-        /// Registers a handler for immediate execution within a transaction.
-        /// </summary>
-        /// <typeparam name="TEvent">The type of the event.</typeparam>
-        /// <param name="processor">The message processor.</param>
+        ///// <summary>
+        ///// Registers a handler for immediate execution within a transaction.
+        ///// </summary>
+        ///// <typeparam name="TEvent">The type of the event.</typeparam>
+        ///// <param name="processor">The message processor.</param>
         //void Register<TEvent>(IMessageProcessor<TEvent> processor) where TEvent : class;
 
         /// <summary>

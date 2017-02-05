@@ -20,8 +20,13 @@ using System.Collections.Generic;
 
 namespace Miles.MassTransit.MessageDeduplication
 {
-    class MessageDeduplicationConfigurator<TContext> : IMessageDeduplicationConfigurator, IPipeSpecification<TContext> where TContext : class, ConsumeContext
+    class MessageDeduplicationSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, ConsumeContext
     {
+        public MessageDeduplicationSpecification(string queueName)
+        {
+            this.QueueName = queueName;
+        }
+
         public string QueueName { get; set; }
 
         IEnumerable<ValidationResult> ISpecification.Validate()

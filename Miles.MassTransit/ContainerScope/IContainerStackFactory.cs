@@ -1,5 +1,5 @@
 ﻿/*
- *     Copyright 2016 Adam Burton (adz21c@gmail.com)
+ *     Copyright 2017 Adam Burton (adz21c@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Miles.MassTransit.RecordMessageDispatch;
+using GreenPipes;
 
-namespace MassTransit
+namespace Miles.MassTransit.ContainerScope
 {
-    /// <summary>
-    /// Allows developer to configure the <see cref="RecordMessageDispatchFilter{TContext}"/> .
-    /// </summary>
-    public interface IRecordMessageDispatchConfigurator
+    public interface IContainerStackFactory : ISpecification
     {
-        /// <summary>
-        /// Provide the <see cref="IDispatchedRepository"/> instance for recording message dispatch. 
-        /// </summary>
-        /// <returns></returns>
-        IDispatchedRepository DispatchedRepository { set; }
+        string ContainerType { get; }
+
+        IContainerStack Create<TContext>(TContext context) where TContext : class, PipeContext;
     }
 }

@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 using MassTransit.Courier;
+using Microsoft.Practices.Unity;
+using Miles.MassTransit.Unity.Courier;
 using System;
 
 namespace MassTransit
 {
-    public interface IReceiveExecuteActivityHostConfigurator<TActivity, TArguments> : IReceiveEndpointConfigurator
-        where TActivity : class, ExecuteActivity<TArguments>
-        where TArguments : class
+    public static class ReceiveCompensateActivityHostExtensions
     {
-        /// <summary>
-        /// Configure the execution activity.
-        /// </summary>
-        /// <param name="configure"></param>
-        void Activity(Action<IExecuteActivityConfigurator<TActivity, TArguments>> configure = null);
+        public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, IUnityContainer container, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
+            where TActivity : class, CompensateActivity<TLog>
+            where TLog : class
+        {
+            var factory = new MilesUnityCompensateActivityFactory<TActivity, TLog>(container);
+            configurator.CompensateActivityHost(factory, configure);
+        }
     }
 }

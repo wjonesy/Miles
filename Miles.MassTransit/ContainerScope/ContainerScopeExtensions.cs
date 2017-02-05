@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Threading.Tasks;
+using GreenPipes;
+using Miles.MassTransit.ContainerScope;
 
-namespace Miles.MassTransit.Courier
+namespace MassTransit
 {
-    /// <summary>
-    /// Routing slip bound to the bus/context it will be initially executed against.
-    /// </summary>
-    /// <seealso cref="Miles.MassTransit.Courier.IRoutingSlipPlanner" />
-    public interface IExecutableRoutingSlipPlanner : IRoutingSlipPlanner
+    public static class ContainerScopeExtensions
     {
-        /// <summary>
-        /// Executes the routing slip.
-        /// </summary>
-        /// <returns></returns>
-        Task Execute();
+        public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IContainerStackFactory containerStackFactory = null)
+            where TContext : class, PipeContext
+        {
+            configurator.AddPipeSpecification(new ContainerScopeSpecification<TContext>(containerStackFactory));
+        }
     }
 }

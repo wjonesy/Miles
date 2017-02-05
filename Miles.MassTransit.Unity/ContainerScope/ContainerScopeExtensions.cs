@@ -1,5 +1,5 @@
 ﻿/*
- *     Copyright 2016 Adam Burton (adz21c@gmail.com)
+ *     Copyright 2017 Adam Burton (adz21c@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using GreenPipes;
+using Microsoft.Practices.Unity;
+using Miles.MassTransit.Unity.ContainerScope;
 
 namespace MassTransit
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public interface IMessageDeduplicationConfigurator
+    public static class ContainerScopeExtensions
     {
-        string QueueName { set; }
+        public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
+            where TContext : class, PipeContext
+        {
+            configurator.ContainerScope(new UnityContainerStackFactory(container));
+        }
     }
 }

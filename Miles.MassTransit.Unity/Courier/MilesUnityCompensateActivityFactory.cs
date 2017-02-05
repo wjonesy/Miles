@@ -1,4 +1,19 @@
-﻿using GreenPipes;
+﻿/*
+ *     Copyright 2017 Adam Burton (adz21c@gmail.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+using GreenPipes;
 using MassTransit;
 using MassTransit.Courier;
 using MassTransit.Courier.Hosts;
@@ -8,17 +23,17 @@ using Microsoft.Practices.Unity;
 using System;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.Unity
+namespace Miles.MassTransit.Unity.Courier
 {
-    class UnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
+    public class MilesUnityCompensateActivityFactory<TActivity, TLog> : CompensateActivityFactory<TActivity, TLog>
         where TActivity : class, CompensateActivity<TLog>
         where TLog : class
     {
-        private static readonly ILog log = Logger.Get<UnityCompensateActivityFactory<TActivity, TLog>>();
+        private static readonly ILog log = Logger.Get<MilesUnityCompensateActivityFactory<TActivity, TLog>>();
 
         private readonly IUnityContainer container;
 
-        public UnityCompensateActivityFactory(IUnityContainer container)
+        public MilesUnityCompensateActivityFactory(IUnityContainer container)
         {
             this.container = container;
         }

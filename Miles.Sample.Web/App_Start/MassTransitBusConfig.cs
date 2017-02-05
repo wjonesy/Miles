@@ -25,7 +25,7 @@ namespace Miles.Sample.Web.App_Start
                     cfg.Password("guest");
                 });
 
-                c.UseRecordMessageDispatch(cfg => cfg.DispatchedRepository = new DispatchedRepository());
+                c.UseRecordMessageDispatch(new DispatchedRepository());
             });
 
             return bus;

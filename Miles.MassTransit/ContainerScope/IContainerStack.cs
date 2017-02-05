@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Threading.Tasks;
+using GreenPipes;
+using Microsoft.Practices.ServiceLocation;
 
-namespace Miles.MassTransit.Courier
+namespace Miles.MassTransit.ContainerScope
 {
-    /// <summary>
-    /// Routing slip bound to the bus/context it will be initially executed against.
-    /// </summary>
-    /// <seealso cref="Miles.MassTransit.Courier.IRoutingSlipPlanner" />
-    public interface IExecutableRoutingSlipPlanner : IRoutingSlipPlanner
+    public interface IContainerStack : IServiceLocator
     {
-        /// <summary>
-        /// Executes the routing slip.
-        /// </summary>
-        /// <returns></returns>
-        Task Execute();
+        void PushScope<TContext>(TContext context) where TContext : class, PipeContext;
+
+        void PopScope();
     }
 }

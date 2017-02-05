@@ -25,9 +25,14 @@ namespace Miles.MassTransit.RecordMessageDispatch
     /// <typeparam name="TContext">The type of the context.</typeparam>
     /// <seealso cref="global::MassTransit.PipeConfigurators.IPipeSpecification{TContext}" />
     /// <seealso cref="IRecordMessageDispatchConfigurator" />
-    class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>, IRecordMessageDispatchConfigurator
+    class RecordMessageDispatchSpecification<TContext> : IPipeSpecification<TContext>
         where TContext : class, SendContext
     {
+        public RecordMessageDispatchSpecification(IDispatchedRepository dispatchedRepository)
+        {
+            this.DispatchedRepository = dispatchedRepository;
+        }
+
         public IDispatchedRepository DispatchedRepository { get; set; }
 
         public IEnumerable<ValidationResult> Validate()

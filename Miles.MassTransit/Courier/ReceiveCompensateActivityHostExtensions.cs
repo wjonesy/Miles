@@ -1,5 +1,19 @@
-﻿using GreenPipes;
-using MassTransit;
+﻿/*
+ *     Copyright 2017 Adam Burton (adz21c@gmail.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+using GreenPipes;
 using MassTransit.Configuration;
 using MassTransit.ConsumeConfigurators;
 using MassTransit.Courier;
@@ -12,43 +26,74 @@ namespace MassTransit
 {
     public static class ReceiveCompensateActivityHostExtensions
     {
+        /// <summary>
+        /// Creates a receive endpoint and configures an activity specifying queues by convention.
+        /// </summary>
+        /// <typeparam name="TActivity">The activity processor.</typeparam>
+        /// <typeparam name="TLog">The compensation log type.</typeparam>
+        /// <param name="configurator"></param>
+        /// <param name="configure"></param>
         public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>, new()
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(ac))));
         }
 
+        /// <summary>
+        /// Creates a receive endpoint and configures an activity specifying queues by convention.
+        /// </summary>
+        /// <typeparam name="TActivity">The activity processor.</typeparam>
+        /// <typeparam name="TLog">The compensation log type.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="controllerFactory">The controller factory.</param>
+        /// <param name="configure">The configure.</param>
         public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Func<TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
+        /// <summary>
+        /// Creates a receive endpoint and configures an activity specifying queues by convention.
+        /// </summary>
+        /// <typeparam name="TActivity">The activity processor.</typeparam>
+        /// <typeparam name="TLog">The compensation log type.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="controllerFactory">The controller factory.</param>
+        /// <param name="configure">The configure.</param>
         public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, Func<TLog, TActivity> controllerFactory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(controllerFactory, ac))));
         }
 
+        /// <summary>
+        /// Creates a receive endpoint and configures an activity specifying queues by convention.
+        /// </summary>
+        /// <typeparam name="TActivity">The activity processor.</typeparam>
+        /// <typeparam name="TLog">The compensation log type.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="factory">The factory.</param>
+        /// <param name="configure">The configure.</param>
         public static void CompensateActivityHost<TActivity, TLog>(this IBusFactoryConfigurator configurator, CompensateActivityFactory<TActivity, TLog> factory, Action<IReceiveCompensateActivityHostConfigurator<TActivity, TLog>> configure = null)
             where TActivity : class, CompensateActivity<TLog>
             where TLog : class
         {
             configure = configure ?? (r => r.Activity());
             configurator.ReceiveEndpoint(
-                typeof(TLog).GenerateExecutionQueueName(),
+                typeof(TLog).GenerateCompensationQueueName(),
                 r => configure?.Invoke(new ReceiveCompensateActivityHostConfigurator<TActivity, TLog>(r, (c, ac) => c.CompensateActivityHost<TActivity, TLog>(factory, ac))));
         }
 

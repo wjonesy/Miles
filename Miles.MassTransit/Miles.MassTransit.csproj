@@ -37,10 +37,13 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="ActivityContext.cs" />
-    <Compile Include="MessageDeduplication\IMessageDeduplicationConfigurator.cs" />
+    <Compile Include="ContainerScope\ContainerScopeExtensions.cs" />
+    <Compile Include="ContainerScope\ContainerScopeFilter.cs" />
+    <Compile Include="ContainerScope\ContainerScopeSpecification.cs" />
+    <Compile Include="ContainerScope\IContainerStack.cs" />
+    <Compile Include="ContainerScope\IContainerStackFactory.cs" />
     <Compile Include="TransactionContext\ITransactionContextConfigurator.cs" />
     <Compile Include="RecordMessageDispatch\RecordMessageDispatchExtensions.cs" />
-    <Compile Include="RecordMessageDispatch\IRecordMessageDispatchConfigurator.cs" />
     <Compile Include="MessageDeduplication\MessageDeduplicationExtensions.cs" />
     <Compile Include="TransactionContext\TransactionContextExtensions.cs" />
     <Compile Include="Courier\ReceiveCompensateActivityHostExtensions.cs" />
@@ -58,7 +61,7 @@
     <Compile Include="Courier\RoutingSlipPlanner.cs" />
     <Compile Include="Courier\RoutingSlipPlannerFactory.cs" />
     <Compile Include="Courier\SingleActivityTypeHostLookup.cs" />
-    <Compile Include="MessageDeduplication\MessageDeduplicationConfigurator.cs" />
+    <Compile Include="MessageDeduplication\MessageDeduplicationSpecification.cs" />
     <Compile Include="MessageDispatch\ConventionBasedMessageDispatcher.cs" />
     <Compile Include="RecordMessageDispatch\DeleteOldDispatchRecordsConsumer.cs" />
     <Compile Include="RecordMessageDispatch\IDeleteOldDispatchRecordsCommand.cs" />
