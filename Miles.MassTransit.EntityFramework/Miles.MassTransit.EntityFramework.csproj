@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Miles.MassTransit.EntityFramework.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -63,6 +66,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="EFTransactionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RecordMessageDispatch\DispatchedRepository.cs" />
     <Compile Include="Repositories\MessageDeduplication\ConsumedRepository.cs" />
@@ -77,6 +81,10 @@
     <ProjectReference Include="..\Miles.MassTransit\Miles.MassTransit.csproj">
       <Project>{BC322498-9FAA-4258-B728-ED4DE372BFE8}</Project>
       <Name>Miles.MassTransit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Miles\Miles.csproj">
+      <Project>{63B7FA97-8619-4EA0-B594-71FBB10481E5}</Project>
+      <Name>Miles</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
