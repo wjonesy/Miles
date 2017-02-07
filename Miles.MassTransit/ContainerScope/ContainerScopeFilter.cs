@@ -36,15 +36,15 @@ namespace Miles.MassTransit.ContainerScope
 
         public async Task Send(TContext context, IPipe<TContext> next)
         {
-            IContainerStack containerStack;
-            if (!context.TryGetPayload(out containerStack))
+            var containerStack = context.GetOrAddPayload(() =>
             {
                 if (containerStackFactory == null)
                     throw new InvalidOperationException("No container stack factory. Make sure the first ContainerScope encountered has a factory to setup the initial container.");
 
-                containerStack = context.GetOrAddPayload(() => containerStackFactory.Create(context));
-                context.GetOrAddPayload<IServiceLocator>(() => containerStack);
-            }
+                var stack = containerStackFactory.Create(context);
+                context.GetOrAddPayload<IServiceLocator>(() => stack);
+                return stack;
+            });
 
             containerStack.PushScope(context);
             try

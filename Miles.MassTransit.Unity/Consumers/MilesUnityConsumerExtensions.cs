@@ -15,7 +15,7 @@
  */
 using MassTransit.ConsumeConfigurators;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit.Unity;
+using Miles.MassTransit.Unity.ContainerScope;
 using System;
 
 namespace MassTransit
@@ -25,9 +25,9 @@ namespace MassTransit
         public static void Consumer<TConsumer>(this IReceiveEndpointConfigurator configurator, IUnityContainer container, Action<IConsumerConfigurator<TConsumer>> configure = null)
             where TConsumer : class, IConsumer
         {
-            var consumerFactory = new MilesUnityConsumerFactory<TConsumer>(container);
+            var containerStackFactory = new UnityContainerStackFactory(container);
 
-            configurator.Consumer(consumerFactory, configure);
+            configurator.Consumer(containerStackFactory, configure);
         }
     }
 }
