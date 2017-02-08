@@ -1,9 +1,9 @@
-﻿using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.MessageDeduplication;
+﻿using Miles.MassTransit.EntityFramework.MessageDeduplication;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Miles.Sample.Persistence.EF.Configurations.Miles.MassTransit.MessageDeduplication
+namespace Miles.MassTransit.EntityFramework.Configurations.Miles.MassTransit.MessageDeduplication
 {
-    class IncomingMessageConfiguration : EntityTypeConfiguration<IncomingMessage>
+    public class IncomingMessageConfiguration : EntityTypeConfiguration<IncomingMessage>
     {
         public IncomingMessageConfiguration()
         {

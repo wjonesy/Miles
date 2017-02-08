@@ -1,5 +1,5 @@
 ﻿using MassTransit;
-using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.RecordMessageDispatch;
+using Miles.MassTransit.EntityFramework.RecordMessageDispatch;
 using Miles.Sample.Web.App_Start;
 using System;
 
@@ -25,7 +25,7 @@ namespace Miles.Sample.Web.App_Start
                     cfg.Password("guest");
                 });
 
-                c.UseRecordMessageDispatch(new DispatchedRepository());
+                c.UseRecordMessageDispatch(new DispatchedRepository("Miles.Sample"));
             });
 
             return bus;

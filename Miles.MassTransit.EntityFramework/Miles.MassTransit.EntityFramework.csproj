@@ -66,6 +66,8 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Configurations\MessageDeduplication\IncomingMessageConfiguration.cs" />
+    <Compile Include="Configurations\MessageDeduplication\OutgoingMessageConfiguration.cs" />
     <Compile Include="EFTransactionContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RecordMessageDispatch\DispatchedRepository.cs" />
@@ -87,6 +89,7 @@
       <Name>Miles</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

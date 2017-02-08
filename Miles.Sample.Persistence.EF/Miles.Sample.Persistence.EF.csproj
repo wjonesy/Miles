@@ -63,8 +63,6 @@
   <ItemGroup>
     <Compile Include="Access\Domain\Read\TeamReader.cs" />
     <Compile Include="Access\Domain\Read\LeagueReader.cs" />
-    <Compile Include="Access\Miles.MassTransit\EnsureMessageDispatch\DispatchedRepository.cs" />
-    <Compile Include="Access\Miles.MassTransit\MessageDeduplication\IncomingMessage.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Fixtures\FixtureIdConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Leagues\LeagueAbbreviationConfiguration.cs" />
@@ -72,8 +70,6 @@
     <Compile Include="Configurations\Domain.Command\Leagues\LeagueStandingConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Teams\TeamAbbreviationConfiguration.cs" />
     <Compile Include="Configurations\Domain.Command\Teams\TeamConfiguration.cs" />
-    <Compile Include="Configurations\Miles.MassTransit\MessageDeduplication\OutgoingMessageConfiguration.cs" />
-    <Compile Include="Configurations\Miles.MassTransit\MessageDeduplication\IncomingMessageConfiguration.cs" />
     <Compile Include="Conventions\DateTime2Convention.cs" />
     <Compile Include="Conventions\SurrogateIdConvention.cs" />
     <Compile Include="Access\Domain\Command\Fixtures\FixtureRepository.cs" />
@@ -92,11 +88,8 @@
       <DependentUpon>201612190142036_IncomingMessageQueueName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Access\Miles.MassTransit\MessageDeduplication\ConsumedRepository.cs" />
-    <Compile Include="Access\Miles.MassTransit\MessageDeduplication\OutgoingMessageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleDbContext.cs" />
-    <Compile Include="SampleTransactionContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -104,6 +97,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj">
+      <Project>{63849da1-496a-476a-a861-698d3942c81a}</Project>
+      <Name>Miles.MassTransit.EntityFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles.MassTransit\Miles.MassTransit.csproj">
       <Project>{BC322498-9FAA-4258-B728-ED4DE372BFE8}</Project>
       <Name>Miles.MassTransit</Name>

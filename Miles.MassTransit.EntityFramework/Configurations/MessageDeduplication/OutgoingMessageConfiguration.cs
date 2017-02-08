@@ -1,9 +1,9 @@
 ﻿using Miles.MassTransit.MessageDeduplication;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Miles.Sample.Persistence.EF.Configurations.Miles.MassTransit.MessageDeduplication
+namespace Miles.MassTransit.EntityFramework.Configurations.Miles.MassTransit.MessageDeduplication
 {
-    class OutgoingMessageConfiguration : EntityTypeConfiguration<OutgoingMessage>
+    public class OutgoingMessageConfiguration : EntityTypeConfiguration<OutgoingMessage>
     {
         public OutgoingMessageConfiguration()
         {

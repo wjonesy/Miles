@@ -248,6 +248,10 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj">
+      <Project>{63849DA1-496A-476A-A861-698D3942C81A}</Project>
+      <Name>Miles.MassTransit.EntityFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles.MassTransit.Unity\Miles.MassTransit.Unity.csproj">
       <Project>{1c316f1c-58ef-4846-9713-d903bacb5fb8}</Project>
       <Name>Miles.MassTransit.Unity</Name>

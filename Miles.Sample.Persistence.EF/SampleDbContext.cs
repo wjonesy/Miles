@@ -1,8 +1,9 @@
-﻿using Miles.MassTransit.MessageDeduplication;
+﻿using Miles.MassTransit.EntityFramework.Configurations.Miles.MassTransit.MessageDeduplication;
+using Miles.MassTransit.EntityFramework.MessageDeduplication;
+using Miles.MassTransit.MessageDeduplication;
 using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Leagues;
 using Miles.Sample.Domain.Command.Teams;
-using Miles.Sample.Persistence.EF.Access.Miles.MassTransit.MessageDeduplication;
 using System.Data.Entity;
 using System.Reflection;
 
@@ -24,6 +25,8 @@ namespace Miles.Sample.Persistence.EF
         {
             modelBuilder.Conventions.AddFromAssembly(Assembly.GetExecutingAssembly());
             modelBuilder.Configurations.AddFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.Configurations.Add(new IncomingMessageConfiguration());
+            modelBuilder.Configurations.Add(new OutgoingMessageConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
