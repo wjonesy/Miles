@@ -28,7 +28,7 @@ namespace Miles.MassTransit
         /// Initializes a new instance of the <see cref="ActivityContext"/> class.
         /// </summary>
         /// <param name="consumeContext">The consume context.</param>
-        public ActivityContext(ConsumeContext consumeContext)
+        public ActivityContext(ConsumeContext consumeContext = null)
         {
             CorrelationId = consumeContext?.CorrelationId ?? NewId.NextGuid();
         }
