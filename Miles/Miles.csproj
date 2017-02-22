@@ -42,7 +42,6 @@
     <Compile Include="Aggregates\IAppliesEvent.cs" />
     <Compile Include="Persistence\IRepository.cs" />
     <Compile Include="IActivityContext.cs" />
-    <Compile Include="Messaging\CallbackMessageProcessor.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="Messaging\ICommandPublisher.cs" />

@@ -22,11 +22,11 @@ namespace Miles.Sample.Application
             var teamA = TeamAbbreviation.Parse(context.Message.TeamA.Abbreviation);
             var teamB = TeamAbbreviation.Parse(context.Message.TeamB.Abbreviation);
             var leagueAbbr = LeagueAbbreviation.Parse(context.Message.League);
-            var league = await leagueRepository.GetByAbbreviationAsync(leagueAbbr);
+            var league = await leagueRepository.GetByAbbreviationAsync(leagueAbbr).ConfigureAwait(false);
             var result = (FixtureResults)Enum.ToObject(typeof(FixtureResults), context.Message.Result);
 
             league.RecordResult(result, teamA, context.Message.TeamA.Points, teamB, context.Message.TeamB.Points);
-            await leagueRepository.SaveAsync(league);
+            await leagueRepository.SaveAsync(league).ConfigureAwait(false);
         }
     }
 }
