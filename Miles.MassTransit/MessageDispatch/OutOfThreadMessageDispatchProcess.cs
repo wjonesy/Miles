@@ -50,7 +50,7 @@ namespace Miles.MassTransit.MessageDispatch
                 while (message != null)
                 {
                     var dispatcher = message.ConceptType == OutgoingMessageConceptType.Command ? commandDispatcher : eventDispatcher;
-                    await dispatcher.DispatchAsync(message);
+                    await dispatcher.DispatchAsync(message).ConfigureAwait(false);
 
                     message = queue.Take();
                 }

@@ -10,9 +10,9 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
     public class OutgoingMessageRepository : IOutgoingMessageRepository
     {
         private readonly DbContext dbContext;
-        private readonly TimeSpan expiryTimeSpan;
+        private readonly TimeSpan expiryTimeSpan = TimeSpan.FromDays(3);
 
-        public OutgoingMessageRepository(DbContext dbContext, TimeSpan expiryTimeSpan)
+        public OutgoingMessageRepository(DbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -20,15 +20,15 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
         public async Task SaveAsync(IEnumerable<OutgoingMessage> messages)
         {
             dbContext.Set<OutgoingMessage>().AddRange(messages);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task DeleteOldRecordsAsync()
         {
             var expiryDate = DateTime.Now.Add(-expiryTimeSpan);
-            var msgs = await dbContext.Set<OutgoingMessage>().Where(x => x.DispatchedDate.HasValue && x.DispatchedDate < expiryDate).ToListAsync();
+            var msgs = await dbContext.Set<OutgoingMessage>().Where(x => x.DispatchedDate.HasValue && x.DispatchedDate < expiryDate).ToListAsync().ConfigureAwait(false);
             dbContext.Set<OutgoingMessage>().RemoveRange(msgs);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

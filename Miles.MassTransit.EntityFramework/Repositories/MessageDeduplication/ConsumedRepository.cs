@@ -22,7 +22,7 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
 
             try
             {
-                await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync().ConfigureAwait(false);
                 return false;
             }
             catch (Exception ex)
@@ -33,9 +33,9 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
 
         public async Task DeleteOldRecordsAsync()
         {
-            var messages = await dbContext.Set<IncomingMessage>().Where(x => x.When < DateTime.Now.AddMonths(-1)).ToListAsync();
+            var messages = await dbContext.Set<IncomingMessage>().Where(x => x.When < DateTime.Now.AddMonths(-1)).ToListAsync().ConfigureAwait(false);
             dbContext.Set<IncomingMessage>().RemoveRange(messages);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }

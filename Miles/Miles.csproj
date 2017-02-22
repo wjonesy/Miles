@@ -38,7 +38,6 @@
     </Compile>
     <Compile Include="DomainContext.cs" />
     <Compile Include="IActivityContext.cs" />
-    <Compile Include="Messaging\CallbackMessageProcessor.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />
     <Compile Include="Hook.cs" />
     <Compile Include="Messaging\ICommandPublisher.cs" />

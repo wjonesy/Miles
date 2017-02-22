@@ -163,7 +163,7 @@ namespace Miles.Persistence
                 if (Completed)
                     throw new InvalidOperationException("Transaction instance already completed");
 
-                await context.DoNestedCommitAsync(this);
+                await context.DoNestedCommitAsync(this).ConfigureAwait(false);
             }
 
             /// <summary>
@@ -176,7 +176,7 @@ namespace Miles.Persistence
                 if (Completed)
                     throw new InvalidOperationException("Transaction instance already completed");
 
-                await context.DoNestedRollbackAsync(this);
+                await context.DoNestedRollbackAsync(this).ConfigureAwait(false);
             }
 
             /// <summary>

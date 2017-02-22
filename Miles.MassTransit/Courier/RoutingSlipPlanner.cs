@@ -66,7 +66,7 @@ namespace Miles.MassTransit.Courier
             var hostAddress = hostLookup.Lookup<TEvent>();
             var typeName = messageNameFormatter.GetMessageName(typeof(TEvent)).Name;
             var address = new Uri(hostAddress, typeName);
-            await AddSubscription(address, events, callback);
+            await AddSubscription(address, events, callback).ConfigureAwait(false);
         }
 
         public async Task AddSubscription<TEvent>(RoutingSlipEvents events, RoutingSlipEventContents contents, Func<ISendEndpoint, Task> callback) where TEvent : class
@@ -74,7 +74,7 @@ namespace Miles.MassTransit.Courier
             var hostAddress = hostLookup.Lookup<TEvent>();
             var typeName = messageNameFormatter.GetMessageName(typeof(TEvent)).Name;
             var address = new Uri(hostAddress, typeName);
-            await AddSubscription(address, events, contents, callback);
+            await AddSubscription(address, events, contents, callback).ConfigureAwait(false);
         }
 
         public async Task AddSubscription<TEvent>(RoutingSlipEvents events, RoutingSlipEventContents contents, string activityName, Func<ISendEndpoint, Task> callback) where TEvent : class
@@ -82,7 +82,7 @@ namespace Miles.MassTransit.Courier
             var hostAddress = hostLookup.Lookup<TEvent>();
             var typeName = messageNameFormatter.GetMessageName(typeof(TEvent)).Name;
             var address = new Uri(hostAddress, typeName);
-            await AddSubscription(address, events, contents, activityName, callback);
+            await AddSubscription(address, events, contents, activityName, callback).ConfigureAwait(false);
         }
     }
 }

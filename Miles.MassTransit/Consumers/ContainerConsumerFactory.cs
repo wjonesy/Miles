@@ -4,6 +4,7 @@ using MassTransit.Util;
 using Microsoft.Practices.ServiceLocation;
 using Miles.MassTransit.ContainerScope;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.Consumers
@@ -31,6 +32,7 @@ namespace Miles.MassTransit.Consumers
                 .Add("container-type", containerStackFactory.ContainerType);
         }
 
+        [DebuggerNonUserCode]
         public async Task Send<T>(ConsumeContext<T> context, IPipe<ConsumerConsumeContext<TConsumer, T>> next) where T : class
         {
             var createdStack = false;
