@@ -37,10 +37,6 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="DomainContext.cs" />
-    <Compile Include="Aggregates\Aggregate.cs" />
-    <Compile Include="Aggregates\IAggregate.cs" />
-    <Compile Include="Aggregates\IAppliesEvent.cs" />
-    <Compile Include="Persistence\IRepository.cs" />
     <Compile Include="IActivityContext.cs" />
     <Compile Include="Messaging\IEventPublisher.cs" />
     <Compile Include="Hook.cs" />
