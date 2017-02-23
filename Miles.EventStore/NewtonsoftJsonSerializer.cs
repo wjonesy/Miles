@@ -16,32 +16,29 @@
 using EventStore.ClientAPI;
 using Newtonsoft.Json;
 using System;
-using System.IO;
 
 namespace Miles.EventStore
 {
     public class NewtonsoftJsonSerializer<TAggregate> : ISerializer<TAggregate>
     {
-        private readonly JsonSerializer serializer;
+        private readonly JsonSerializerSettings settings;
 
         public NewtonsoftJsonSerializer(JsonSerializerSettings settings)
         {
-            serializer = JsonSerializer.Create(settings);
+            this.settings = settings;
         }
 
         public object DeSerialize(RecordedEvent @event)
         {
-            using (var ms = new MemoryStream(@event.Data))
-            using (var stream = new StreamReader(ms))
-            {
-                var eventType = Type.GetType(@event.EventType);
-                return serializer.Deserialize(stream, eventType);
-            }
+            var eventType = Type.GetType(@event.EventType);
+            var text = Convert.ToBase64String(@event.Data);
+            return JsonConvert.DeserializeObject(text, eventType);
         }
 
         public byte[] Serialize(object @event)
         {
-            throw new NotImplementedException();
+            var text = JsonConvert.SerializeObject(@event, settings);
+            return Convert.FromBase64String(text);
         }
     }
 }
