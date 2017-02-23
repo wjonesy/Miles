@@ -1,9 +1,7 @@
 ﻿using Miles.Sample.Domain.Read.Leagues;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.Sample.Persistence.EF.Access.Domain.Read
@@ -20,12 +18,12 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
         public async Task<List<League>> GetLeaguesAsync()
         {
             return await dbContext.Leagues.Select(x => new League
-                {
-                    Abbreviation = x.Abbreviation.Abbreviation,
-                    Name = x.Name
-                })
+            {
+                Abbreviation = x.Abbreviation.Abbreviation,
+                Name = x.Name
+            })
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<List<Standing>> GetStandingsAsync(string id)
@@ -47,7 +45,7 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
                 .ThenByDescending(x => x.PointsFor)
                 .ThenByDescending(x => x.PointsAgainst)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<List<Fixture>> GetFixturesAsync(string leagueId)
@@ -67,7 +65,7 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
                    })
                    .OrderByDescending(x => x.ScheduledDateTime)
                    .AsNoTracking()
-                   .ToListAsync();
+                   .ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<List<string>> GetTeamsAsync(string leagueId)
@@ -77,7 +75,7 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
                 .Select(x => x.Team.Abbreviation)
                 .OrderBy(x => x)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
         }
     }
 }

@@ -16,6 +16,7 @@
 using GreenPipes;
 using Microsoft.Practices.ServiceLocation;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.ContainerScope
@@ -34,6 +35,7 @@ namespace Miles.MassTransit.ContainerScope
             context.CreateFilterScope("miles-container-scope").Add("type", containerStackFactory.ContainerType);
         }
 
+        [DebuggerNonUserCode]
         public async Task Send(TContext context, IPipe<TContext> next)
         {
             var containerStack = context.GetOrAddPayload(() =>
@@ -49,7 +51,7 @@ namespace Miles.MassTransit.ContainerScope
             containerStack.PushScope(context);
             try
             {
-                await next.Send(context);
+                await next.Send(context).ConfigureAwait(false);
             }
             finally
             {

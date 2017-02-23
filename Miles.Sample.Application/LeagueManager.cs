@@ -3,9 +3,6 @@ using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Leagues;
 using Miles.Sample.Domain.Command.Teams;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.Sample.Application

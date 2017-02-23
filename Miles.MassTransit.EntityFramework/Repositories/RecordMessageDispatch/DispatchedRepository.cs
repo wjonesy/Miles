@@ -23,8 +23,8 @@ namespace Miles.MassTransit.EntityFramework.RecordMessageDispatch
                 command.Parameters.AddWithValue("@DispatchedDate", DateTime.Now);
                 command.Parameters.AddWithValue("@MessageId", context.MessageId.Value);
 
-                await connection.OpenAsync();
-                await command.ExecuteNonQueryAsync();
+                await connection.OpenAsync().ConfigureAwait(false);
+                await command.ExecuteNonQueryAsync().ConfigureAwait(false);
             }
         }
     }

@@ -1,10 +1,7 @@
-﻿using Miles.Sample.Domain.Read.Leagues;
-using Miles.Sample.Domain.Read.Teams;
-using System;
+﻿using Miles.Sample.Domain.Read.Teams;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Miles.Sample.Persistence.EF.Access.Domain.Read
@@ -17,7 +14,7 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
         {
             this.dbContext = dbContext;
         }
-        
+
         public async Task<List<string>> GetTeamsNotInLeagueAsync(string id)
         {
             var teamsInLeague = dbContext.Set<Sample.Domain.Command.Leagues.LeagueStanding>()
@@ -29,7 +26,7 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Read
                 .Select(x => x.Abbreviation.Abbreviation)
                 .OrderBy(x => x)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
         }
     }
 }
