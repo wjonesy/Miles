@@ -45,8 +45,11 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="ClashingEventAliasException.cs" />
     <Compile Include="DynamicAggregateBuilder.cs" />
+    <Compile Include="EventAliasAttribute.cs" />
     <Compile Include="EventConnectionExtensions.cs" />
+    <Compile Include="AggregateStateEventTypeLookup.cs" />
     <Compile Include="IAggregateBuilderFactory.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="IAggregateBuilder.cs" />
