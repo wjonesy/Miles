@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using EventStore.ClientAPI;
+using System;
 
 namespace Miles.EventStore
 {
@@ -21,6 +21,6 @@ namespace Miles.EventStore
     {
         byte[] Serialize(object @event);
 
-        object DeSerialize(RecordedEvent @event);
+        object DeSerialize(byte[] @event, Type eventType);
     }
 }

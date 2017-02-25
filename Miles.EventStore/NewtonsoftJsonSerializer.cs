@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using EventStore.ClientAPI;
 using Newtonsoft.Json;
 using System;
 
@@ -28,17 +27,16 @@ namespace Miles.EventStore
             this.settings = settings;
         }
 
-        public object DeSerialize(RecordedEvent @event)
-        {
-            var eventType = Type.GetType(@event.EventType);
-            var text = Convert.ToBase64String(@event.Data);
-            return JsonConvert.DeserializeObject(text, eventType);
-        }
-
         public byte[] Serialize(object @event)
         {
             var text = JsonConvert.SerializeObject(@event, settings);
             return Convert.FromBase64String(text);
+        }
+
+        public object DeSerialize(byte[] @event, Type eventType)
+        {
+            var text = Convert.ToBase64String(@event);
+            return JsonConvert.DeserializeObject(text, eventType, settings);
         }
     }
 }

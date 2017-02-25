@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="ClashingEventAliasException.cs" />
     <Compile Include="DynamicAggregateBuilder.cs" />
+    <Compile Include="EventNameAttribute.cs" />
     <Compile Include="EventAliasAttribute.cs" />
     <Compile Include="EventConnectionExtensions.cs" />
     <Compile Include="AggregateStateEventTypeLookup.cs" />

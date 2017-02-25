@@ -22,18 +22,24 @@ namespace Miles.EventStore
     public class DynamicAggregateBuilder<TAggregate, TState> : IAggregateBuilder<TAggregate> where TState : class, IAppliesEvent, new()
     {
         private readonly ISerializer<TAggregate> serializer;
+        private readonly AggregateStateEventTypeLookup<TState> eventTypeLookup;
 
         private int version = 0;
         private readonly TState state = new TState();
 
-        public DynamicAggregateBuilder(ISerializer<TAggregate> serializer)
+        public DynamicAggregateBuilder(
+            ISerializer<TAggregate> serializer,
+            AggregateStateEventTypeLookup<TState> eventTypeLookup)
         {
             this.serializer = serializer;
+            this.eventTypeLookup = eventTypeLookup;
         }
 
         public void AddEvent(RecordedEvent @event)
         {
-            var eventObj = serializer.DeSerialize(@event);
+            var eventType = eventTypeLookup[@event.EventType];
+            var eventObj = serializer.DeSerialize(@event.Data, eventType);
+
             ((dynamic)state).ApplyEvent(eventObj);
             version = @event.EventNumber;
         }

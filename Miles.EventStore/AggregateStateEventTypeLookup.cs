@@ -6,11 +6,12 @@ using System.Reflection;
 
 namespace Miles.EventStore
 {
-    class AggregateStateEventTypeLookup<TState> where TState : class, IAppliesEvent
+    public class AggregateStateEventTypeLookup<TState> where TState : class, IAppliesEvent
     {
         private static readonly Type iAppliesEvents = typeof(IAppliesEvent<>);
 
-        private readonly Dictionary<string, Type> types;
+        private readonly Dictionary<string, Type> aliasToType;
+        private readonly Dictionary<Type, string> typeToAlias;
 
         public AggregateStateEventTypeLookup()
         {
@@ -19,20 +20,30 @@ namespace Miles.EventStore
                 .Where(t => t.GetGenericTypeDefinition() == iAppliesEvents)
                 .Select(t => t.GetGenericArguments().First());
 
-            var typesAndAliases = applyableEvents
+            var nameAndType = applyableEvents
+                .Select(et => new
+                {
+                    Alias = et.GetCustomAttribute<EventNameAttribute>(false)?.Name ?? et.Name,
+                    Type = et
+                })
+                .ToList();
+
+            var aliasAndType = applyableEvents
                 .SelectMany(et => et.GetCustomAttributes<EventAliasAttribute>(false)
                     .Select(n => new
                     {
                         Alias = n.Alias,
                         Type = et
-                    })
-                ).ToList();
+                    }))
+                    .Concat(nameAndType)
+                    .ToList();
 
-            var clashingAliasCheck = typesAndAliases.GroupBy(x => x.Alias, x => x.Type).Where(x => x.Count() > 1).ToList();
+            var clashingAliasCheck = aliasAndType.GroupBy(x => x.Alias, x => x.Type).Where(x => x.Count() > 1).ToList();
             if (clashingAliasCheck.Any())
                 throw new ClashingEventAliasException(typeof(TState), clashingAliasCheck);
 
-            types = typesAndAliases.ToDictionary(x => x.Alias, x => x.Type);
+            aliasToType = aliasAndType.ToDictionary(x => x.Alias, x => x.Type);
+            typeToAlias = nameAndType.ToDictionary(x => x.Type, x => x.Alias);
         }
 
         public Type this[string alias]
@@ -40,8 +51,20 @@ namespace Miles.EventStore
             get
             {
                 Type et;
-                if (types.TryGetValue(alias, out et))
+                if (aliasToType.TryGetValue(alias, out et))
                     return et;
+
+                return null;
+            }
+        }
+
+        public string this[Type eventType]
+        {
+            get
+            {
+                string alias;
+                if (typeToAlias.TryGetValue(eventType, out alias))
+                    return alias;
 
                 return null;
             }
