@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections.Generic;
+using System;
 
 namespace Miles.Aggregates
 {
-    public interface IAggregate
+    public class AggregateNameAttribute : Attribute
     {
-        IEnumerable<object> NewEvents { get; }
+        public AggregateNameAttribute(string name)
+        {
+            this.Name = name;
+        }
 
-        void NewEventsPublished();
+        public string Name { get; private set; }
     }
 }

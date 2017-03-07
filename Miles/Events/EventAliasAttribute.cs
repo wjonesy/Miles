@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections.Generic;
+using System;
 
-namespace Miles.Aggregates
+namespace Miles.Events
 {
-    public interface IAggregate
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
+    public class EventAliasAttribute : Attribute
     {
-        IEnumerable<object> NewEvents { get; }
+        public EventAliasAttribute(string alias)
+        {
+            if (string.IsNullOrWhiteSpace(alias))
+                throw new ArgumentNullException(nameof(alias));
 
-        void NewEventsPublished();
+            this.Alias = alias;
+        }
+
+        public string Alias { get; private set; }
     }
 }

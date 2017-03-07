@@ -15,21 +15,22 @@
  */
 using EventStore.ClientAPI;
 using Miles.Aggregates;
-using System;
 
 namespace Miles.EventStore
 {
-    public class DynamicAggregateBuilder<TAggregate, TState> : IAggregateBuilder<TAggregate> where TState : class, IAppliesEvent, new()
+    public class AggregateBuilder<TAggregate, TState> : IAggregateBuilder<TAggregate>
+        where TAggregate : IAggregateState<TState>, IEventSourcedAggregate, new()
+        where TState : class, IAppliesEvent, new()
     {
         private readonly ISerializer<TAggregate> serializer;
-        private readonly AggregateStateEventTypeLookup<TState> eventTypeLookup;
+        private readonly IAggregateEventTypeLookup<TAggregate> eventTypeLookup;
 
         private int version = 0;
         private readonly TState state = new TState();
 
-        public DynamicAggregateBuilder(
+        public AggregateBuilder(
             ISerializer<TAggregate> serializer,
-            AggregateStateEventTypeLookup<TState> eventTypeLookup)
+            IAggregateEventTypeLookup<TAggregate> eventTypeLookup)
         {
             this.serializer = serializer;
             this.eventTypeLookup = eventTypeLookup;
@@ -37,7 +38,7 @@ namespace Miles.EventStore
 
         public void AddEvent(RecordedEvent @event)
         {
-            var eventType = eventTypeLookup[@event.EventType];
+            var eventType = eventTypeLookup.lookupType(@event.EventType);
             var eventObj = serializer.DeSerialize(@event.Data, eventType);
 
             ((dynamic)state).ApplyEvent(eventObj);
@@ -46,7 +47,11 @@ namespace Miles.EventStore
 
         public TAggregate Build()
         {
-            throw new NotImplementedException();
+            return new TAggregate()
+            {
+                Version = version,
+                State = state
+            };
         }
 
         #region IDisposable Support

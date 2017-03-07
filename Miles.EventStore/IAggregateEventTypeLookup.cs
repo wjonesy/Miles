@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections.Generic;
+using System;
 
-namespace Miles.Aggregates
+namespace Miles.EventStore
 {
-    public interface IAggregate
+    public interface IAggregateEventTypeLookup<TAggregate>
     {
-        IEnumerable<object> NewEvents { get; }
+        string lookupName(Type eventType);
 
-        void NewEventsPublished();
+        Type lookupType(string alias);
     }
 }

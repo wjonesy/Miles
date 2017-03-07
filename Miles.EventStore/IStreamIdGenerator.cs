@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections.Generic;
+using System;
 
-namespace Miles.Aggregates
+namespace Miles.EventStore
 {
-    public interface IAggregate
+    public interface IStreamIdGenerator
     {
-        IEnumerable<object> NewEvents { get; }
-
-        void NewEventsPublished();
+        string GenerateStreamId(Type aggregateType, Guid id);
     }
 }

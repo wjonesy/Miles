@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using EventStore.ClientAPI;
+using Miles.Aggregates;
+using System.Collections.Generic;
+
 namespace Miles.EventStore
 {
-    public interface IAggregateBuilderFactory<TAggregate>
+    public interface IAggregateManager<TAggregate> where TAggregate : class, IEventSourcedAggregate
     {
-        IAggregateBuilder<TAggregate> Create();
+        IAggregateBuilder<TAggregate> CreateBuilder(TAggregate aggregate = null);
+
+        EventData[] CreateEventData(IEnumerable<object> newEvents);
     }
 }

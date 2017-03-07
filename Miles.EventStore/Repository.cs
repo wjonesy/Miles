@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 using EventStore.ClientAPI;
+using Miles.Aggregates;
 using Miles.Persistence;
 using System;
 using System.Threading.Tasks;
 
 namespace Miles.EventStore
 {
-    public class Repository<TAggregate> : IRepository<TAggregate>
+    public class Repository<TAggregate> : IRepository<TAggregate> where TAggregate : class, IEventSourcedAggregate
     {
+        private static readonly Type AggregateType = typeof(TAggregate);
+
         private readonly IEventStoreConnection connection;
-        private readonly IAggregateBuilderFactory<TAggregate> aggregateBuilderFactory;
+        private readonly IAggregateManager<TAggregate> aggregateManager;
+        private readonly IStreamIdGenerator streamIdGenerator;
 
         public Repository(
             IEventStoreConnection connection,
-            IAggregateBuilderFactory<TAggregate> aggregateBuilderFactory)
+            IAggregateManager<TAggregate> aggregateManager)
         {
             this.connection = connection;
-            this.aggregateBuilderFactory = aggregateBuilderFactory;
+            this.aggregateManager = aggregateManager;
         }
 
         public async Task<TAggregate> GetByIdAsync(Guid id)
         {
-            using (var builder = aggregateBuilderFactory.Create())
+            var streamId = streamIdGenerator.GenerateStreamId(AggregateType, id);
+            using (var builder = aggregateManager.CreateBuilder())
             {
-                await connection.ForEachStreamEventsForwardAsync("", 0, 100, false, e =>
+                await connection.ForEachStreamEventsForwardAsync(streamId, 0, 100, false, e =>
                 {
                     builder.AddEvent(e.Event);
                 });
@@ -46,9 +51,16 @@ namespace Miles.EventStore
             }
         }
 
-        public Task SaveAsync(TAggregate aggregate)
+        public async Task SaveAsync(TAggregate aggregate)
         {
-            throw new NotImplementedException();
+            var streamId = streamIdGenerator.GenerateStreamId(AggregateType, Guid.NewGuid());
+
+            var eventData = aggregateManager.CreateEventData(aggregate.NewEvents);
+            var expectedVersion = aggregate.Version;
+
+            var result = await connection.AppendToStreamAsync(streamId, expectedVersion, eventData);
+            aggregate.NewEventsPublished();
+            aggregate.Version = result.NextExpectedVersion;
         }
     }
 }

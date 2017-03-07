@@ -19,6 +19,8 @@ namespace Miles.EventStore
 {
     public interface ISerializer<TAggregate>
     {
+        bool IsJson(Type eventType);
+
         byte[] Serialize(object @event);
 
         object DeSerialize(byte[] @event, Type eventType);

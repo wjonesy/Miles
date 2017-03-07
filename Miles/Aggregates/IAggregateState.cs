@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System.Collections.Generic;
 
 namespace Miles.Aggregates
 {
-    public interface IAggregate
+    public interface IAggregateState<TState>
     {
-        IEnumerable<object> NewEvents { get; }
-
-        void NewEventsPublished();
+        TState State { set; }
     }
 }

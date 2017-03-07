@@ -13,15 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
 using System.Collections.Generic;
 
 namespace Miles.Aggregates
 {
-    public abstract class Aggregate<TState> : IAggregate where TState : class, IAppliesEvent, new()
+    public abstract class Aggregate<TState> : IEventSourcedAggregate, IAggregateState<TState> where TState : class, IAppliesEvent, new()
     {
-        private int version = 0;
-        private List<object> newEvents = new List<object>();
+        private readonly List<object> newEvents = new List<object>();
         private TState state = new TState();
 
         protected TState State => state;
@@ -30,24 +28,21 @@ namespace Miles.Aggregates
         {
             var eventApplyable = state as IAppliesEvent<TEvent>;
             if (eventApplyable == null)
-                throw new InvalidOperationException($"{typeof(TEvent).ToString()} not supported.");
+                throw new UnsupportedEventTypeException(this.GetType(), typeof(TEvent));
 
             eventApplyable.ApplyEvent(@event);
-            ++version;
             newEvents.Add(@event);
         }
 
-        #region IAggregate
+        IEnumerable<object> IAggregate.NewEvents => newEvents;
 
-        int IAggregate.Version => version;
-
-        IEnumerable<object> IAggregate.PullNewEvents()
+        void IAggregate.NewEventsPublished()
         {
-            var result = newEvents;
-            newEvents = new List<object>();
-            return result;
+            newEvents.Clear();
         }
 
-        #endregion
+        int IEventSourcedAggregate.Version { get; set; }
+
+        TState IAggregateState<TState>.State { set { state = value; } }
     }
 }

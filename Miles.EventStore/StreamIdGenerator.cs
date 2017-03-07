@@ -13,30 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using Newtonsoft.Json;
+using Miles.Aggregates;
 using System;
+using System.Reflection;
 
 namespace Miles.EventStore
 {
-    public class NewtonsoftJsonSerializer<TAggregate> : ISerializer<TAggregate>
+    public class StreamIdGenerator : IStreamIdGenerator
     {
-        private readonly JsonSerializerSettings settings;
-
-        public NewtonsoftJsonSerializer(JsonSerializerSettings settings)
+        public string GenerateStreamId(Type aggregateType, Guid id)
         {
-            this.settings = settings;
-        }
-
-        public byte[] Serialize(object @event)
-        {
-            var text = JsonConvert.SerializeObject(@event, settings);
-            return Convert.FromBase64String(text);
-        }
-
-        public object DeSerialize(byte[] @event, Type eventType)
-        {
-            var text = Convert.ToBase64String(@event);
-            return JsonConvert.DeserializeObject(text, eventType, settings);
+            var aggregateName = aggregateType.GetCustomAttribute<AggregateNameAttribute>()?.Name ?? aggregateType.Name;
+            return $"{aggregateName}-{id}";
         }
     }
 }

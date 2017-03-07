@@ -1,4 +1,20 @@
-﻿using Miles.Aggregates;
+﻿/*
+ *     Copyright 2017 Adam Burton (adz21c@gmail.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+using Miles.Aggregates;
+using Miles.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,14 +22,14 @@ using System.Reflection;
 
 namespace Miles.EventStore
 {
-    public class AggregateStateEventTypeLookup<TState> where TState : class, IAppliesEvent
+    public class AggregateEventTypeLookup<TAggregate, TState> : IAggregateEventTypeLookup<TAggregate> where TState : class, IAppliesEvent
     {
         private static readonly Type iAppliesEvents = typeof(IAppliesEvent<>);
 
         private readonly Dictionary<string, Type> aliasToType;
         private readonly Dictionary<Type, string> typeToAlias;
 
-        public AggregateStateEventTypeLookup()
+        public AggregateEventTypeLookup()
         {
             var applyableEvents = typeof(TState).GetInterfaces()
                 .Where(t => t.IsGenericType)
@@ -46,28 +62,22 @@ namespace Miles.EventStore
             typeToAlias = nameAndType.ToDictionary(x => x.Type, x => x.Alias);
         }
 
-        public Type this[string alias]
+        public Type lookupType(string alias)
         {
-            get
-            {
-                Type et;
-                if (aliasToType.TryGetValue(alias, out et))
-                    return et;
+            Type et;
+            if (aliasToType.TryGetValue(alias, out et))
+                return et;
 
-                return null;
-            }
+            return null;
         }
 
-        public string this[Type eventType]
+        public string lookupName(Type eventType)
         {
-            get
-            {
-                string alias;
-                if (typeToAlias.TryGetValue(eventType, out alias))
-                    return alias;
+            string alias;
+            if (typeToAlias.TryGetValue(eventType, out alias))
+                return alias;
 
-                return null;
-            }
+            return null;
         }
     }
 }
