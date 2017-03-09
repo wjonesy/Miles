@@ -1,4 +1,4 @@
-﻿namespace Miles.Sample.Domain.Command.Fixtures
+﻿namespace Miles.Sample.Domain.Command.Leagues
 {
     public enum FixtureResults
     {

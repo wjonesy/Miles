@@ -34,17 +34,18 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\Fixtures\FixtureScheduled.cs" />
-    <Compile Include="Command\Fixtures\FixtureResults.cs" />
+    <Compile Include="Command\Leagues\FixtureScheduled.cs" />
+    <Compile Include="Command\Leagues\FixtureResults.cs" />
     <Compile Include="Command\Fixtures\FixtureState.cs" />
-    <Compile Include="Command\Fixtures\GoalScored.cs" />
+    <Compile Include="Command\Leagues\GoalRecorded.cs" />
     <Compile Include="Command\Leagues\ILeagueRepository.cs" />
     <Compile Include="Command\Leagues\League.cs" />
     <Compile Include="Command\Leagues\LeagueAbbreviation.cs" />
     <Compile Include="Command\Fixtures\Fixture.cs" />
-    <Compile Include="Command\Fixtures\FixtureFinished.cs" />
-    <Compile Include="Command\Fixtures\FixtureStarted.cs" />
+    <Compile Include="Command\Leagues\FixtureFinished.cs" />
+    <Compile Include="Command\Leagues\FixtureStarted.cs" />
     <Compile Include="Command\Leagues\LeagueCreated.cs" />
+    <Compile Include="Command\Leagues\Fixture.cs" />
     <Compile Include="Command\Leagues\LeagueStanding.cs" />
     <Compile Include="Command\Leagues\LeagueStarted.cs" />
     <Compile Include="Command\Leagues\LeagueState.cs" />

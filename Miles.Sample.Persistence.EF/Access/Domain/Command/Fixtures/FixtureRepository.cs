@@ -18,12 +18,12 @@ namespace Miles.Sample.Persistence.EF.Access.Domain.Command.Fixtures
             this.dbContext = dbContext;
         }
 
-        public Task<Fixture> GetByIdAsync(FixtureId fixtureId)
+        public Task<Sample.Domain.Command.Fixtures.Fixture> GetByIdAsync(FixtureId fixtureId)
         {
             return dbContext.Fixtures.SingleOrDefaultAsync(x => x.Id.Id == fixtureId.Id);
         }
 
-        public Task SaveAsync(Fixture fixture)
+        public Task SaveAsync(Sample.Domain.Command.Fixtures.Fixture fixture)
         {
             var entry = dbContext.Entry(fixture);
             if (entry == null || entry.State == EntityState.Detached || entry.State == EntityState.Deleted)

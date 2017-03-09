@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Miles.Sample.Domain.Command.Fixtures
+namespace Miles.Sample.Domain.Command.Leagues
 {
     public class FixtureFinished
     {

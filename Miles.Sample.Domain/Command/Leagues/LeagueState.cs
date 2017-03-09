@@ -1,6 +1,7 @@
 ﻿using Miles.Aggregates;
 using Miles.Sample.Domain.Command.Teams;
 using System.Collections.Generic;
+using System;
 
 namespace Miles.Sample.Domain.Command.Leagues
 {
@@ -29,6 +30,11 @@ namespace Miles.Sample.Domain.Command.Leagues
         void IAppliesEvent<LeagueStarted>.ApplyEvent(LeagueStarted @event)
         {
             State = LeagueStates.InProgress;
+        }
+
+        internal bool HasFixtureStarted(Guid fixtureId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

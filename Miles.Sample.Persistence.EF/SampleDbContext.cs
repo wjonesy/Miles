@@ -14,7 +14,7 @@ namespace Miles.Sample.Persistence.EF
         public SampleDbContext() : base("Miles.Sample")
         { }
 
-        public DbSet<Fixture> Fixtures { get; set; }
+        public DbSet<Domain.Command.Fixtures.Fixture> Fixtures { get; set; }
         public DbSet<League> Leagues { get; set; }
         public DbSet<Team> Teams { get; set; }
 

@@ -5,7 +5,7 @@ using System;
 
 namespace Miles.Sample.Domain.Command.Fixtures
 {
-    public class FixtureState : IAppliesEvent<FixtureScheduled>, IAppliesEvent<FixtureStarted>, IAppliesEvent<GoalScored>, IAppliesEvent<FixtureFinished>
+    public class FixtureState : IAppliesEvent<FixtureScheduled>, IAppliesEvent<FixtureStarted>, IAppliesEvent<GoalRecorded>, IAppliesEvent<FixtureFinished>
     {
         public enum FixtureStates
         {
@@ -49,7 +49,7 @@ namespace Miles.Sample.Domain.Command.Fixtures
             this.State = FixtureStates.InProgress;
         }
 
-        void IAppliesEvent<GoalScored>.ApplyEvent(GoalScored @event)
+        void IAppliesEvent<GoalRecorded>.ApplyEvent(GoalRecorded @event)
         {
             if (@event.Team == TeamA)
                 ++TeamAPoints;

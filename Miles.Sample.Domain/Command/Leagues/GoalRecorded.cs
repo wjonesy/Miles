@@ -1,9 +1,9 @@
 ﻿using Miles.Sample.Domain.Command.Teams;
 using System;
 
-namespace Miles.Sample.Domain.Command.Fixtures
+namespace Miles.Sample.Domain.Command.Leagues
 {
-    class GoalScored
+    class GoalRecorded
     {
         public Guid Id { get; set; }
 

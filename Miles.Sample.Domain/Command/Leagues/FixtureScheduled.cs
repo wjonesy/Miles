@@ -1,8 +1,7 @@
-﻿using Miles.Sample.Domain.Command.Leagues;
-using Miles.Sample.Domain.Command.Teams;
+﻿using Miles.Sample.Domain.Command.Teams;
 using System;
 
-namespace Miles.Sample.Domain.Command.Fixtures
+namespace Miles.Sample.Domain.Command.Leagues
 {
     class FixtureScheduled
     {

@@ -58,7 +58,7 @@ namespace Miles.Sample.Domain.Command.Fixtures
             if (when < State.Started.Value)
                 throw new ArgumentOutOfRangeException(nameof(when), "Cannot score a goal before the game has started.");
 
-            this.ApplyNewEvent(new GoalScored
+            this.ApplyNewEvent(new GoalRecorded
             {
                 Id = State.Id,
                 When = when,
