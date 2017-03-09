@@ -46,6 +46,7 @@
     <Compile Include="Command\Fixtures\FixtureStarted.cs" />
     <Compile Include="Command\Leagues\LeagueCreated.cs" />
     <Compile Include="Command\Leagues\LeagueStanding.cs" />
+    <Compile Include="Command\Leagues\LeagueStarted.cs" />
     <Compile Include="Command\Leagues\LeagueState.cs" />
     <Compile Include="Command\Leagues\TeamRegistered.cs" />
     <Compile Include="Command\Teams\ITeamRepository.cs" />

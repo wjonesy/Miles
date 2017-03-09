@@ -1,5 +1,4 @@
 ﻿using Miles.Aggregates;
-using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Teams;
 using System;
 using System.Linq;
@@ -28,7 +27,8 @@ namespace Miles.Sample.Domain.Command.Leagues
             if (team == null)
                 throw new ArgumentNullException(nameof(team));
 
-            // TODO: Scheduling
+            if (State.State != LeagueState.LeagueStates.Planning)
+                throw new InvalidOperationException("The league is not open for planning");
 
             if (State.RegisteredTeams.Contains(team))   // Team already registered, ignore
                 return;
@@ -40,37 +40,59 @@ namespace Miles.Sample.Domain.Command.Leagues
             });
         }
 
-        public Fixture ScheduleFixture(TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
+        public void Start(DateTime when)
         {
-            // TODO: Scheduling
-            return new Fixture(Guid.NewGuid(), State.Id, teamA, teamB, scheduledDateTime);
-        }
+            if (State.State == LeagueState.LeagueStates.InProgress)
+                return;
 
-        public void RecordResult(FixtureResults result, TeamAbbreviation teamA, int teamAPoints, TeamAbbreviation teamB, int teamBPoints)
-        {
-            var teamAStanding = Standings.SingleOrDefault(x => x.Team == teamA);
-            if (teamAStanding == null)
-                throw new ArgumentException("Team A is not a member of the league");
+            if (State.State == LeagueState.LeagueStates.Completed)
+                throw new InvalidOperationException("League has already completed");
 
-            var teamBStanding = Standings.SingleOrDefault(x => x.Team == teamB);
-            if (teamBStanding == null)
-                throw new ArgumentException("Team B is not a member of the league");
-
-            switch (result)
+            this.ApplyNewEvent(new LeagueStarted
             {
-                case FixtureResults.TeamAWins:
-                    teamAStanding.RecordResult(LeagueStanding.Results.Win, teamAPoints, teamBPoints);
-                    teamBStanding.RecordResult(LeagueStanding.Results.Lose, teamBPoints, teamAPoints);
-                    break;
-                case FixtureResults.TeamBWins:
-                    teamAStanding.RecordResult(LeagueStanding.Results.Lose, teamAPoints, teamBPoints);
-                    teamBStanding.RecordResult(LeagueStanding.Results.Win, teamBPoints, teamAPoints);
-                    break;
-                case FixtureResults.Draw:
-                    teamAStanding.RecordResult(LeagueStanding.Results.Draw, teamAPoints, teamBPoints);
-                    teamBStanding.RecordResult(LeagueStanding.Results.Draw, teamBPoints, teamAPoints);
-                    break;
-            }
+                Id = State.Id,
+                When = when
+            });
         }
+
+        //public Fixture ScheduleFixture(TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
+        //{
+        //    if (!State.RegisteredTeams.Contains(teamA))
+        //        throw new ArgumentOutOfRangeException(nameof(teamA), "Not registered with the league");
+
+
+        //    if (!State.RegisteredTeams.Contains(teamB))
+        //        throw new ArgumentOutOfRangeException(nameof(teamB), "Not registered with the league");
+
+        //    // TODO: Scheduling
+        //    return new Fixture(Guid.NewGuid(), State.Id, teamA, teamB, scheduledDateTime);
+        //}
+
+        //public void RecordResult(FixtureResults result, TeamAbbreviation teamA, int teamAPoints, TeamAbbreviation teamB, int teamBPoints)
+        //{
+        //    var teamAStanding = Standings.SingleOrDefault(x => x.Team == teamA);
+        //    if (teamAStanding == null)
+        //        throw new ArgumentException("Team A is not a member of the league");
+
+        //    var teamBStanding = Standings.SingleOrDefault(x => x.Team == teamB);
+        //    if (teamBStanding == null)
+        //        throw new ArgumentException("Team B is not a member of the league");
+
+        //    switch (result)
+        //    {
+        //        case FixtureResults.TeamAWins:
+        //            teamAStanding.RecordResult(LeagueStanding.Results.Win, teamAPoints, teamBPoints);
+        //            teamBStanding.RecordResult(LeagueStanding.Results.Lose, teamBPoints, teamAPoints);
+        //            break;
+        //        case FixtureResults.TeamBWins:
+        //            teamAStanding.RecordResult(LeagueStanding.Results.Lose, teamAPoints, teamBPoints);
+        //            teamBStanding.RecordResult(LeagueStanding.Results.Win, teamBPoints, teamAPoints);
+        //            break;
+        //        case FixtureResults.Draw:
+        //            teamAStanding.RecordResult(LeagueStanding.Results.Draw, teamAPoints, teamBPoints);
+        //            teamBStanding.RecordResult(LeagueStanding.Results.Draw, teamBPoints, teamAPoints);
+        //            break;
+        //    }
+        //}
     }
 }
