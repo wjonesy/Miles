@@ -1,35 +1,49 @@
-﻿using Miles.Sample.Domain.Command.Fixtures;
+﻿using Miles.Aggregates;
+using Miles.Sample.Domain.Command.Fixtures;
 using Miles.Sample.Domain.Command.Teams;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Miles.Sample.Domain.Command.Leagues
 {
-    public class League
+    public class League : Aggregate<LeagueState>
     {
-        protected League()
+        public League(LeagueAbbreviation abbreviation, string name)
         {
-            Standings = new List<LeagueStanding>();
+            if (abbreviation == null)
+                throw new ArgumentNullException(nameof(abbreviation));
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+
+            this.ApplyNewEvent(new LeagueCreated
+            {
+                Id = abbreviation,
+                Name = name
+            });
         }
-
-        public League(LeagueAbbreviation abbreviation, string name) : this()
-        {
-            this.Abbreviation = abbreviation;
-            this.Name = name;
-        }
-
-        public int SurrogateId { get; private set; }
-
-        public LeagueAbbreviation Abbreviation { get; private set; }
-
-        public string Name { get; private set; }
-
-        public virtual ICollection<LeagueStanding> Standings { get; private set; }
 
         public void RegisterTeam(TeamAbbreviation team)
         {
-            Standings.Add(new LeagueStanding(this, team));
+            if (team == null)
+                throw new ArgumentNullException(nameof(team));
+
+            // TODO: Scheduling
+
+            if (State.RegisteredTeams.Contains(team))   // Team already registered, ignore
+                return;
+
+            this.ApplyNewEvent(new TeamRegistered
+            {
+                Id = State.Id,
+                Team = team
+            });
+        }
+
+        public Fixture ScheduleFixture(TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
+        {
+            // TODO: Scheduling
+            return new Fixture(Guid.NewGuid(), State.Id, teamA, teamB, scheduledDateTime);
         }
 
         public void RecordResult(FixtureResults result, TeamAbbreviation teamA, int teamAPoints, TeamAbbreviation teamB, int teamBPoints)
@@ -57,12 +71,6 @@ namespace Miles.Sample.Domain.Command.Leagues
                     teamBStanding.RecordResult(LeagueStanding.Results.Draw, teamBPoints, teamAPoints);
                     break;
             }
-        }
-
-        public Fixture ScheduleFixture(DomainContext domainContext, TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
-        {
-            var fixture = new Fixture(Abbreviation, teamA, teamB, scheduledDateTime);
-            return fixture;
         }
     }
 }

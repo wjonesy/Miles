@@ -44,7 +44,10 @@
     <Compile Include="Command\Fixtures\Fixture.cs" />
     <Compile Include="Command\Fixtures\FixtureFinished.cs" />
     <Compile Include="Command\Fixtures\FixtureStarted.cs" />
+    <Compile Include="Command\Leagues\LeagueCreated.cs" />
     <Compile Include="Command\Leagues\LeagueStanding.cs" />
+    <Compile Include="Command\Leagues\LeagueState.cs" />
+    <Compile Include="Command\Leagues\TeamRegistered.cs" />
     <Compile Include="Command\Teams\ITeamRepository.cs" />
     <Compile Include="Command\Teams\Team.cs" />
     <Compile Include="Command\Teams\TeamAbbreviation.cs" />
