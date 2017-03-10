@@ -3,18 +3,9 @@ using System;
 
 namespace Miles.Sample.Domain.Command.Leagues
 {
-    class Fixture
+    public class Fixture
     {
-        public enum FixtureStates
-        {
-            Scheduled = 1,
-            InProgress = 2,
-            Finished = 3
-        }
-
         public Guid Id { get; private set; }
-
-        public LeagueAbbreviation League { get; private set; }
 
         public TeamAbbreviation TeamA { get; private set; }
 

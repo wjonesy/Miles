@@ -1,11 +1,13 @@
 ﻿using Miles.Aggregates;
 using Miles.Sample.Domain.Command.Teams;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Miles.Sample.Domain.Command.Leagues
 {
-    public class LeagueState : IAppliesEvent<LeagueCreated>, IAppliesEvent<LeagueStarted>
+    public class LeagueState :
+        IAppliesEvent<LeagueCreated>, IAppliesEvent<TeamRegistered>, IAppliesEvent<LeagueStarted>,
+        IAppliesEvent<FixtureScheduled>, IAppliesEvent<FixtureStarted>, IAppliesEvent<GoalRecorded>, IAppliesEvent<FixtureFinished>
     {
         public LeagueAbbreviation Id { get; private set; }
 
@@ -14,12 +16,8 @@ namespace Miles.Sample.Domain.Command.Leagues
         private readonly List<TeamAbbreviation> registeredTeamsList = new List<TeamAbbreviation>();
         public IEnumerable<TeamAbbreviation> RegisteredTeams => registeredTeamsList;
 
-        public enum LeagueStates
-        {
-            Planning,
-            InProgress,
-            Completed
-        }
+        private readonly Dictionary<Guid, Fixture> fixtures = new Dictionary<Guid, Fixture>();
+        public Fixture GetFixture(Guid id) { return fixtures[id]; }
 
         void IAppliesEvent<LeagueCreated>.ApplyEvent(LeagueCreated @event)
         {
@@ -27,14 +25,51 @@ namespace Miles.Sample.Domain.Command.Leagues
             State = LeagueStates.Planning;
         }
 
+        void IAppliesEvent<TeamRegistered>.ApplyEvent(TeamRegistered @event)
+        {
+            registeredTeamsList.Add(@event.Team);
+        }
+
         void IAppliesEvent<LeagueStarted>.ApplyEvent(LeagueStarted @event)
         {
             State = LeagueStates.InProgress;
         }
 
-        internal bool HasFixtureStarted(Guid fixtureId)
+        void IAppliesEvent<FixtureScheduled>.ApplyEvent(FixtureScheduled @event)
         {
-            throw new NotImplementedException();
+            fixtures.Add(
+                @event.Id,
+                new Fixture
+                {
+                    Id = @event.Id,
+                    State = FixtureStates.Scheduled,
+                    TeamA = @event.TeamA,
+                    TeamB = @event.TeamB,
+                    ScheduledDateTime = @event.ScheduledDateTime
+                });
+        }
+
+        void IAppliesEvent<FixtureStarted>.ApplyEvent(FixtureStarted @event)
+        {
+            var fixture = GetFixture(@event.Id);
+            fixture.Started = @event.When;
+            fixture.State = FixtureStates.InProgress;
+        }
+
+        void IAppliesEvent<GoalRecorded>.ApplyEvent(GoalRecorded @event)
+        {
+            var fixture = GetFixture(@event.Id);
+            if (fixture.TeamA == @event.Team)
+                fixture.TeamAPoints += 1;
+            else
+                fixture.TeamBPoints += 1;
+        }
+
+        void IAppliesEvent<FixtureFinished>.ApplyEvent(FixtureFinished @event)
+        {
+            var fixture = GetFixture(@event.Id);
+            fixture.Finished = @event.When;
+            fixture.State = FixtureStates.Finished;
         }
     }
 }

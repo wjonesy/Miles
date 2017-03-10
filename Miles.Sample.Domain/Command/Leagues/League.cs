@@ -27,7 +27,7 @@ namespace Miles.Sample.Domain.Command.Leagues
             if (team == null)
                 throw new ArgumentNullException(nameof(team));
 
-            if (State.State != LeagueState.LeagueStates.Planning)
+            if (State.State != LeagueStates.Planning)
                 throw new InvalidOperationException("The league is not open for planning");
 
             if (State.RegisteredTeams.Contains(team))
@@ -42,10 +42,10 @@ namespace Miles.Sample.Domain.Command.Leagues
 
         public void StartLeague(DateTime when)
         {
-            if (State.State == LeagueState.LeagueStates.InProgress)
+            if (State.State == LeagueStates.InProgress)
                 return;
 
-            if (State.State == LeagueState.LeagueStates.Completed)
+            if (State.State == LeagueStates.Completed)
                 throw new InvalidOperationException("League has already completed");
 
             this.ApplyNewEvent(new LeagueStarted
@@ -63,6 +63,9 @@ namespace Miles.Sample.Domain.Command.Leagues
                 throw new ArgumentNullException(nameof(teamB));
             if (teamA == teamB)
                 throw new ArgumentOutOfRangeException(nameof(teamB), "Team A and Team B cannot be the same team");
+
+            if (State.State != LeagueStates.Planning)
+                throw new InvalidOperationException("League is not open to scheduling");
 
             if (!State.RegisteredTeams.Contains(teamA))
                 throw new ArgumentOutOfRangeException(nameof(teamA), "Not registered with the league");
@@ -83,8 +86,15 @@ namespace Miles.Sample.Domain.Command.Leagues
 
         public void StartFixture(Guid fixtureId, DateTime when)
         {
-            if (State.HasFixtureStarted(fixtureId))
+            var fixture = State.GetFixture(fixtureId);
+            if (fixture == null)
+                throw new InvalidOperationException("Could not find the Fixture");
+
+            if (fixture.State != FixtureStates.InProgress)
                 throw new InvalidOperationException("Fixture has already started and possibly completed");
+
+            if (State.State != LeagueStates.InProgress)
+                throw new InvalidOperationException("The league is not in-progress");
 
             this.ApplyNewEvent(new FixtureStarted
             {
@@ -94,64 +104,61 @@ namespace Miles.Sample.Domain.Command.Leagues
             });
         }
 
-        public void RecordGoal(TeamAbbreviation team, DateTime when)
+        public void RecordGoal(Guid fixtureId, TeamAbbreviation team, DateTime when)
         {
             if (team == null)
                 throw new ArgumentNullException(nameof(team));
 
-            if (team != State.TeamA && team != State.TeamB)
+            var fixture = State.GetFixture(fixtureId);
+            if (fixture == null)
+                throw new InvalidOperationException("Could not find the Fixture");
+
+            if (team != fixture.TeamA && team != fixture.TeamB)
                 throw new ArgumentOutOfRangeException(nameof(team), "Must be one of the team fixtures");
 
-            if (State.State != FixtureState.FixtureStates.InProgress)
+            if (fixture.State != FixtureStates.InProgress)
                 throw new InvalidOperationException("Cannot score a goal while the game is not in-progress");
 
-            if (when < State.Started.Value)
+            if (when < fixture.Started.Value)
                 throw new ArgumentOutOfRangeException(nameof(when), "Cannot score a goal before the game has started.");
 
             this.ApplyNewEvent(new GoalRecorded
             {
-                Id = State.Id,
+                League = State.Id,
+                Id = fixtureId,
                 When = when,
                 Team = team
             });
         }
 
-        public void Finish(DateTime when)
+        public void FinishFixture(Guid fixtureId, DateTime when)
         {
-            if (State.State != FixtureState.FixtureStates.InProgress)
+            var fixture = State.GetFixture(fixtureId);
+            if (fixture == null)
+                throw new InvalidOperationException("Could not find the Fixture");
+
+            if (fixture.State != FixtureStates.InProgress)
                 throw new InvalidOperationException("Fixture has not started or already completed");
 
-            if (when <= State.Started.Value)
+            if (when <= fixture.Started.Value)
                 throw new ArgumentOutOfRangeException(nameof(when), "Cannot finish the fixture before it started.");
 
             FixtureResults result;
-            if (State.TeamAPoints > State.TeamBPoints)
+            if (fixture.TeamAPoints > fixture.TeamBPoints)
                 result = FixtureResults.TeamAWins;
-            else if (State.TeamAPoints < State.TeamBPoints)
+            else if (fixture.TeamAPoints < fixture.TeamBPoints)
                 result = FixtureResults.TeamBWins;
             else
                 result = FixtureResults.Draw;
 
             this.ApplyNewEvent(new FixtureFinished
             {
-                Id = this.State.Id,
+                League = State.Id,
+                Id = fixture.Id,
                 When = when,
                 Result = result
             });
         }
-
-        //public Fixture ScheduleFixture(TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
-        //{
-        //    if (!State.RegisteredTeams.Contains(teamA))
-        //        throw new ArgumentOutOfRangeException(nameof(teamA), "Not registered with the league");
-
-
-        //    if (!State.RegisteredTeams.Contains(teamB))
-        //        throw new ArgumentOutOfRangeException(nameof(teamB), "Not registered with the league");
-
-        //    // TODO: Scheduling
-        //    return new Fixture(Guid.NewGuid(), State.Id, teamA, teamB, scheduledDateTime);
-        //}
 
         //public void RecordResult(FixtureResults result, TeamAbbreviation teamA, int teamAPoints, TeamAbbreviation teamB, int teamBPoints)
         //{
