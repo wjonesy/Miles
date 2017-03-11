@@ -1,20 +1,26 @@
-﻿namespace Miles.Sample.Domain.Command.Teams
+﻿using Miles.Aggregates;
+using System;
+
+namespace Miles.Sample.Domain.Command.Teams
 {
-    public class Team
+    public class Team : Aggregate<TeamState>
     {
-        protected Team()
+        public Team()
         { }
 
-        public Team(TeamAbbreviation abbreviation, string name)
+        public Team(TeamAbbreviation id, string name)
         {
-            this.Abbreviation = abbreviation;
-            this.Name = name;
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+
+            this.ApplyNewEvent(new TeamCreated
+            {
+                Id = id,
+                Name = name
+            });
         }
-
-        public int SurrogateId { get; private set; }
-
-        public TeamAbbreviation Abbreviation { get; private set; }
-
-        public string Name { get; private set; }
     }
 }
