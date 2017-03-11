@@ -159,32 +159,5 @@ namespace Miles.Sample.Domain.Command.Leagues
                 Result = result
             });
         }
-
-        //public void RecordResult(FixtureResults result, TeamAbbreviation teamA, int teamAPoints, TeamAbbreviation teamB, int teamBPoints)
-        //{
-        //    var teamAStanding = Standings.SingleOrDefault(x => x.Team == teamA);
-        //    if (teamAStanding == null)
-        //        throw new ArgumentException("Team A is not a member of the league");
-
-        //    var teamBStanding = Standings.SingleOrDefault(x => x.Team == teamB);
-        //    if (teamBStanding == null)
-        //        throw new ArgumentException("Team B is not a member of the league");
-
-        //    switch (result)
-        //    {
-        //        case FixtureResults.TeamAWins:
-        //            teamAStanding.RecordResult(LeagueStanding.Results.Win, teamAPoints, teamBPoints);
-        //            teamBStanding.RecordResult(LeagueStanding.Results.Lose, teamBPoints, teamAPoints);
-        //            break;
-        //        case FixtureResults.TeamBWins:
-        //            teamAStanding.RecordResult(LeagueStanding.Results.Lose, teamAPoints, teamBPoints);
-        //            teamBStanding.RecordResult(LeagueStanding.Results.Win, teamBPoints, teamAPoints);
-        //            break;
-        //        case FixtureResults.Draw:
-        //            teamAStanding.RecordResult(LeagueStanding.Results.Draw, teamAPoints, teamBPoints);
-        //            teamBStanding.RecordResult(LeagueStanding.Results.Draw, teamBPoints, teamAPoints);
-        //            break;
-        //    }
-        //}
     }
 }
