@@ -34,31 +34,26 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\Leagues\FixtureScheduled.cs" />
-    <Compile Include="Command\Leagues\FixtureResults.cs" />
-    <Compile Include="Command\Leagues\FixtureStates.cs" />
-    <Compile Include="Command\Leagues\GoalRecorded.cs" />
-    <Compile Include="Command\Leagues\League.cs" />
-    <Compile Include="Command\Leagues\LeagueAbbreviation.cs" />
-    <Compile Include="Command\Leagues\FixtureFinished.cs" />
-    <Compile Include="Command\Leagues\FixtureStarted.cs" />
-    <Compile Include="Command\Leagues\LeagueCreated.cs" />
-    <Compile Include="Command\Leagues\Fixture.cs" />
-    <Compile Include="Command\Leagues\LeagueStanding.cs" />
-    <Compile Include="Command\Leagues\LeagueStarted.cs" />
-    <Compile Include="Command\Leagues\LeagueState.cs" />
-    <Compile Include="Command\Leagues\LeagueStates.cs" />
-    <Compile Include="Command\Leagues\TeamRegistered.cs" />
-    <Compile Include="Command\Teams\Team.cs" />
-    <Compile Include="Command\Teams\TeamAbbreviation.cs" />
-    <Compile Include="Command\Teams\TeamCreated.cs" />
-    <Compile Include="Command\Teams\TeamState.cs" />
+    <Compile Include="Leagues\FixtureScheduled.cs" />
+    <Compile Include="Leagues\FixtureResults.cs" />
+    <Compile Include="Leagues\FixtureStates.cs" />
+    <Compile Include="Leagues\GoalRecorded.cs" />
+    <Compile Include="Leagues\League.cs" />
+    <Compile Include="Leagues\LeagueAbbreviation.cs" />
+    <Compile Include="Leagues\FixtureFinished.cs" />
+    <Compile Include="Leagues\FixtureStarted.cs" />
+    <Compile Include="Leagues\LeagueCreated.cs" />
+    <Compile Include="Leagues\Fixture.cs" />
+    <Compile Include="Leagues\LeagueStanding.cs" />
+    <Compile Include="Leagues\LeagueStarted.cs" />
+    <Compile Include="Leagues\LeagueState.cs" />
+    <Compile Include="Leagues\LeagueStates.cs" />
+    <Compile Include="Leagues\TeamRegistered.cs" />
+    <Compile Include="Teams\Team.cs" />
+    <Compile Include="Teams\TeamAbbreviation.cs" />
+    <Compile Include="Teams\TeamCreated.cs" />
+    <Compile Include="Teams\TeamState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Read\Leagues\Fixture.cs" />
-    <Compile Include="Read\Leagues\ILeagueReader.cs" />
-    <Compile Include="Read\Leagues\League.cs" />
-    <Compile Include="Read\Leagues\Standing.cs" />
-    <Compile Include="Read\Teams\ITeamReader.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
