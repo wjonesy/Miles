@@ -272,10 +272,6 @@
       <Project>{ccf74eab-5e6f-4964-b31c-8c76c0a527b7}</Project>
       <Name>Miles.Sample.Infrastructure.Unity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Miles.Sample.Persistence.EF\Miles.Sample.Persistence.EF.csproj">
-      <Project>{4C004035-8464-46D6-93E5-51C5694DF6C1}</Project>
-      <Name>Miles.Sample.Persistence.EF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Miles\Miles.csproj">
       <Project>{63b7fa97-8619-4ea0-b594-71fbb10481e5}</Project>
       <Name>Miles</Name>
