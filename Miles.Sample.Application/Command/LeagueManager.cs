@@ -1,7 +1,6 @@
 ﻿using Miles.Persistence;
-using Miles.Sample.Domain.Command.Fixtures;
-using Miles.Sample.Domain.Command.Leagues;
-using Miles.Sample.Domain.Command.Teams;
+using Miles.Sample.Domain.Leagues;
+using Miles.Sample.Domain.Teams;
 using System;
 using System.Threading.Tasks;
 
@@ -9,94 +8,31 @@ namespace Miles.Sample.Application.Command
 {
     public class LeagueManager
     {
-        private readonly ITransactionContext transactionContext;
-        private readonly ILeagueRepository leagueRepository;
-        private readonly IFixtureRepository fixtureRepository;
-        private readonly DomainContext domainContext;
+        private readonly IRepository<League> leagueRepository;
 
-        public LeagueManager(
-            ITransactionContext transactionContext,
-            ILeagueRepository leagueRepository,
-            IFixtureRepository fixtureRepository,
-            DomainContext domainContext)
+        public LeagueManager(IRepository<League> leagueRepository)
         {
-            this.transactionContext = transactionContext;
             this.leagueRepository = leagueRepository;
-            this.fixtureRepository = fixtureRepository;
-            this.domainContext = domainContext;
         }
 
-        public async Task CreateLeagueAsync(LeagueAbbreviation abbr, string name)
+        public async Task CreateLeagueAsync(LeagueAbbreviation id, string name)
         {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var league = new League(
-                    abbr,
-                    name);
-                await leagueRepository.SaveAsync(league);
-
-                await transaction.CommitAsync();
-            }
+            var league = new League(id, name);
+            await leagueRepository.SaveAsync(league);
         }
 
-        public async Task RegisterTeam(LeagueAbbreviation leagueAbbr, TeamAbbreviation teamAbbr)
+        public async Task RegisterTeamAsync(Guid id, TeamAbbreviation team)
         {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var league = await leagueRepository.GetByAbbreviationAsync(leagueAbbr);
-                league.RegisterTeam(teamAbbr);
-                await leagueRepository.SaveAsync(league);
-
-                await transaction.CommitAsync();
-            }
+            var league = await leagueRepository.GetByIdAsync(id);
+            league.RegisterTeam(team);
+            await leagueRepository.SaveAsync(league);
         }
 
-        public async Task ScheduleFixture(LeagueAbbreviation leagueAbbr, TeamAbbreviation teamAAbbr, TeamAbbreviation teamBAbbr, DateTime scheduledDateTime)
+        public async Task ScheduleFixtureAsync(Guid id, TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
         {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var league = await leagueRepository.GetByAbbreviationAsync(leagueAbbr);
-                var fixture = league.ScheduleFixture(domainContext, teamAAbbr, teamBAbbr, scheduledDateTime);
-                await fixtureRepository.SaveAsync(fixture);
-
-                await transaction.CommitAsync();
-            }
-        }
-
-        public async Task StartFixture(FixtureId fixtureId)
-        {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var fixture = await fixtureRepository.GetByIdAsync(fixtureId);
-                fixture.Start(domainContext);
-                await fixtureRepository.SaveAsync(fixture);
-
-                await transaction.CommitAsync();
-            }
-        }
-
-        public async Task IncreatePoints(FixtureId fixtureId, TeamAbbreviation team, int points)
-        {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var fixture = await fixtureRepository.GetByIdAsync(fixtureId);
-                fixture.IncreasePoints(team, points);
-                await fixtureRepository.SaveAsync(fixture);
-
-                await transaction.CommitAsync();
-            }
-        }
-
-        public async Task FinishFixture(FixtureId fixtureId)
-        {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var fixture = await fixtureRepository.GetByIdAsync(fixtureId);
-                fixture.Finish(domainContext);
-                await fixtureRepository.SaveAsync(fixture);
-
-                await transaction.CommitAsync();
-            }
+            var league = await leagueRepository.GetByIdAsync(id);
+            league.ScheduleFixture(teamA, teamB, scheduledDateTime);
+            await leagueRepository.SaveAsync(league);
         }
     }
 }
