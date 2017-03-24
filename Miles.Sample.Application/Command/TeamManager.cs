@@ -1,5 +1,6 @@
 ﻿using Miles.Persistence;
 using Miles.Sample.Domain.Command.Teams;
+using Miles.Sample.Domain.Teams;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +11,17 @@ namespace Miles.Sample.Application.Command
 {
     public class TeamManager
     {
-        private readonly ITransactionContext transactionContext;
-        private readonly ITeamRepository teamRepository;
+        private readonly IRepository<Team> teamRepository;
 
-        public TeamManager(
-            ITransactionContext transactionContext,
-            ITeamRepository teamRepository)
+        public TeamManager(IRepository<Team> teamRepository)
         {
-            this.transactionContext = transactionContext;
             this.teamRepository = teamRepository;
         }
 
-        public async Task CreateTeam(TeamAbbreviation teamAbbr, string name)
+        public async Task CreateTeam(TeamAbbreviation id, string name)
         {
-            using (var transaction = await transactionContext.BeginAsync())
-            {
-                var team = new Team(teamAbbr, name);
-                await teamRepository.SaveAsync(team);
-
-                await transaction.CommitAsync();
-            }
+            var team = new Team(id, name);
+            await teamRepository.SaveAsync(team);
         }
     }
 }
