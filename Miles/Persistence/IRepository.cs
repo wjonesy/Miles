@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
 using System.Threading.Tasks;
 
 namespace Miles.Persistence
 {
-    public interface IRepository<TAggregate>
+    public interface IRepository<TAggregate, TId>
     {
-        Task<TAggregate> GetByIdAsync(Guid id);
+        Task<TAggregate> GetByIdAsync(TId id);
 
         Task SaveAsync(TAggregate aggregate);
     }

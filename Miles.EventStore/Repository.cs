@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace Miles.EventStore
 {
-    public class Repository<TAggregate> : IRepository<TAggregate> where TAggregate : class, IEventSourcedAggregate
+    public class Repository<TAggregate, TId> : IRepository<TAggregate, TId> where TAggregate : class, IEventSourcedAggregate
     {
         private static readonly Type AggregateType = typeof(TAggregate);
 
@@ -31,13 +31,15 @@ namespace Miles.EventStore
 
         public Repository(
             IEventStoreConnection connection,
-            IAggregateManager<TAggregate> aggregateManager)
+            IAggregateManager<TAggregate> aggregateManager,
+            IStreamIdGenerator streamIdGenerator)
         {
             this.connection = connection;
             this.aggregateManager = aggregateManager;
+            this.streamIdGenerator = streamIdGenerator;
         }
 
-        public async Task<TAggregate> GetByIdAsync(Guid id)
+        public async Task<TAggregate> GetByIdAsync(TId id)
         {
             var streamId = streamIdGenerator.GenerateStreamId(AggregateType, id);
             using (var builder = aggregateManager.CreateBuilder())

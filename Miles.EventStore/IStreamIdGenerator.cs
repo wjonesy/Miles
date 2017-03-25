@@ -19,6 +19,6 @@ namespace Miles.EventStore
 {
     public interface IStreamIdGenerator
     {
-        string GenerateStreamId(Type aggregateType, Guid id);
+        string GenerateStreamId<TId>(Type aggregateType, TId id);
     }
 }

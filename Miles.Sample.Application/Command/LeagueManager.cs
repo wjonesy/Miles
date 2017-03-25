@@ -8,9 +8,9 @@ namespace Miles.Sample.Application.Command
 {
     public class LeagueManager
     {
-        private readonly IRepository<League> leagueRepository;
+        private readonly IRepository<League, LeagueAbbreviation> leagueRepository;
 
-        public LeagueManager(IRepository<League> leagueRepository)
+        public LeagueManager(IRepository<League, LeagueAbbreviation> leagueRepository)
         {
             this.leagueRepository = leagueRepository;
         }
@@ -21,14 +21,14 @@ namespace Miles.Sample.Application.Command
             await leagueRepository.SaveAsync(league);
         }
 
-        public async Task RegisterTeamAsync(Guid id, TeamAbbreviation team)
+        public async Task RegisterTeamAsync(LeagueAbbreviation id, TeamAbbreviation team)
         {
             var league = await leagueRepository.GetByIdAsync(id);
             league.RegisterTeam(team);
             await leagueRepository.SaveAsync(league);
         }
 
-        public async Task ScheduleFixtureAsync(Guid id, TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
+        public async Task ScheduleFixtureAsync(LeagueAbbreviation id, TeamAbbreviation teamA, TeamAbbreviation teamB, DateTime scheduledDateTime)
         {
             var league = await leagueRepository.GetByIdAsync(id);
             league.ScheduleFixture(teamA, teamB, scheduledDateTime);

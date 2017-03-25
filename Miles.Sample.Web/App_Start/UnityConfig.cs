@@ -1,13 +1,6 @@
-using MassTransit;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit;
-using Miles.MassTransit.MessageDispatch;
-using Miles.MassTransit.Unity;
-using Miles.Persistence;
 using Miles.Sample.Infrastructure.Unity;
-using Miles.Sample.Persistence.EF;
 using System;
-using System.Linq;
 
 namespace Miles.Sample.Web.App_Start
 {
@@ -40,10 +33,6 @@ namespace Miles.Sample.Web.App_Start
         public static void RegisterTypes(IUnityContainer container)
         {
             container.ConfigureSample(t => new PerRequestLifetimeManager());
-
-            container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(new PerRequestLifetimeManager());
-            container.RegisterInstance<IBus>(MassTransitBusConfig.GetBus());
-            container.RegisterInstance<IPublishEndpoint>(MassTransitBusConfig.GetBus());
         }
     }
 }

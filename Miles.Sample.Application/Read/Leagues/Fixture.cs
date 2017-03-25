@@ -4,7 +4,7 @@ namespace Miles.Sample.Application.Read.Leagues
 {
     public class Fixture
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string TeamA { get; set; }
 

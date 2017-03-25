@@ -6,9 +6,9 @@ namespace Miles.Sample.Application.Command
 {
     public class TeamManager
     {
-        private readonly IRepository<Team> teamRepository;
+        private readonly IRepository<Team, TeamAbbreviation> teamRepository;
 
-        public TeamManager(IRepository<Team> teamRepository)
+        public TeamManager(IRepository<Team, TeamAbbreviation> teamRepository)
         {
             this.teamRepository = teamRepository;
         }

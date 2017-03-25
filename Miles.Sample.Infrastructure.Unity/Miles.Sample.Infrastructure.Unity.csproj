@@ -82,6 +82,10 @@
       <Project>{BC322498-9FAA-4258-B728-ED4DE372BFE8}</Project>
       <Name>Miles.MassTransit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miles.Sample.Application\Miles.Sample.Application.csproj">
+      <Project>{D0E9E5A3-B55E-4940-89C6-3516F2CB7CDE}</Project>
+      <Name>Miles.Sample.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles.Sample.Domain\Miles.Sample.Domain.csproj">
       <Project>{DB495F33-3A5C-479F-9620-089A7A7ABFD2}</Project>
       <Name>Miles.Sample.Domain</Name>

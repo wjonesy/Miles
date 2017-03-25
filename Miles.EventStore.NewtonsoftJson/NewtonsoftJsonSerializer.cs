@@ -15,6 +15,7 @@
  */
 using Newtonsoft.Json;
 using System;
+using System.Text;
 
 namespace Miles.EventStore.NewtonsoftJson
 {
@@ -35,12 +36,12 @@ namespace Miles.EventStore.NewtonsoftJson
         public byte[] Serialize(object @event)
         {
             var text = JsonConvert.SerializeObject(@event, settings);
-            return Convert.FromBase64String(text);
+            return Encoding.UTF32.GetBytes(text);
         }
 
         public object DeSerialize(byte[] @event, Type eventType)
         {
-            var text = Convert.ToBase64String(@event);
+            var text = Encoding.UTF32.GetString(@event);
             return JsonConvert.DeserializeObject(text, eventType, settings);
         }
     }

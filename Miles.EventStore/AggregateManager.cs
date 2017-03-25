@@ -28,6 +28,14 @@ namespace Miles.EventStore
         private readonly ISerializer<TAggregate> serializer;
         private readonly IAggregateEventTypeLookup<TAggregate> eventTypeLookup;
 
+        public AggregateManager(
+            ISerializer<TAggregate> serializer,
+            IAggregateEventTypeLookup<TAggregate> eventTypeLookup)
+        {
+            this.serializer = serializer;
+            this.eventTypeLookup = eventTypeLookup;
+        }
+
 
         public IAggregateBuilder<TAggregate> CreateBuilder(TAggregate aggregate = default(TAggregate))
         {

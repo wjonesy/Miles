@@ -21,7 +21,7 @@ namespace Miles.EventStore
 {
     public class StreamIdGenerator : IStreamIdGenerator
     {
-        public string GenerateStreamId(Type aggregateType, Guid id)
+        public string GenerateStreamId<TId>(Type aggregateType, TId id)
         {
             var aggregateName = aggregateType.GetCustomAttribute<AggregateNameAttribute>()?.Name ?? aggregateType.Name;
             return $"{aggregateName}-{id}";

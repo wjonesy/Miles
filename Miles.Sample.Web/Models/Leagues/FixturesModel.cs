@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Miles.Sample.Web.Models.Leagues
 {
@@ -22,7 +20,7 @@ namespace Miles.Sample.Web.Models.Leagues
 
     public class FixturesModelFixture
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         public string TeamA { get; set; }
 
