@@ -41,7 +41,7 @@ namespace Miles.Aggregates
             newEvents.Clear();
         }
 
-        int IEventSourcedAggregate.Version { get; set; }
+        long IEventSourcedAggregate.Version { get; set; }
 
         TState IAggregateState<TState>.State { set { state = value; } }
     }
