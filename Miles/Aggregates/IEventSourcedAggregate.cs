@@ -17,6 +17,6 @@ namespace Miles.Aggregates
 {
     public interface IEventSourcedAggregate : IAggregate
     {
-        int Version { get; set; }
+        long Version { get; set; }
     }
 }

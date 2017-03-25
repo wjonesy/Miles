@@ -7,6 +7,9 @@ namespace Miles.Sample.Domain.Leagues
 {
     public class League : Aggregate<LeagueState>
     {
+        public League()
+        { }
+
         public League(LeagueAbbreviation abbreviation, string name)
         {
             if (abbreviation == null)

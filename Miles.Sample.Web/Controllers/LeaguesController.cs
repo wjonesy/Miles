@@ -1,14 +1,11 @@
-﻿using Miles.Sample.Application;
-using Miles.Sample.Domain.Command.Leagues;
-using Miles.Sample.Domain.Command.Teams;
-using Miles.Sample.Domain.Read.Leagues;
-using Miles.Sample.Domain.Read.Teams;
+﻿using Miles.Sample.Application.Command;
+using Miles.Sample.Application.Read.Leagues;
+using Miles.Sample.Application.Read.Teams;
+using Miles.Sample.Domain.Leagues;
+using Miles.Sample.Domain.Teams;
 using Miles.Sample.Web.Models.Leagues;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Miles.Sample.Web.Controllers
@@ -125,7 +122,7 @@ namespace Miles.Sample.Web.Controllers
             var team = TeamAbbreviation.Parse(model.Team);
             var league = LeagueAbbreviation.Parse(id);
 
-            await leagueManager.RegisterTeam(league, team);
+            await leagueManager.RegisterTeamAsync(league, team);
 
             return RedirectToAction("Index");
         }

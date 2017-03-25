@@ -25,7 +25,7 @@ namespace Miles.EventStore
         private readonly ISerializer<TAggregate> serializer;
         private readonly IAggregateEventTypeLookup<TAggregate> eventTypeLookup;
 
-        private int version = 0;
+        private long version = 0;
         private readonly TState state = new TState();
 
         public AggregateBuilder(

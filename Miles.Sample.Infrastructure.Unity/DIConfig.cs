@@ -1,11 +1,11 @@
-﻿using Microsoft.Practices.Unity;
-using Miles.MassTransit.EntityFramework;
-using Miles.MassTransit.Unity;
+﻿using EventStore.ClientAPI;
+using Microsoft.Practices.Unity;
+using Miles.EventStore;
+using Miles.EventStore.NewtonsoftJson;
 using Miles.Persistence;
-using Miles.Sample.Persistence.EF;
+using Miles.Sample.Domain.Leagues;
+using Miles.Sample.Domain.Teams;
 using System;
-using System.Data.Entity;
-using System.Linq;
 
 namespace Miles.Sample.Infrastructure.Unity
 {
@@ -13,24 +13,16 @@ namespace Miles.Sample.Infrastructure.Unity
     {
         public static IUnityContainer ConfigureSample(this IUnityContainer container, Func<Type, LifetimeManager> lifetimeManager)
         {
-            container.RegisterTypes(
-                AllClasses.FromAssembliesInBasePath().Where(x => x.Namespace.StartsWith("Miles.Sample")),
-                t => WithMappings.FromMatchingInterface(t),
-                WithName.Default,
-                lifetimeManager);
-
-            // Miles.MassTransit EF repositories
-            container.RegisterTypes(
-                AllClasses.FromAssembliesInBasePath().Where(x => x.Namespace.StartsWith("Miles.MassTransit.EntityFramework.Repositories")),
-                t => WithMappings.FromMatchingInterface(t),
-                WithName.Default,
-                lifetimeManager);
-
-            container.RegisterType<DbContext, SampleDbContext>(lifetimeManager(null));
-            container.RegisterType<ITime, Time>(lifetimeManager(null));
-            container.RegisterMilesMassTransit(new UnityRegistrationConfiguration { ChildContainerLifetimeManagerFactory = lifetimeManager });
-
-            container.RegisterType<ITransactionContext, EFTransactionContext>(lifetimeManager(null));
+            var connection = EventStoreConnection.Create("tcp://admin:changeit@localhost:2112");
+            connection.ConnectAsync().Wait();
+            container.RegisterInstance(connection);
+            container.RegisterType(typeof(IRepository<>), typeof(Repository<>));
+            container.RegisterType(typeof(ISerializer<>), typeof(NewtonsoftJsonSerializer<>));
+            container.RegisterType<IStreamIdGenerator, StreamIdGenerator>();
+            container.RegisterType<IAggregateManager<Team>, AggregateManager<Team, TeamState>>();
+            container.RegisterType<IAggregateEventTypeLookup<Team>, AggregateEventTypeLookup<Team, TeamState>>();
+            container.RegisterType<IAggregateManager<League>, AggregateManager<League, LeagueState>>();
+            container.RegisterType<IAggregateEventTypeLookup<League>, AggregateEventTypeLookup<League, LeagueState>>();
 
             return container;
         }
