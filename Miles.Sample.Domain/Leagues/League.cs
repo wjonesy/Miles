@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Miles.Sample.Domain.Leagues
 {
-    public class League : Aggregate<LeagueState>
+    public class League : Aggregate<LeagueState, LeagueAbbreviation>
     {
         public League()
         { }

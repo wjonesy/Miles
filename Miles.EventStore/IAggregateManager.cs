@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 namespace Miles.EventStore
 {
-    public interface IAggregateManager<TAggregate> where TAggregate : class, IEventSourcedAggregate
+    public interface IAggregateManager<TAggregate, TId> where TAggregate : class, IEventSourcedAggregate<TId>
     {
         IAggregateBuilder<TAggregate> CreateBuilder(TAggregate aggregate = null);
 

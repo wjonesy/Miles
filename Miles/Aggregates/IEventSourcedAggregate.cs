@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
+
 namespace Miles.Aggregates
 {
-    public interface IEventSourcedAggregate : IAggregate
+    public interface IEventSourcedAggregate : IEventSourcedAggregate<Guid>
+    { }
+
+    public interface IEventSourcedAggregate<TId> : IAggregate<TId>
     {
-        long Version { get; set; }
+        long? Version { get; set; }
     }
 }

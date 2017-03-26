@@ -21,9 +21,9 @@ using System.Linq;
 
 namespace Miles.EventStore
 {
-    public class AggregateManager<TAggregate, TState> : IAggregateManager<TAggregate>
-        where TAggregate : class, IEventSourcedAggregate, IAggregateState<TState>, new()
-        where TState : class, IAppliesEvent, new()
+    public class AggregateManager<TAggregate, TId, TState> : IAggregateManager<TAggregate, TId>
+        where TAggregate : class, IEventSourcedAggregate<TId>, ISetableAggregateState<TState, TId>, new()
+        where TState : class, IState<TId>, IAppliesEvent, new()
     {
         private readonly ISerializer<TAggregate> serializer;
         private readonly IAggregateEventTypeLookup<TAggregate> eventTypeLookup;
@@ -39,7 +39,7 @@ namespace Miles.EventStore
 
         public IAggregateBuilder<TAggregate> CreateBuilder(TAggregate aggregate = default(TAggregate))
         {
-            return new AggregateBuilder<TAggregate, TState>(serializer, eventTypeLookup);
+            return new AggregateBuilder<TAggregate, TId, TState>(serializer, eventTypeLookup);
         }
 
         public EventData[] CreateEventData(IEnumerable<object> newEvents)

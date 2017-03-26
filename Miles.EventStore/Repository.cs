@@ -21,17 +21,17 @@ using System.Threading.Tasks;
 
 namespace Miles.EventStore
 {
-    public class Repository<TAggregate, TId> : IRepository<TAggregate, TId> where TAggregate : class, IEventSourcedAggregate
+    public class Repository<TAggregate, TId> : IRepository<TAggregate, TId> where TAggregate : class, IEventSourcedAggregate<TId>
     {
         private static readonly Type AggregateType = typeof(TAggregate);
 
         private readonly IEventStoreConnection connection;
-        private readonly IAggregateManager<TAggregate> aggregateManager;
+        private readonly IAggregateManager<TAggregate, TId> aggregateManager;
         private readonly IStreamIdGenerator streamIdGenerator;
 
         public Repository(
             IEventStoreConnection connection,
-            IAggregateManager<TAggregate> aggregateManager,
+            IAggregateManager<TAggregate, TId> aggregateManager,
             IStreamIdGenerator streamIdGenerator)
         {
             this.connection = connection;
@@ -55,10 +55,10 @@ namespace Miles.EventStore
 
         public async Task SaveAsync(TAggregate aggregate)
         {
-            var streamId = streamIdGenerator.GenerateStreamId(AggregateType, Guid.NewGuid());
+            var streamId = streamIdGenerator.GenerateStreamId(AggregateType, aggregate.Id);
 
             var eventData = aggregateManager.CreateEventData(aggregate.NewEvents);
-            var expectedVersion = aggregate.Version;
+            var expectedVersion = aggregate.Version ?? ExpectedVersion.NoStream;
 
             var result = await connection.AppendToStreamAsync(streamId, expectedVersion, eventData);
             aggregate.NewEventsPublished();

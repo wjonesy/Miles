@@ -3,7 +3,7 @@ using System;
 
 namespace Miles.Sample.Domain.Teams
 {
-    public class Team : Aggregate<TeamState>
+    public class Team : Aggregate<TeamState, TeamAbbreviation>
     {
         public Team()
         { }

@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 using System;
-using System.Collections.Generic;
 
 namespace Miles.Aggregates
 {
-    public interface IAggregate : IAggregate<Guid>
+    public interface IState : IState<Guid>
     { }
 
-    public interface IAggregate<TId>
+    public interface IState<TId>
     {
         TId Id { get; }
-
-        IEnumerable<object> NewEvents { get; }
-
-        void NewEventsPublished();
     }
 }

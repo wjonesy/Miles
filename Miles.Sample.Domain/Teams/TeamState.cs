@@ -2,7 +2,7 @@
 
 namespace Miles.Sample.Domain.Teams
 {
-    public class TeamState : IAppliesEvent<TeamCreated>
+    public class TeamState : IState<TeamAbbreviation>, IAppliesEvent<TeamCreated>
     {
         public TeamAbbreviation Id { get; private set; }
 

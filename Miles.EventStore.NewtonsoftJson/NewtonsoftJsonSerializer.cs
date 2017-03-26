@@ -36,12 +36,12 @@ namespace Miles.EventStore.NewtonsoftJson
         public byte[] Serialize(object @event)
         {
             var text = JsonConvert.SerializeObject(@event, settings);
-            return Encoding.UTF32.GetBytes(text);
+            return Encoding.UTF8.GetBytes(text);
         }
 
         public object DeSerialize(byte[] @event, Type eventType)
         {
-            var text = Encoding.UTF32.GetString(@event);
+            var text = Encoding.UTF8.GetString(@event);
             return JsonConvert.DeserializeObject(text, eventType, settings);
         }
     }

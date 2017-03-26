@@ -18,9 +18,9 @@ using Miles.Aggregates;
 
 namespace Miles.EventStore
 {
-    public class AggregateBuilder<TAggregate, TState> : IAggregateBuilder<TAggregate>
-        where TAggregate : IAggregateState<TState>, IEventSourcedAggregate, new()
-        where TState : class, IAppliesEvent, new()
+    public class AggregateBuilder<TAggregate, TId, TState> : IAggregateBuilder<TAggregate>
+        where TAggregate : ISetableAggregateState<TState, TId>, IEventSourcedAggregate<TId>, new()
+        where TState : class, IState<TId>, IAppliesEvent, new()
     {
         private readonly ISerializer<TAggregate> serializer;
         private readonly IAggregateEventTypeLookup<TAggregate> eventTypeLookup;
@@ -47,11 +47,9 @@ namespace Miles.EventStore
 
         public TAggregate Build()
         {
-            return new TAggregate()
-            {
-                Version = version,
-                State = state
-            };
+            var aggregate = new TAggregate() { Version = version };
+            aggregate.SetState(state);
+            return aggregate;
         }
 
         #region IDisposable Support

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace Miles.Sample.Domain.Leagues
 {
     public class LeagueState :
+        IState<LeagueAbbreviation>,
         IAppliesEvent<LeagueCreated>, IAppliesEvent<TeamRegistered>, IAppliesEvent<LeagueStarted>,
         IAppliesEvent<FixtureScheduled>, IAppliesEvent<FixtureStarted>, IAppliesEvent<GoalRecorded>, IAppliesEvent<FixtureFinished>
     {

@@ -38,7 +38,8 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Aggregates\AggregateNameAttribute.cs" />
-    <Compile Include="Aggregates\IAggregateState.cs" />
+    <Compile Include="Aggregates\IState.cs" />
+    <Compile Include="Aggregates\ISetableAggregateState.cs" />
     <Compile Include="Aggregates\IEventSourcedAggregate.cs" />
     <Compile Include="Aggregates\UnsupportedEventTypeException.cs" />
     <Compile Include="DomainContext.cs" />

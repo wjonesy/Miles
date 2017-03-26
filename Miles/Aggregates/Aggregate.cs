@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+using System;
 using System.Collections.Generic;
 
 namespace Miles.Aggregates
 {
-    public abstract class Aggregate<TState> : IEventSourcedAggregate, IAggregateState<TState> where TState : class, IAppliesEvent, new()
+    public abstract class Aggregate<TState, TId> : IEventSourcedAggregate<TId>, ISetableAggregateState<TState, TId>
+        where TState : class, IState<TId>, IAppliesEvent, new()
     {
         private readonly List<object> newEvents = new List<object>();
         private TState state = new TState();
 
+        public TId Id => state.Id;
         protected TState State => state;
 
         protected void ApplyNewEvent<TEvent>(TEvent @event) where TEvent : class
@@ -34,15 +37,18 @@ namespace Miles.Aggregates
             newEvents.Add(@event);
         }
 
-        IEnumerable<object> IAggregate.NewEvents => newEvents;
+        IEnumerable<object> IAggregate<TId>.NewEvents => newEvents;
 
-        void IAggregate.NewEventsPublished()
+        void IAggregate<TId>.NewEventsPublished()
         {
             newEvents.Clear();
         }
 
-        long IEventSourcedAggregate.Version { get; set; }
+        void ISetableAggregateState<TState, TId>.SetState(TState state)
+        {
+            this.state = state;
+        }
 
-        TState IAggregateState<TState>.State { set { state = value; } }
+        long? IEventSourcedAggregate<TId>.Version { get; set; }
     }
 }

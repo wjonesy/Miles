@@ -15,15 +15,15 @@ namespace Miles.Sample.Infrastructure.Unity
     {
         public static IUnityContainer ConfigureSample(this IUnityContainer container, Func<Type, LifetimeManager> lifetimeManager)
         {
-            var connection = EventStoreConnection.Create("ConnectTo=tcp://admin:changeit@localhost:2112");
+            var connection = EventStoreConnection.Create("ConnectTo=tcp://admin:changeit@localhost:1113");
             connection.ConnectAsync().Wait();
-            container.RegisterInstance(connection);
+            container.RegisterInstance(connection, new ContainerControlledLifetimeManager());
             container.RegisterType(typeof(IRepository<,>), typeof(Repository<,>));
             container.RegisterType(typeof(ISerializer<>), typeof(NewtonsoftJsonSerializer<>));
             container.RegisterType<IStreamIdGenerator, StreamIdGenerator>();
-            container.RegisterType<IAggregateManager<Team>, AggregateManager<Team, TeamState>>();
+            container.RegisterType<IAggregateManager<Team, TeamAbbreviation>, AggregateManager<Team, TeamAbbreviation, TeamState>>();
             container.RegisterType<IAggregateEventTypeLookup<Team>, AggregateEventTypeLookup<Team, TeamState>>();
-            container.RegisterType<IAggregateManager<League>, AggregateManager<League, LeagueState>>();
+            container.RegisterType<IAggregateManager<League, LeagueAbbreviation>, AggregateManager<League, LeagueAbbreviation, LeagueState>>();
             container.RegisterType<IAggregateEventTypeLookup<League>, AggregateEventTypeLookup<League, LeagueState>>();
             container.RegisterType<Application.Read.Teams.ITeamReader, TeamReader>();
             container.RegisterType<Application.Read.Leagues.ILeagueReader, LeagueReader>();

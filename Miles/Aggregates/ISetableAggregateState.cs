@@ -16,8 +16,9 @@
 
 namespace Miles.Aggregates
 {
-    public interface IAggregateState<TState>
+    public interface ISetableAggregateState<TState, TId>
+        where TState : IState<TId>, new()
     {
-        TState State { set; }
+        void SetState(TState state);
     }
 }
