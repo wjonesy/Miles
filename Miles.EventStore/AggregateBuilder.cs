@@ -15,6 +15,8 @@
  */
 using EventStore.ClientAPI;
 using Miles.Aggregates;
+using System;
+using System.Linq.Expressions;
 
 namespace Miles.EventStore
 {
@@ -41,7 +43,8 @@ namespace Miles.EventStore
             var eventType = eventTypeLookup.lookupType(@event.EventType);
             var eventObj = serializer.DeSerialize(@event.Data, eventType);
 
-            ((dynamic)state).ApplyEvent(eventObj);
+            var proxyMethod = ProxyMe(eventType);
+            proxyMethod(state, eventObj);
             version = @event.EventNumber;
         }
 
@@ -50,6 +53,17 @@ namespace Miles.EventStore
             var aggregate = new TAggregate() { Version = version };
             aggregate.SetState(state);
             return aggregate;
+        }
+
+        private Action<object, object> ProxyMe(Type eventType)
+        {
+            // TODO: Build on app start and make this a lazy lookup
+            var appliesEventType = typeof(IAppliesEvent<>).MakeGenericType(eventType);
+            var method = appliesEventType.GetMethod("ApplyEvent");
+            var stateParam = Expression.Parameter(typeof(object), "state");
+            var eventParam = Expression.Parameter(typeof(object), "@event");
+            var proxyMethod = Expression.Call(Expression.TypeAs(stateParam, appliesEventType), method, Expression.TypeAs(eventParam, eventType));
+            return Expression.Lambda<Action<object, object>>(proxyMethod, stateParam, eventParam).Compile();
         }
 
         #region IDisposable Support

@@ -102,7 +102,11 @@ namespace Miles.Sample.Infrastructure.Unity
 
             public Task<List<string>> GetTeamsAsync(string leagueId)
             {
-                throw new NotImplementedException();
+                return Task.FromResult(new List<string>
+                {
+                    "LCFC",
+                    "MUFC"
+                });
             }
         }
     }
