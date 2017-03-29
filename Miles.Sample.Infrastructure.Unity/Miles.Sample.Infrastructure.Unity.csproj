@@ -90,6 +90,10 @@
       <Project>{DB495F33-3A5C-479F-9620-089A7A7ABFD2}</Project>
       <Name>Miles.Sample.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miles.Sample.WebReadStore\Miles.Sample.WebReadStore.csproj">
+      <Project>{0cbfb2e7-b3fe-4e3e-b66b-cb14035acc71}</Project>
+      <Name>Miles.Sample.WebReadStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles\Miles.csproj">
       <Project>{63B7FA97-8619-4EA0-B594-71FBB10481E5}</Project>
       <Name>Miles</Name>

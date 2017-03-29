@@ -5,6 +5,7 @@ using Miles.EventStore.NewtonsoftJson;
 using Miles.Persistence;
 using Miles.Sample.Domain.Leagues;
 using Miles.Sample.Domain.Teams;
+using Miles.Sample.WebReadStore.Adapters;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace Miles.Sample.Infrastructure.Unity
             container.RegisterType<IAggregateManager<League, LeagueAbbreviation>, AggregateManager<League, LeagueAbbreviation, LeagueState>>();
             container.RegisterType<IAggregateEventTypeLookup<League>, AggregateEventTypeLookup<League, LeagueState>>();
             container.RegisterType<Application.Read.Teams.ITeamReader, TeamReader>();
-            container.RegisterType<Application.Read.Leagues.ILeagueReader, LeagueReader>();
+            container.RegisterType<Application.Read.Leagues.ILeagueReader, LeagueReader>(lifetimeManager(typeof(LeagueReader)));
 
             return container;
         }
@@ -36,77 +37,6 @@ namespace Miles.Sample.Infrastructure.Unity
             public Task<List<string>> GetTeamsNotInLeagueAsync(string id)
             {
                 return Task.FromResult(new List<string> { "LCFC", "MUFC" });
-            }
-        }
-
-        class LeagueReader : Application.Read.Leagues.ILeagueReader
-        {
-            public Task<List<Application.Read.Leagues.Fixture>> GetFixturesAsync(string leagueId)
-            {
-                return Task.FromResult(new List<Application.Read.Leagues.Fixture>
-                {
-                    new Application.Read.Leagues.Fixture
-                    {
-                        Id = Guid.NewGuid(),
-                        ScheduledDateTime = DateTime.Now,
-                        TeamA = "MUFC",
-                        TeamAPoints = 0,
-                        TeamB = "LCFC",
-                        TeamBPoints = 0,
-                        Active = false,
-                        Completed = new DateTime?()
-                    }
-                });
-            }
-
-            public Task<List<Application.Read.Leagues.League>> GetLeaguesAsync()
-            {
-                return Task.FromResult(new List<Application.Read.Leagues.League>
-                {
-                    new Application.Read.Leagues.League
-                    {
-                        Abbreviation = "Prem",
-                        Name = "Premiership"
-                    }
-                });
-            }
-
-            public Task<List<Application.Read.Leagues.Standing>> GetStandingsAsync(string id)
-            {
-                return Task.FromResult(new List<Application.Read.Leagues.Standing>
-                {
-                    new Application.Read.Leagues.Standing
-                    {
-                        Draws = 0,
-                        Losses = 0,
-                        Played = 0,
-                        Name = "MUFC",
-                        Points = 0,
-                        PointsAgainst = 0,
-                        PointsFor = 0,
-                        Wins = 0
-                    },
-                    new Application.Read.Leagues.Standing
-                    {
-                        Draws = 0,
-                        Losses = 0,
-                        Played = 0,
-                        Name = "LCFC",
-                        Points = 0,
-                        PointsAgainst = 0,
-                        PointsFor = 0,
-                        Wins = 0
-                    }
-                });
-            }
-
-            public Task<List<string>> GetTeamsAsync(string leagueId)
-            {
-                return Task.FromResult(new List<string>
-                {
-                    "LCFC",
-                    "MUFC"
-                });
             }
         }
     }
