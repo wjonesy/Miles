@@ -131,6 +131,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Miles.GreenPipes\Miles.GreenPipes.csproj">
+      <Project>{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}</Project>
+      <Name>Miles.GreenPipes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj">
       <Project>{63849DA1-496A-476A-A861-698D3942C81A}</Project>
       <Name>Miles.MassTransit.EntityFramework</Name>

@@ -19,7 +19,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Miles.MassTransit.ContainerScope
+namespace Miles.GreenPipes.ContainerScope
 {
     class ContainerScopeFilter<TContext> : IFilter<TContext> where TContext : class, PipeContext
     {

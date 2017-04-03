@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles", "Miles\Miles.csproj", "{63B7FA97-8619-4EA0-B594-71FBB10481E5}"
 EndProject
@@ -30,6 +30,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.MassTransit.EntityFramework", "Miles.MassTransit.EntityFramework\Miles.MassTransit.EntityFramework.csproj", "{63849DA1-496A-476A-A861-698D3942C81A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.Serilog", "Miles.GreenPipes.Serilog\Miles.GreenPipes.Serilog.csproj", "{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes", "Miles.GreenPipes\Miles.GreenPipes.csproj", "{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miles.GreenPipes.Unity", "Miles.GreenPipes.Unity\Miles.GreenPipes.Unity.csproj", "{A0AC2C36-0968-4972-8844-6F255D6ACFEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +93,14 @@ Global
 		{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDD9B7DA-FA56-42C3-9EC7-63B522619BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1BAF40-50B3-418A-99A3-FA37BAB7303A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0AC2C36-0968-4972-8844-6F255D6ACFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0AC2C36-0968-4972-8844-6F255D6ACFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0AC2C36-0968-4972-8844-6F255D6ACFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0AC2C36-0968-4972-8844-6F255D6ACFEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

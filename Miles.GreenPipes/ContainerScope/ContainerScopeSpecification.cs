@@ -16,7 +16,7 @@
 using GreenPipes;
 using System.Collections.Generic;
 
-namespace Miles.MassTransit.ContainerScope
+namespace Miles.GreenPipes.ContainerScope
 {
     class ContainerScopeSpecification<TContext> : IPipeSpecification<TContext> where TContext : class, PipeContext
     {

@@ -16,11 +16,11 @@
 using GreenPipes;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit.ContainerScope;
+using Miles.GreenPipes.ContainerScope;
 using System;
 using System.Collections.Generic;
 
-namespace Miles.MassTransit.Unity.ContainerScope
+namespace Miles.GreenPipes.Unity.ContainerScope
 {
     class UnityContainerStack : IContainerStack, IUnityContainer
     {

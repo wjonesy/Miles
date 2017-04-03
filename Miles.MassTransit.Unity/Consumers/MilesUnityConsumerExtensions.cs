@@ -15,7 +15,7 @@
  */
 using MassTransit.ConsumeConfigurators;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit.Unity.ContainerScope;
+using Miles.GreenPipes.Unity.ContainerScope;
 using System;
 
 namespace MassTransit

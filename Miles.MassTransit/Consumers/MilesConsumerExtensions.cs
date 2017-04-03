@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 using MassTransit.ConsumeConfigurators;
+using Miles.GreenPipes.ContainerScope;
 using Miles.MassTransit.Consumers;
-using Miles.MassTransit.ContainerScope;
 using System;
 
 namespace MassTransit

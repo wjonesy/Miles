@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 using GreenPipes;
-using Microsoft.Practices.ServiceLocation;
 
-namespace Miles.MassTransit.ContainerScope
+namespace Miles.GreenPipes.ContainerScope
 {
-    public interface IContainerStack : IServiceLocator
+    public interface IContainerStackFactory : ISpecification
     {
-        void PushScope<TContext>(TContext context) where TContext : class, PipeContext;
+        string ContainerType { get; }
 
-        void PopScope();
+        IContainerStack Create<TContext>(TContext context) where TContext : class, PipeContext;
     }
 }

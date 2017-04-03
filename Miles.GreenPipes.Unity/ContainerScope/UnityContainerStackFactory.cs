@@ -15,12 +15,12 @@
  */
 using GreenPipes;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit.ContainerScope;
+using Miles.GreenPipes.ContainerScope;
 using System.Collections.Generic;
 
-namespace Miles.MassTransit.Unity.ContainerScope
+namespace Miles.GreenPipes.Unity.ContainerScope
 {
-    class UnityContainerStackFactory : IContainerStackFactory
+    public class UnityContainerStackFactory : IContainerStackFactory
     {
         private readonly IUnityContainer rootContainer;
 

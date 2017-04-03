@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using GreenPipes;
-using Microsoft.Practices.Unity;
-using Miles.MassTransit.Unity.ContainerScope;
+using Miles.GreenPipes.ContainerScope;
 
-namespace MassTransit
+namespace GreenPipes
 {
     public static class ContainerScopeExtensions
     {
-        public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IUnityContainer container)
+        /// <summary>
+        /// Creates a container scope allowing child scopes/containers.
+        /// </summary>
+        /// <typeparam name="TContext">The type of the context.</typeparam>
+        /// <param name="configurator">The configurator.</param>
+        /// <param name="containerStackFactory">The container stack factory.</param>
+        public static void ContainerScope<TContext>(this IPipeConfigurator<TContext> configurator, IContainerStackFactory containerStackFactory = null)
             where TContext : class, PipeContext
         {
-            configurator.ContainerScope(new UnityContainerStackFactory(container));
+            configurator.AddPipeSpecification(new ContainerScopeSpecification<TContext>(containerStackFactory));
         }
     }
 }

@@ -2,7 +2,7 @@
 using MassTransit;
 using MassTransit.Util;
 using Microsoft.Practices.ServiceLocation;
-using Miles.MassTransit.ContainerScope;
+using Miles.GreenPipes.ContainerScope;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
