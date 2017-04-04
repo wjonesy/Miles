@@ -40,6 +40,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="LogContext\ContextProperty.cs" />
     <Compile Include="LogContext\ILogContextConfigurator.cs" />
     <Compile Include="LogContext\LogContextExtensions.cs" />

@@ -40,6 +40,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>Properties\VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="ContainerScope\ContainerScopeExtensions.cs" />
     <Compile Include="ContainerScope\ContainerScopeFilter.cs" />
     <Compile Include="ContainerScope\ContainerScopeSpecification.cs" />
