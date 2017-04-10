@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 using MassTransit;
-using Miles.MassTransit.RecordMessageDispatch;
 using System.Threading.Tasks;
 
 namespace Miles.MassTransit.MessageDeduplication
@@ -29,7 +28,7 @@ namespace Miles.MassTransit.MessageDeduplication
         /// Records a message as consumed.
         /// </summary>
         /// <param name="messageContext">The message context info.</param>
-        /// <returns><c>true</c> if the message has already been processed.</returns>
+        /// <returns><c>true</c> if the message was recorded and <c>false</c> if it has already been recorded.</returns>
         Task<bool> RecordAsync(MessageContext messageContext, string queueName);
 
         /// <summary>

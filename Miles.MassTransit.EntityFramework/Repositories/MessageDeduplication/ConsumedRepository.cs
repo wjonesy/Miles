@@ -23,11 +23,11 @@ namespace Miles.MassTransit.EntityFramework.MessageDeduplication
             try
             {
                 await dbContext.SaveChangesAsync().ConfigureAwait(false);
-                return false;
-            }
-            catch (Exception ex)
-            {
                 return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
