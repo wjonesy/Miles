@@ -15,9 +15,7 @@
  */
 using MassTransit;
 using Microsoft.Practices.Unity;
-using Miles.MassTransit.MessageDeduplication;
 using Miles.MassTransit.MessageDispatch;
-using Miles.MassTransit.RecordMessageDispatch;
 using Miles.MassTransit.TransactionContext;
 using Miles.Messaging;
 
@@ -64,9 +62,6 @@ namespace Miles.MassTransit.Unity
                     container.RegisterType<IMessageDispatchProcess, ImmediateMessageDispatchProcess>(configuration.ChildContainerLifetimeManagerFactory(typeof(ImmediateMessageDispatchProcess)));
                     break;
             }
-
-            container.RegisterType<IConsumer<IDeleteOldConsumedRecordsCommand>, DeleteOldConsumedRecordsConsumer>(configuration.ChildContainerLifetimeManagerFactory(typeof(DeleteOldConsumedRecordsConsumer)));
-            container.RegisterType<IConsumer<IDeleteOldDispatchRecordsCommand>, DeleteOldDispatchRecordsConsumer>(configuration.ChildContainerLifetimeManagerFactory(typeof(DeleteOldDispatchRecordsConsumer)));
 
             return container;
         }
